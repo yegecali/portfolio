@@ -1,7 +1,12 @@
 import "./Hero.css";
 import { usePersonalInfo } from "../store/hooks/usePortfolioSelectors";
 import { useLoadPortfolioData } from "../store/hooks/useLoadPortfolioData";
-import { FaGithub, FaLinkedinIn, FaFacebook, FaEnvelope } from "react-icons/fa6";
+import {
+  FaGithub,
+  FaLinkedinIn,
+  FaFacebook,
+  FaEnvelope,
+} from "react-icons/fa6";
 
 export default function Hero() {
   useLoadPortfolioData();

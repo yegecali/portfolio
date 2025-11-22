@@ -47,7 +47,9 @@ export default function Contacto() {
             <h3>Información de Contacto</h3>
 
             <div className="info-item">
-              <span className="info-icon"><FaEnvelope size={24} /></span>
+              <span className="info-icon">
+                <FaEnvelope size={24} />
+              </span>
               <div>
                 <h4>Email</h4>
                 <a href={`mailto:${personalInfo.email}`}>
@@ -57,7 +59,9 @@ export default function Contacto() {
             </div>
 
             <div className="info-item">
-              <span className="info-icon"><FaLocationDot size={24} /></span>
+              <span className="info-icon">
+                <FaLocationDot size={24} />
+              </span>
               <div>
                 <h4>Ubicación</h4>
                 <p>
@@ -72,7 +76,9 @@ export default function Contacto() {
             </div>
 
             <div className="info-item">
-              <span className="info-icon"><FaLink size={24} /></span>
+              <span className="info-icon">
+                <FaLink size={24} />
+              </span>
               <div>
                 <h4>Redes Sociales</h4>
                 <div className="social-links">

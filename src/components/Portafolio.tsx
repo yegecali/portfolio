@@ -17,7 +17,9 @@ export default function Portafolio() {
           {proyectos.map((proyecto) => (
             <div key={proyecto.id} className="project-card">
               <div className="project-image">
-                <span className="project-icon">{renderIcon(proyecto.icon)}</span>
+                <span className="project-icon">
+                  {renderIcon(proyecto.icon)}
+                </span>
               </div>
               <div className="project-content">
                 <h3 className="project-title">{proyecto.titulo}</h3>
