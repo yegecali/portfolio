@@ -1,10 +1,10 @@
-import "./Loader.css";
+import { LoaderContainer, Spinner, LoaderText } from "../styles/LoaderStyles";
 
 export default function Loader() {
   return (
-    <div className="loader-container">
-      <div className="spinner"></div>
-      <p className="loader-text">Cargando datos...</p>
-    </div>
+    <LoaderContainer>
+      <Spinner />
+      <LoaderText>Cargando datos...</LoaderText>
+    </LoaderContainer>
   );
 }

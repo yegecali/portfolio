@@ -1,4 +1,3 @@
-import "./Servicios.css";
 import { useServicios } from "../store/hooks/usePortfolioSelectors";
 import { renderIcon } from "../utils/iconRenderer";
 

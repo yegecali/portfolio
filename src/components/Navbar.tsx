@@ -1,48 +1,54 @@
 import { Link, useLocation } from "react-router-dom";
-import "./Navbar.css";
+import {
+  NavbarContainer,
+  NavbarContent,
+  NavbarLogo,
+  NavMenu,
+  NavLink,
+} from "../styles/NavbarStyles";
 
 export default function Navbar() {
   const location = useLocation();
 
   const isActive = (path: string) => {
-    return location.pathname === path ? "active" : "";
+    return location.pathname === path;
   };
 
   return (
-    <nav className="navbar">
-      <div className="navbar-container">
-        <Link to="/" className="navbar-logo">
-          <h1>G</h1>
-        </Link>
-        <ul className="nav-menu">
+    <NavbarContainer>
+      <NavbarContent>
+        <NavbarLogo>
+          <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+            <h1>G</h1>
+          </Link>
+        </NavbarLogo>
+        <NavMenu>
           <li>
-            <Link to="/" className={`nav-link ${isActive("/")}`}>
+            <NavLink as={Link} to="/" $active={isActive("/")}>
               Inicio
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link to="/acerca" className={`nav-link ${isActive("/acerca")}`}>
+            <NavLink as={Link} to="/acerca" $active={isActive("/acerca")}>
               Acerca de
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link
+            <NavLink
+              as={Link}
               to="/portafolio"
-              className={`nav-link ${isActive("/portafolio")}`}
+              $active={isActive("/portafolio")}
             >
               Portafolio
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link
-              to="/contacto"
-              className={`nav-link ${isActive("/contacto")}`}
-            >
+            <NavLink as={Link} to="/contacto" $active={isActive("/contacto")}>
               Contacto
-            </Link>
+            </NavLink>
           </li>
-        </ul>
-      </div>
-    </nav>
+        </NavMenu>
+      </NavbarContent>
+    </NavbarContainer>
   );
 }

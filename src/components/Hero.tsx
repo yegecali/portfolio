@@ -1,4 +1,3 @@
-import "./Hero.css";
 import { usePersonalInfo } from "../store/hooks/usePortfolioSelectors";
 import {
   FaGithub,
@@ -10,98 +9,103 @@ import {
   FaDatabase,
 } from "react-icons/fa6";
 import { SiQuarkus, SiApachekafka } from "react-icons/si";
+import {
+  HeroSection,
+  HeroContainer,
+  HeroContent,
+  HeroTitle,
+  HeroSubtitle,
+  HeroProfession,
+  HeroDescription,
+  HeroContactInfo,
+  ContactItem,
+  HeroSocials,
+  SocialBtn,
+  HeroImageContainer,
+  HeroImage,
+  ImageBlur,
+  TechIcon,
+} from "../styles/HeroStyles";
 
 export default function Hero() {
   const personalInfo = usePersonalInfo();
 
   return (
-    <section className="hero">
-      <div className="hero-content">
-        <div className="hero-left">
-          <div className="hero-text">
-            <h2 className="hero-subtitle">Hola, soy</h2>
-            <h1 className="hero-title">
-              {personalInfo.nombre} {personalInfo.apellido}
-            </h1>
-            <p className="hero-profession">{personalInfo.profesion}</p>
-            <p className="hero-description">{personalInfo.descripcion}</p>
-            <p className="hero-description-long">
-              {personalInfo.descripcionLarga}
-            </p>
+    <HeroSection>
+      <HeroContainer>
+        <HeroContent>
+          <HeroSubtitle>Hola, soy</HeroSubtitle>
+          <HeroTitle>
+            {personalInfo.nombre} {personalInfo.apellido}
+          </HeroTitle>
+          <HeroProfession>{personalInfo.profesion}</HeroProfession>
+          <HeroDescription>{personalInfo.descripcion}</HeroDescription>
+          <HeroDescription>{personalInfo.descripcionLarga}</HeroDescription>
 
-            <div className="hero-contact-info">
-              <div className="contact-item">
-                <FaEnvelope size={18} />
-                <a href={`mailto:${personalInfo.email}`}>
-                  {personalInfo.email}
-                </a>
-              </div>
-              <div className="contact-item">
-                <FaPhone size={18} />
-                <span>{personalInfo.telefono}</span>
-              </div>
-            </div>
+          <HeroContactInfo>
+            <ContactItem>
+              <FaEnvelope size={18} />
+              <a href={`mailto:${personalInfo.email}`}>{personalInfo.email}</a>
+            </ContactItem>
+            <ContactItem>
+              <FaPhone size={18} />
+              <span>{personalInfo.telefono}</span>
+            </ContactItem>
+          </HeroContactInfo>
 
-            <div className="hero-socials">
-              <a
-                href={personalInfo.redes.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="GitHub"
-                className="social-btn"
-              >
-                <FaGithub size={20} />
-                <span>GitHub</span>
-              </a>
-              <a
-                href={personalInfo.redes.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="LinkedIn"
-                className="social-btn"
-              >
-                <FaLinkedinIn size={20} />
-                <span>LinkedIn</span>
-              </a>
-              <a
-                href={personalInfo.redes.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Facebook"
-                className="social-btn"
-              >
-                <FaFacebook size={20} />
-                <span>Facebook</span>
-              </a>
-            </div>
-          </div>
-        </div>
+          <HeroSocials>
+            <SocialBtn
+              href={personalInfo.redes.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="GitHub"
+            >
+              <FaGithub size={20} />
+              <span>GitHub</span>
+            </SocialBtn>
+            <SocialBtn
+              href={personalInfo.redes.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="LinkedIn"
+            >
+              <FaLinkedinIn size={20} />
+              <span>LinkedIn</span>
+            </SocialBtn>
+            <SocialBtn
+              href={personalInfo.redes.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Facebook"
+            >
+              <FaFacebook size={20} />
+              <span>Facebook</span>
+            </SocialBtn>
+          </HeroSocials>
+        </HeroContent>
 
-        <div className="hero-right">
-          <div className="hero-image-container">
-            <img
-              src={personalInfo.imagen}
-              alt={`${personalInfo.nombre} ${personalInfo.apellido}`}
-              className="hero-image"
-            />
-            <div className="image-blur"></div>
+        <HeroImageContainer>
+          <HeroImage
+            src={personalInfo.imagen}
+            alt={`${personalInfo.nombre} ${personalInfo.apellido}`}
+          />
+          <ImageBlur />
 
-            {/* Tech stack floating icons */}
-            <div className="tech-icon tech-icon-1">
-              <FaJava size={32} />
-            </div>
-            <div className="tech-icon tech-icon-2">
-              <SiQuarkus size={32} />
-            </div>
-            <div className="tech-icon tech-icon-3">
-              <SiApachekafka size={32} />
-            </div>
-            <div className="tech-icon tech-icon-4">
-              <FaDatabase size={32} />
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+          {/* Tech stack floating icons */}
+          <TechIcon $index={0}>
+            <FaJava size={32} />
+          </TechIcon>
+          <TechIcon $index={1}>
+            <SiQuarkus size={32} />
+          </TechIcon>
+          <TechIcon $index={2}>
+            <SiApachekafka size={32} />
+          </TechIcon>
+          <TechIcon $index={3}>
+            <FaDatabase size={32} />
+          </TechIcon>
+        </HeroImageContainer>
+      </HeroContainer>
+    </HeroSection>
   );
 }

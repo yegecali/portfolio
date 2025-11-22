@@ -1,6 +1,12 @@
-import "./Toast.css";
 import { useEffect } from "react";
 import { FaCircleCheck, FaExclamation, FaXmark } from "react-icons/fa6";
+import {
+  ToastContainer,
+  ToastContent,
+  ToastIcon,
+  ToastMessage,
+  ToastClose,
+} from "../styles/ToastStyles";
 
 export type ToastType = "success" | "error";
 
@@ -23,18 +29,22 @@ export default function Toast({
   }, [onClose, duration]);
 
   return (
-    <div className={`toast toast-${type}`}>
-      <div className="toast-content">
+    <ToastContainer $type={type}>
+      <ToastContent>
         {type === "success" ? (
-          <FaCircleCheck className="toast-icon" />
+          <ToastIcon>
+            <FaCircleCheck />
+          </ToastIcon>
         ) : (
-          <FaExclamation className="toast-icon" />
+          <ToastIcon>
+            <FaExclamation />
+          </ToastIcon>
         )}
-        <p className="toast-message">{message}</p>
-      </div>
-      <button className="toast-close" onClick={onClose}>
+        <ToastMessage>{message}</ToastMessage>
+      </ToastContent>
+      <ToastClose onClick={onClose}>
         <FaXmark />
-      </button>
-    </div>
+      </ToastClose>
+    </ToastContainer>
   );
 }

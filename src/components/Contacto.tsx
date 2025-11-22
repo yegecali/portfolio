@@ -1,9 +1,29 @@
-import "./Contacto.css";
 import { usePersonalInfo } from "../store/hooks/usePortfolioSelectors";
 import { FaEnvelope, FaLocationDot, FaLink } from "react-icons/fa6";
 import { useFormValidation } from "../hooks/useFormValidation";
 import { useToast } from "../hooks/useToast";
 import Toast from "./Toast";
+import { Container } from "../styles/components";
+import {
+  ContactoSection,
+  ContactoContent,
+  ContactoInfo,
+  ContactoTitle,
+  InfoItem,
+  InfoIcon,
+  InfoContent,
+  InfoTitle,
+  InfoText,
+  InfoLink,
+  SocialLinks,
+  SocialLink,
+  ContactoForm,
+  FormGroup,
+  FormInput,
+  FormTextarea,
+  ErrorMessage,
+  SubmitButton,
+} from "../styles/ContactoStyles";
 
 export default function Contacto() {
   const personalInfo = usePersonalInfo();
@@ -25,84 +45,103 @@ export default function Contacto() {
   });
 
   return (
-    <section className="contacto">
-      <div className="container">
-        <div className="portafolio-header">
-          <h2 className="section-title">Contacto</h2>
-          <p className="section-subtitle">
+    <ContactoSection>
+      <Container>
+        <div style={{ marginBottom: "4rem", textAlign: "center" }}>
+          <h2
+            style={{
+              fontSize: "2.5rem",
+              background: "linear-gradient(135deg, #667eea, #764ba2)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              marginBottom: "0.5rem",
+              fontWeight: 700,
+            }}
+          >
+            Contacto
+          </h2>
+          <p
+            style={{
+              fontSize: "1.1rem",
+              color: "#4a5568",
+              maxWidth: "500px",
+              margin: "0 auto",
+            }}
+          >
             ¡Comuniquémonos y hagamos algo increíble!
           </p>
         </div>
 
-        <div className="contacto-content">
-          <div className="contacto-info">
-            <h3>Información de Contacto</h3>
+        <ContactoContent>
+          <ContactoInfo>
+            <ContactoTitle>Información de Contacto</ContactoTitle>
 
-            <div className="info-item">
-              <span className="info-icon">
+            <InfoItem>
+              <InfoIcon>
                 <FaEnvelope size={24} />
-              </span>
-              <div>
-                <h4>Email</h4>
-                <a href={`mailto:${personalInfo.email}`}>
+              </InfoIcon>
+              <InfoContent>
+                <InfoTitle>Email</InfoTitle>
+                <InfoLink href={`mailto:${personalInfo.email}`}>
                   {personalInfo.email}
-                </a>
-              </div>
-            </div>
+                </InfoLink>
+              </InfoContent>
+            </InfoItem>
 
-            <div className="info-item">
-              <span className="info-icon">
+            <InfoItem>
+              <InfoIcon>
                 <FaLocationDot size={24} />
-              </span>
-              <div>
-                <h4>Ubicación</h4>
-                <p>
+              </InfoIcon>
+              <InfoContent>
+                <InfoTitle>Ubicación</InfoTitle>
+                <InfoText>
                   {personalInfo.ubicaciones.map((ubicacion, index) => (
                     <span key={index}>
                       {ubicacion}
                       {index < personalInfo.ubicaciones.length - 1 && <br />}
                     </span>
                   ))}
-                </p>
-              </div>
-            </div>
+                </InfoText>
+              </InfoContent>
+            </InfoItem>
 
-            <div className="info-item">
-              <span className="info-icon">
+            <InfoItem>
+              <InfoIcon>
                 <FaLink size={24} />
-              </span>
-              <div>
-                <h4>Redes Sociales</h4>
-                <div className="social-links">
-                  <a
+              </InfoIcon>
+              <InfoContent>
+                <InfoTitle>Redes Sociales</InfoTitle>
+                <SocialLinks>
+                  <SocialLink
                     href={personalInfo.redes.github}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     GitHub
-                  </a>
-                  <a
+                  </SocialLink>
+                  <SocialLink
                     href={personalInfo.redes.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     LinkedIn
-                  </a>
-                  <a
+                  </SocialLink>
+                  <SocialLink
                     href={personalInfo.redes.facebook}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     Facebook
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
+                  </SocialLink>
+                </SocialLinks>
+              </InfoContent>
+            </InfoItem>
+          </ContactoInfo>
 
-          <form className="contacto-form" onSubmit={onFormSubmit}>
-            <div className="form-group">
-              <input
+          <ContactoForm onSubmit={onFormSubmit}>
+            <FormGroup>
+              <FormInput
                 type="text"
                 name="nombre"
                 placeholder="¿Cuál es tu nombre?"
@@ -110,13 +149,11 @@ export default function Contacto() {
                 onChange={handleChange}
                 className={errors.nombre ? "input-error" : ""}
               />
-              {errors.nombre && (
-                <span className="error-message">{errors.nombre}</span>
-              )}
-            </div>
+              {errors.nombre && <ErrorMessage>{errors.nombre}</ErrorMessage>}
+            </FormGroup>
 
-            <div className="form-group">
-              <input
+            <FormGroup>
+              <FormInput
                 type="email"
                 name="email"
                 placeholder="Tu email para contactarte"
@@ -124,13 +161,11 @@ export default function Contacto() {
                 onChange={handleChange}
                 className={errors.email ? "input-error" : ""}
               />
-              {errors.email && (
-                <span className="error-message">{errors.email}</span>
-              )}
-            </div>
+              {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
+            </FormGroup>
 
-            <div className="form-group">
-              <input
+            <FormGroup>
+              <FormInput
                 type="text"
                 name="asunto"
                 placeholder="Asunto del mensaje"
@@ -138,13 +173,11 @@ export default function Contacto() {
                 onChange={handleChange}
                 className={errors.asunto ? "input-error" : ""}
               />
-              {errors.asunto && (
-                <span className="error-message">{errors.asunto}</span>
-              )}
-            </div>
+              {errors.asunto && <ErrorMessage>{errors.asunto}</ErrorMessage>}
+            </FormGroup>
 
-            <div className="form-group">
-              <textarea
+            <FormGroup>
+              <FormTextarea
                 name="mensaje"
                 placeholder="Cuéntame qué tienes en mente..."
                 rows={6}
@@ -152,21 +185,15 @@ export default function Contacto() {
                 onChange={handleChange}
                 className={errors.mensaje ? "input-error" : ""}
               />
-              {errors.mensaje && (
-                <span className="error-message">{errors.mensaje}</span>
-              )}
-            </div>
+              {errors.mensaje && <ErrorMessage>{errors.mensaje}</ErrorMessage>}
+            </FormGroup>
 
-            <button
-              type="submit"
-              className="submit-btn"
-              disabled={isSubmitting}
-            >
+            <SubmitButton type="submit" disabled={isSubmitting}>
               {isSubmitting ? "Enviando..." : "Enviar Mensaje"}
-            </button>
-          </form>
-        </div>
-      </div>
+            </SubmitButton>
+          </ContactoForm>
+        </ContactoContent>
+      </Container>
 
       {toasts.map((toast) => (
         <Toast
@@ -176,6 +203,6 @@ export default function Contacto() {
           onClose={() => removeToast(toast.id)}
         />
       ))}
-    </section>
+    </ContactoSection>
   );
 }

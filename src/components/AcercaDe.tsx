@@ -1,9 +1,36 @@
-import "./AcercaDe.css";
 import {
   usePersonalInfo,
   useTrayectoria,
   useHabilidadesCategorizadas,
 } from "../store/hooks/usePortfolioSelectors";
+import { Container } from "../styles/components";
+import {
+  AcercaDeSection,
+  BioTrayectoriaContainer,
+  BioColumn,
+  BioFoto,
+  BioImage,
+  BioContent,
+  BioNombre,
+  BioProfesion,
+  BioTexto,
+  TrayectoriaColumn,
+  SectionSubtitle,
+  TrayectoriaTimelineVertical,
+  TimelineItem,
+  TimelineMarker,
+  TimelineContent,
+  JobTitle,
+  JobCompany,
+  JobPeriod,
+  JobDescription,
+  HabilidadesCategorizadasSection,
+  HabilidadesCategorias,
+  HabilidadCategoria,
+  CategoriaTitulo,
+  SkillsTags,
+  SkillTag,
+} from "../styles/AcercaDeStyles";
 
 export default function AcercaDe() {
   const personalInfo = usePersonalInfo();
@@ -11,70 +38,84 @@ export default function AcercaDe() {
   const habilidadesCategorizadas = useHabilidadesCategorizadas();
 
   return (
-    <section className="acerca-de">
-      <div className="container">
-        <h2 className="section-title">Acerca de Mí</h2>
+    <AcercaDeSection>
+      <Container>
+        <h2
+          style={{
+            fontSize: "2.5rem",
+            background: "linear-gradient(135deg, #667eea, #764ba2)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+            marginBottom: "3rem",
+            fontWeight: 700,
+            textAlign: "center",
+          }}
+        >
+          Acerca de Mí
+        </h2>
 
         {/* Biografía y Trayectoria en 2 Columnas */}
-        <div className="bio-trayectoria-container">
+        <BioTrayectoriaContainer>
           {/* Columna Izquierda: Biografía con Foto */}
-          <div className="bio-column">
-            <div className="bio-foto">
-              <img
+          <BioColumn>
+            <BioFoto>
+              <BioImage
                 src={personalInfo.imagen}
                 alt={`${personalInfo.nombre} ${personalInfo.apellido}`}
-                className="bio-image"
               />
-            </div>
-            <div className="bio-content">
-              <h3 className="bio-nombre">
+            </BioFoto>
+            <BioContent>
+              <BioNombre>
                 {personalInfo.nombre} {personalInfo.apellido}
-              </h3>
-              <p className="bio-profesion">{personalInfo.profesion}</p>
-              <p className="bio-texto">{personalInfo.biografia.parrafo1}</p>
-              <p className="bio-texto">{personalInfo.biografia.parrafo2}</p>
-              <p className="bio-texto">{personalInfo.biografia.parrafo3}</p>
-            </div>
-          </div>
+              </BioNombre>
+              <BioProfesion>{personalInfo.profesion}</BioProfesion>
+              <BioTexto>{personalInfo.biografia.parrafo1}</BioTexto>
+              <BioTexto>{personalInfo.biografia.parrafo2}</BioTexto>
+              <BioTexto>{personalInfo.biografia.parrafo3}</BioTexto>
+            </BioContent>
+          </BioColumn>
 
           {/* Columna Derecha: Trayectoria */}
-          <div className="trayectoria-column">
-            <h3 className="section-subtitle">Mi Trayectoria Profesional</h3>
-            <div className="trayectoria-timeline-vertical">
+          <TrayectoriaColumn>
+            <SectionSubtitle>Mi Trayectoria Profesional</SectionSubtitle>
+            <TrayectoriaTimelineVertical>
               {trayectoria.map((item) => (
-                <div key={item.id} className="timeline-item">
-                  <div className="timeline-marker"></div>
-                  <div className="timeline-content">
-                    <h4 className="job-title">{item.puesto}</h4>
-                    <p className="job-company">{item.empresa}</p>
-                    <p className="job-period">{item.periodo}</p>
-                    <p className="job-description">{item.descripcion}</p>
-                  </div>
-                </div>
+                <TimelineItem key={item.id}>
+                  <TimelineMarker />
+                  <TimelineContent>
+                    <JobTitle>{item.puesto}</JobTitle>
+                    <JobCompany>{item.empresa}</JobCompany>
+                    <JobPeriod>{item.periodo}</JobPeriod>
+                    <JobDescription>{item.descripcion}</JobDescription>
+                  </TimelineContent>
+                </TimelineItem>
               ))}
-            </div>
-          </div>
-        </div>
+            </TrayectoriaTimelineVertical>
+          </TrayectoriaColumn>
+        </BioTrayectoriaContainer>
 
         {/* Habilidades Categorizadas */}
-        <div className="habilidades-categorizadas-section">
-          <h3 className="section-subtitle">Mis Habilidades</h3>
-          <div className="habilidades-categorias">
+        <HabilidadesCategorizadasSection>
+          <SectionSubtitle
+            style={{ textAlign: "center", marginBottom: "2rem" }}
+          >
+            Mis Habilidades
+          </SectionSubtitle>
+          <HabilidadesCategorias>
             {habilidadesCategorizadas.map((categoria) => (
-              <div key={categoria.id} className="habilidad-categoria">
-                <h4 className="categoria-titulo">{categoria.categoria}</h4>
-                <div className="skills-tags">
+              <HabilidadCategoria key={categoria.id}>
+                <CategoriaTitulo>{categoria.categoria}</CategoriaTitulo>
+                <SkillsTags>
                   {categoria.skills.map((skill, index) => (
-                    <span key={index} className="skill-tag">
-                      {skill}
-                    </span>
+                    <SkillTag key={index}>{skill}</SkillTag>
                   ))}
-                </div>
-              </div>
+                </SkillsTags>
+              </HabilidadCategoria>
             ))}
-          </div>
-        </div>
-      </div>
-    </section>
+          </HabilidadesCategorias>
+        </HabilidadesCategorizadasSection>
+      </Container>
+    </AcercaDeSection>
   );
 }

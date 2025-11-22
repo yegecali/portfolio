@@ -1,8 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
-import "./App.css";
+import { ThemeProvider } from "styled-components";
 import { store } from "./store/store";
 import { DataLoaderWrapper } from "./DataLoaderWrapper";
+import { GlobalStyles } from "./styles/GlobalStyles";
+import { theme } from "./styles/theme";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Portafolio from "./components/Portafolio";
@@ -34,7 +36,10 @@ function AppContent() {
 function App() {
   return (
     <Provider store={store}>
-      <AppContent />
+      <ThemeProvider theme={theme}>
+        <GlobalStyles />
+        <AppContent />
+      </ThemeProvider>
     </Provider>
   );
 }

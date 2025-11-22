@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import "./Footer.css";
 import {
   FaGithub,
   FaLinkedin,
@@ -7,48 +6,70 @@ import {
   FaEnvelope,
   FaLocationDot,
 } from "react-icons/fa6";
+import { Container } from "../styles/components";
+import {
+  FooterElement,
+  FooterContent,
+  FooterSection,
+  FooterTitle,
+  FooterList,
+  FooterListItem,
+  FooterLink,
+  FooterText,
+  SocialIconsContainer,
+  SocialIconLink,
+  FooterBottom,
+} from "../styles/FooterStyles";
 
 export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="footer">
-      <div className="container">
-        <div className="footer-content">
-          <div className="footer-section">
-            <h4>Navegación</h4>
-            <ul>
-              <li>
-                <Link to="/">Inicio</Link>
-              </li>
-              <li>
-                <Link to="/acerca">Acerca de</Link>
-              </li>
-              <li>
-                <Link to="/portafolio">Portafolio</Link>
-              </li>
-              <li>
-                <Link to="/contacto">Contacto</Link>
-              </li>
-            </ul>
-          </div>
+    <FooterElement>
+      <Container>
+        <FooterContent>
+          <FooterSection>
+            <FooterTitle>Navegación</FooterTitle>
+            <FooterList>
+              <FooterListItem>
+                <FooterLink as={Link} to="/">
+                  Inicio
+                </FooterLink>
+              </FooterListItem>
+              <FooterListItem>
+                <FooterLink as={Link} to="/acerca">
+                  Acerca de
+                </FooterLink>
+              </FooterListItem>
+              <FooterListItem>
+                <FooterLink as={Link} to="/portafolio">
+                  Portafolio
+                </FooterLink>
+              </FooterListItem>
+              <FooterListItem>
+                <FooterLink as={Link} to="/contacto">
+                  Contacto
+                </FooterLink>
+              </FooterListItem>
+            </FooterList>
+          </FooterSection>
 
-          <div className="footer-section">
-            <h4>Contacto</h4>
-            <p>
+          <FooterSection>
+            <FooterTitle>Contacto</FooterTitle>
+            <FooterText>
               <FaEnvelope style={{ marginRight: "0.5rem" }} />
               yegecali2@gmail.com
-            </p>
-            <p>
+            </FooterText>
+            <FooterText>
               <FaLocationDot style={{ marginRight: "0.5rem" }} />
               Ayacucho, Perú
-            </p>
-          </div>
+            </FooterText>
+          </FooterSection>
 
-          <div className="footer-section">
-            <h4>Conéctate</h4>
-            <div className="social-icons">
-              <a
+          <FooterSection>
+            <FooterTitle>Conéctate</FooterTitle>
+            <SocialIconsContainer>
+              <SocialIconLink
                 href="https://github.com/yegecali"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -56,8 +77,8 @@ export default function Footer() {
               >
                 <FaGithub size={18} />
                 GitHub
-              </a>
-              <a
+              </SocialIconLink>
+              <SocialIconLink
                 href="https://linkedin.com/in/yemi-genderson-canchari-lizarbe-90bb98127/"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -65,8 +86,8 @@ export default function Footer() {
               >
                 <FaLinkedin size={18} />
                 LinkedIn
-              </a>
-              <a
+              </SocialIconLink>
+              <SocialIconLink
                 href="https://facebook.com/yemigenderson.cancharilizarbe"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -74,18 +95,18 @@ export default function Footer() {
               >
                 <FaFacebook size={18} />
                 Facebook
-              </a>
-            </div>
-          </div>
-        </div>
+              </SocialIconLink>
+            </SocialIconsContainer>
+          </FooterSection>
+        </FooterContent>
 
-        <div className="footer-bottom">
+        <FooterBottom>
           <p>
             &copy; {year} Todos los derechos reservados | Ing. Genderson
             Canchari Lizarbe
           </p>
-        </div>
-      </div>
-    </footer>
+        </FooterBottom>
+      </Container>
+    </FooterElement>
   );
 }

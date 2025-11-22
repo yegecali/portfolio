@@ -1,54 +1,80 @@
-import "./Portafolio.css";
 import { useProyectos } from "../store/hooks/usePortfolioSelectors";
 import { renderIcon } from "../utils/iconRenderer";
+import { Container } from "../styles/components";
+import {
+  PortafolioSection,
+  ProjectsGrid,
+  ProjectCard,
+  ProjectIconFloat,
+  ProjectContent,
+  ProjectTitle,
+  ProjectDescription,
+  ProjectTechnologies,
+  TechTag,
+  ProjectLink,
+} from "../styles/PortafolioStyles";
 
 export default function Portafolio() {
   const proyectos = useProyectos();
 
   return (
-    <section className="portafolio">
-      <div className="container">
-        <div className="portafolio-header">
-          <h2 className="section-title">Mi Portafolio</h2>
-          <p className="section-subtitle">
+    <PortafolioSection>
+      <Container>
+        <div style={{ marginBottom: "4rem", textAlign: "center" }}>
+          <h2
+            style={{
+              fontSize: "2.5rem",
+              background: "linear-gradient(135deg, #667eea, #764ba2)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              marginBottom: "0.5rem",
+              fontWeight: 700,
+            }}
+          >
+            Mi Portafolio
+          </h2>
+          <p
+            style={{
+              fontSize: "1.1rem",
+              color: "#4a5568",
+              maxWidth: "500px",
+              margin: "0 auto",
+            }}
+          >
             Proyectos de Backend, IA y Soluciones Empresariales
           </p>
         </div>
 
-        <div className="projects-grid">
+        <ProjectsGrid>
           {proyectos.map((proyecto) => (
-            <div key={proyecto.id} className="project-card">
-              <div className="project-icon-float">
-                {renderIcon(proyecto.icon)}
-              </div>
+            <ProjectCard key={proyecto.id}>
+              <ProjectIconFloat>{renderIcon(proyecto.icon)}</ProjectIconFloat>
 
-              <div className="project-content">
-                <h3 className="project-title">{proyecto.titulo}</h3>
-                <p className="project-description">{proyecto.descripcion}</p>
+              <ProjectContent>
+                <ProjectTitle>{proyecto.titulo}</ProjectTitle>
+                <ProjectDescription>{proyecto.descripcion}</ProjectDescription>
 
-                <div className="project-technologies">
+                <ProjectTechnologies>
                   {proyecto.tecnologias.map((tech, index) => (
-                    <span key={index} className="tech-tag">
-                      {tech}
-                    </span>
+                    <TechTag key={index}>{tech}</TechTag>
                   ))}
-                </div>
+                </ProjectTechnologies>
 
                 {proyecto.enlace && (
-                  <a
+                  <ProjectLink
                     href={proyecto.enlace}
-                    className="project-link"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     Ver Proyecto →
-                  </a>
+                  </ProjectLink>
                 )}
-              </div>
-            </div>
+              </ProjectContent>
+            </ProjectCard>
           ))}
-        </div>
-      </div>
-    </section>
+        </ProjectsGrid>
+      </Container>
+    </PortafolioSection>
   );
 }
