@@ -4,8 +4,16 @@
     "apellido": "LIZARBE",
     "profesion": "Ingeniero de Sistemas",
     "email": "yegecali2@gmail.com",
+    "telefono": "+51 999 999 999",
     "ubicaciones": ["Santa Rosa - Ayacucho", "Huamanga - Ayacucho"],
     "descripcion": "Soluciones informáticas para negocios. Diseño y desarrollo web. Sistemas de información. Auditoría de sistemas.",
+    "descripcionLarga": "Profesional con más de 5 años de experiencia en desarrollo de soluciones informáticas innovadoras. Especializado en crear aplicaciones web robustas, sistemas de información escalables y bases de datos eficientes. Comprometido con la calidad, la innovación y la satisfacción del cliente.",
+    "biografia": {
+      "parrafo1": "Soy un ingeniero de sistemas apasionado por la innovación y el desarrollo de soluciones tecnológicas que impacten positivamente en los negocios. Con más de 5 años de experiencia, he trabajado en diversos proyectos que van desde sistemas empresariales hasta aplicaciones web modernas y soluciones de inteligencia artificial.",
+      "parrafo2": "Mi especialidad radica en el desarrollo full-stack, combinando backend robusto con frontends interactivos, además de experiencia en arquitectura de sistemas y bases de datos. Soy un creyente en escribir código limpio, mantenible y eficiente, siempre pensando en la escalabilidad y el rendimiento.",
+      "parrafo3": "Más allá de la programación, me interesa la inteligencia artificial y el machine learning, explorando cómo estas tecnologías pueden revolucionar la forma en que trabajamos y vivimos. Estoy comprometido con el aprendizaje continuo y con mantenerse actualizado en un campo tan dinámico como la tecnología."
+    },
+    "imagen": "https://api.dicebear.com/7.x/avataaars/svg?seed=Genderson",
     "redes": {
       "github": "https://github.com/yegecali",
       "linkedin": "https://linkedin.com/in/yemi-genderson-canchari-lizarbe-90bb98127/",
@@ -15,50 +23,84 @@
   "proyectos": [
     {
       "id": 1,
-      "titulo": "Sistema de Botica",
-      "descripcion": "Administrar los productos de una botica, administración de citas, etc",
-      "tecnologias": ["Diseño", "Desarrollo Web", "Bases de Datos"],
-      "icon": "FaHospital",
+      "titulo": "API Resiliente de Gestión de Usuarios",
+      "descripcion": "API backend con patrones de resiliencia (Circuit Breaker, Retry, Timeout) para garantizar alta disponibilidad y recuperación automática ante fallos. Implementación de health checks y observabilidad.",
+      "tecnologias": [
+        "Java",
+        "Quarkus",
+        "Kafka",
+        "PostgreSQL",
+        "Resiliencia4j"
+      ],
+      "icon": "FaShieldAlt",
       "enlace": null
     },
     {
       "id": 2,
-      "titulo": "Sistema de Almacén",
-      "descripcion": "Administrar los productos de una tienda de abarrotes, stock, compras y ventas",
-      "tecnologias": ["Diseño", "Desarrollo Web", "Bases de Datos", "Android"],
-      "icon": "FaBox",
+      "titulo": "Sistema de Checkeo de Tickets Incidentes",
+      "descripcion": "Plataforma integral para la gestión y seguimiento de tickets de incidentes. Incluye asignación automática, priorización, notificaciones en tiempo real y reportes analíticos de resolución.",
+      "tecnologias": ["Java", "Quarkus", "React", "PostgreSQL", "WebSocket"],
+      "icon": "FaTicketAlt",
       "enlace": null
     },
     {
       "id": 3,
-      "titulo": "Sistema de Trámite",
-      "descripcion": "Administrar los documentos de una organización",
-      "tecnologias": ["Diseño", "Desarrollo Web", "Bases de Datos"],
-      "icon": "FaClipboard",
+      "titulo": "LangChain Confluence Knowledge Manager",
+      "descripcion": "Sistema inteligente de gestión de conocimientos que integra Confluence con LangChain para extraer, indexar y recuperar documentación empresarial mediante búsqueda semántica y RAG.",
+      "tecnologias": [
+        "Python",
+        "LangChain",
+        "RAG",
+        "Embeddings",
+        "Confluence API"
+      ],
+      "icon": "FaBrain",
       "enlace": null
     },
     {
       "id": 4,
-      "titulo": "Ecommerce Vraem",
-      "descripcion": "Compra y venta de bienes",
-      "tecnologias": ["Diseño", "Desarrollo Web", "Bases de Datos"],
-      "icon": "FaShoppingCart",
-      "enlace": null
-    },
-    {
-      "id": 5,
-      "titulo": "Sistema de Seguridad",
-      "descripcion": "Administrar los delitos ocurridos en un lugar, y notificar a los efectivos policiales",
-      "tecnologias": ["Diseño", "Desarrollo Web", "Bases de Datos"],
+      "titulo": "Sistema de Encriptación Asimétrica y Simétrica",
+      "descripcion": "Módulo robusto de criptografía para encriptación/desencriptación de datos sensibles. Implementa RSA para encriptación asimétrica, AES para simétrica, y gestión segura de llaves con PKCS#12 y Key Stores.",
+      "tecnologias": ["Java", "Quarkus", "Cryptography", "Security", "JCA/JCE"],
       "icon": "FaLock",
       "enlace": null
     },
     {
+      "id": 5,
+      "titulo": "Microservicio de Autenticación OAuth2",
+      "descripcion": "Servidor de autenticación empresarial con soporte OAuth2, OpenID Connect, JWT y MFA. Integración con LDAP/Active Directory. Auditoría de accesos y renovación automática de tokens.",
+      "tecnologias": [
+        "Java",
+        "Quarkus",
+        "Spring Security",
+        "PostgreSQL",
+        "JWT"
+      ],
+      "icon": "FaKeyboard",
+      "enlace": null
+    },
+    {
       "id": 6,
-      "titulo": "Portafolios",
-      "descripcion": "Portafolio profesional de una persona",
-      "tecnologias": ["Diseño", "Desarrollo Web", "Bases de Datos"],
-      "icon": "FaBriefcase",
+      "titulo": "Pipeline de Procesamiento de Datos con Kafka",
+      "descripcion": "Arquitectura event-driven que procesa streams de datos en tiempo real. Consumidores y productores Kafka para transformación, validación y almacenamiento de eventos de negocio a escala.",
+      "tecnologias": ["Java", "Quarkus", "Kafka", "PostgreSQL", "Docker"],
+      "icon": "FaExchangeAlt",
+      "enlace": null
+    },
+    {
+      "id": 7,
+      "titulo": "Monitor de Salud de APIs REST",
+      "descripcion": "Dashboard de monitoreo en tiempo real para APIs REST. Tracking de latencia, tasa de error, disponibilidad y generación de alertas. Métricas con Prometheus y visualización Grafana.",
+      "tecnologias": ["Java", "Quarkus", "Prometheus", "Grafana", "REST API"],
+      "icon": "FaHeartbeat",
+      "enlace": null
+    },
+    {
+      "id": 8,
+      "titulo": "Sistema de Auditoría y Logs Distribuido",
+      "descripcion": "Centralización de logs de múltiples aplicaciones con ELK Stack. Búsqueda avanzada, alertas automáticas y reportes de auditoría para cumplimiento normativo.",
+      "tecnologias": ["Java", "Quarkus", "Elasticsearch", "Logstash", "Kibana"],
+      "icon": "FaFileAlt",
       "enlace": null
     }
   ],
@@ -107,9 +149,204 @@
     "Auditoría de Sistemas",
     "Análisis y Diseño de Sistemas"
   ],
+  "habilidadesCategorizadas": [
+    {
+      "id": 1,
+      "categoria": "Backend",
+      "skills": [
+        "Java",
+        "Quarkus",
+        "Spring Boot",
+        "Spring Security",
+        "JUnit",
+        "Mockito",
+        "OAuth2",
+        "JWT",
+        "Resiliencia4j"
+      ]
+    },
+    {
+      "id": 2,
+      "categoria": "Frontend",
+      "skills": [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "SASS",
+        "HTML/CSS",
+        "Redux",
+        "Hooks"
+      ]
+    },
+    {
+      "id": 3,
+      "categoria": "Base de Datos",
+      "skills": [
+        "SQL Server",
+        "PostgreSQL",
+        "Liquibase",
+        "DataFactory",
+        "JPA/Hibernate",
+        "Query Optimization"
+      ]
+    },
+    {
+      "id": 4,
+      "categoria": "IA & Machine Learning",
+      "skills": [
+        "LangChain",
+        "RAG",
+        "Python",
+        "Embeddings",
+        "Confluence Integration",
+        "Semantic Search"
+      ]
+    },
+    {
+      "id": 5,
+      "categoria": "DevOps & Tools",
+      "skills": [
+        "Docker",
+        "Kubernetes",
+        "Git",
+        "CI/CD",
+        "Kafka",
+        "ELK Stack",
+        "Prometheus",
+        "Grafana"
+      ]
+    }
+  ],
   "estadisticas": {
-    "proyectosCompletados": 6,
+    "proyectosCompletados": 8,
     "satisfaccionClientes": 100,
     "aniosExperiencia": 5
-  }
+  },
+  "trayectoria": [
+    {
+      "id": 1,
+      "empresa": "Empresa de Soluciones Informáticas",
+      "puesto": "Ingeniero de Sistemas Senior",
+      "periodo": "2020 - Presente",
+      "descripcion": "Liderazgo en el desarrollo de soluciones informáticas para empresas medianas y grandes. Diseño arquitectónico de sistemas escalables y auditoría de infraestructura."
+    },
+    {
+      "id": 2,
+      "empresa": "Startup Tecnológica",
+      "puesto": "Desarrollador Full Stack",
+      "periodo": "2018 - 2020",
+      "descripcion": "Desarrollo de aplicaciones web y móviles. Implementación de bases de datos y optimización de procesos. Trabajo colaborativo en equipo ágil."
+    },
+    {
+      "id": 3,
+      "empresa": "Consultora de TI",
+      "puesto": "Analista de Sistemas",
+      "periodo": "2016 - 2018",
+      "descripcion": "Análisis de requerimientos, diseño de soluciones y asesoramiento técnico a clientes. Auditoría de sistemas y propuestas de mejora."
+    }
+  ],
+  "colegas": [
+    {
+      "id": 1,
+      "nombre": "Juan Pérez García",
+      "puesto": "Desarrollador Frontend",
+      "especialidad": "React, Vue.js, TypeScript",
+      "enlace": "https://linkedin.com/in/juan-perez"
+    },
+    {
+      "id": 2,
+      "nombre": "María López Rodríguez",
+      "puesto": "Diseñadora UX/UI",
+      "especialidad": "Diseño de interfaces, Usabilidad, Figma",
+      "enlace": "https://linkedin.com/in/maria-lopez"
+    },
+    {
+      "id": 3,
+      "nombre": "Carlos Martínez Sánchez",
+      "puesto": "Especialista en DevOps",
+      "especialidad": "Docker, Kubernetes, CI/CD",
+      "enlace": "https://linkedin.com/in/carlos-martinez"
+    },
+    {
+      "id": 4,
+      "nombre": "Ana Rodríguez Flores",
+      "puesto": "Administradora de Bases de Datos",
+      "especialidad": "SQL Server, PostgreSQL, Optimización",
+      "enlace": "https://linkedin.com/in/ana-rodriguez"
+    }
+  ],
+  "competenciasITecnicas": [
+    {
+      "id": 1,
+      "nombre": "Java",
+      "nivel": "Avanzado",
+      "icono": "FaJava"
+    },
+    {
+      "id": 2,
+      "nombre": "Quarkus",
+      "nivel": "Avanzado",
+      "icono": "SiQuarkus"
+    },
+    {
+      "id": 3,
+      "nombre": "Apache Kafka",
+      "nivel": "Avanzado",
+      "icono": "SiApachekafka"
+    },
+    {
+      "id": 4,
+      "nombre": "Spring Security",
+      "nivel": "Avanzado",
+      "icono": "FaShield"
+    },
+    {
+      "id": 5,
+      "nombre": "PostgreSQL",
+      "nivel": "Avanzado",
+      "icono": "SiPostgresql"
+    },
+    {
+      "id": 6,
+      "nombre": "SQL Server",
+      "nivel": "Avanzado",
+      "icono": "FaDatabase"
+    },
+    {
+      "id": 7,
+      "nombre": "React",
+      "nivel": "Avanzado",
+      "icono": "SiReact"
+    },
+    {
+      "id": 8,
+      "nombre": "TypeScript",
+      "nivel": "Avanzado",
+      "icono": "SiTypescript"
+    },
+    {
+      "id": 9,
+      "nombre": "Docker",
+      "nivel": "Avanzado",
+      "icono": "SiDocker"
+    },
+    {
+      "id": 10,
+      "nombre": "Kubernetes",
+      "nivel": "Intermedio",
+      "icono": "SiKubernetes"
+    },
+    {
+      "id": 11,
+      "nombre": "LangChain",
+      "nivel": "Intermedio",
+      "icono": "FaBrain"
+    },
+    {
+      "id": 12,
+      "nombre": "Elasticsearch",
+      "nivel": "Intermedio",
+      "icono": "SiElasticsearch"
+    }
+  ]
 }

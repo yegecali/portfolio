@@ -35,14 +35,6 @@ export default function Navbar() {
           </li>
           <li>
             <Link
-              to="/servicios"
-              className={`nav-link ${isActive("/servicios")}`}
-            >
-              Servicios
-            </Link>
-          </li>
-          <li>
-            <Link
               to="/contacto"
               className={`nav-link ${isActive("/contacto")}`}
             >

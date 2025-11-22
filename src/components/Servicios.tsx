@@ -1,10 +1,8 @@
 import "./Servicios.css";
 import { useServicios } from "../store/hooks/usePortfolioSelectors";
-import { useLoadPortfolioData } from "../store/hooks/useLoadPortfolioData";
 import { renderIcon } from "../utils/iconRenderer";
 
 export default function Servicios() {
-  useLoadPortfolioData();
   const servicios = useServicios();
 
   return (

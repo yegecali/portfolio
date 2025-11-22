@@ -24,3 +24,27 @@ export const useHabilidades = () => {
 export const useEstadisticas = () => {
   return useSelector((state: RootState) => state.portfolio.estadisticas);
 };
+
+export const useLoading = () => {
+  return useSelector((state: RootState) => state.portfolio.loading);
+};
+
+export const useTrayectoria = () => {
+  return useSelector((state: RootState) => state.portfolio.trayectoria);
+};
+
+export const useColegas = () => {
+  return useSelector((state: RootState) => state.portfolio.colegas);
+};
+
+export const useCompetenciasITecnicas = () => {
+  return useSelector(
+    (state: RootState) => state.portfolio.competenciasITecnicas
+  );
+};
+
+export const useHabilidadesCategorizadas = () => {
+  return useSelector(
+    (state: RootState) => state.portfolio.habilidadesCategorizadas
+  );
+};

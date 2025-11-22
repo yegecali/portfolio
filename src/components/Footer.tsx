@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import "./Footer.css";
+import { FaGithub, FaLinkedin, FaFacebook, FaEnvelope, FaLocationDot } from "react-icons/fa6";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -21,9 +22,6 @@ export default function Footer() {
                 <Link to="/portafolio">Portafolio</Link>
               </li>
               <li>
-                <Link to="/servicios">Servicios</Link>
-              </li>
-              <li>
                 <Link to="/contacto">Contacto</Link>
               </li>
             </ul>
@@ -31,12 +29,18 @@ export default function Footer() {
 
           <div className="footer-section">
             <h4>Contacto</h4>
-            <p>📧 yegecali2@gmail.com</p>
-            <p>📍 Ayacucho, Perú</p>
+            <p>
+              <FaEnvelope style={{ marginRight: "0.5rem" }} />
+              yegecali2@gmail.com
+            </p>
+            <p>
+              <FaLocationDot style={{ marginRight: "0.5rem" }} />
+              Ayacucho, Perú
+            </p>
           </div>
 
           <div className="footer-section">
-            <h4>Redes Sociales</h4>
+            <h4>Conéctate</h4>
             <div className="social-icons">
               <a
                 href="https://github.com/yegecali"
@@ -44,6 +48,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 title="GitHub"
               >
+                <FaGithub size={18} />
                 GitHub
               </a>
               <a
@@ -52,6 +57,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 title="LinkedIn"
               >
+                <FaLinkedin size={18} />
                 LinkedIn
               </a>
               <a
@@ -60,6 +66,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 title="Facebook"
               >
+                <FaFacebook size={18} />
                 Facebook
               </a>
             </div>
@@ -68,8 +75,7 @@ export default function Footer() {
 
         <div className="footer-bottom">
           <p>
-            &copy; {year} Todos los derechos reservados por Ing. Genderson
-            Canchari Lizarbe
+            &copy; {year} Todos los derechos reservados | Ing. Genderson Canchari Lizarbe
           </p>
         </div>
       </div>
