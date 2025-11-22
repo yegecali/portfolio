@@ -4,10 +4,7 @@
     "apellido": "LIZARBE",
     "profesion": "Ingeniero de Sistemas",
     "email": "yegecali2@gmail.com",
-    "ubicaciones": [
-      "Santa Rosa - Ayacucho",
-      "Huamanga - Ayacucho"
-    ],
+    "ubicaciones": ["Santa Rosa - Ayacucho", "Huamanga - Ayacucho"],
     "descripcion": "Soluciones informáticas para negocios. Diseño y desarrollo web. Sistemas de información. Auditoría de sistemas.",
     "redes": {
       "github": "https://github.com/yegecali",
@@ -20,73 +17,48 @@
       "id": 1,
       "titulo": "Sistema de Botica",
       "descripcion": "Administrar los productos de una botica, administración de citas, etc",
-      "tecnologias": [
-        "Diseño",
-        "Desarrollo Web",
-        "Bases de Datos"
-      ],
-      "imagen": "🏥",
+      "tecnologias": ["Diseño", "Desarrollo Web", "Bases de Datos"],
+      "icon": "FaHospital",
       "enlace": null
     },
     {
       "id": 2,
       "titulo": "Sistema de Almacén",
       "descripcion": "Administrar los productos de una tienda de abarrotes, stock, compras y ventas",
-      "tecnologias": [
-        "Diseño",
-        "Desarrollo Web",
-        "Bases de Datos",
-        "Android"
-      ],
-      "imagen": "📦",
+      "tecnologias": ["Diseño", "Desarrollo Web", "Bases de Datos", "Android"],
+      "icon": "FaBox",
       "enlace": null
     },
     {
       "id": 3,
       "titulo": "Sistema de Trámite",
       "descripcion": "Administrar los documentos de una organización",
-      "tecnologias": [
-        "Diseño",
-        "Desarrollo Web",
-        "Bases de Datos"
-      ],
-      "imagen": "📋",
+      "tecnologias": ["Diseño", "Desarrollo Web", "Bases de Datos"],
+      "icon": "FaClipboard",
       "enlace": null
     },
     {
       "id": 4,
       "titulo": "Ecommerce Vraem",
       "descripcion": "Compra y venta de bienes",
-      "tecnologias": [
-        "Diseño",
-        "Desarrollo Web",
-        "Bases de Datos"
-      ],
-      "imagen": "🛒",
+      "tecnologias": ["Diseño", "Desarrollo Web", "Bases de Datos"],
+      "icon": "FaShoppingCart",
       "enlace": null
     },
     {
       "id": 5,
       "titulo": "Sistema de Seguridad",
       "descripcion": "Administrar los delitos ocurridos en un lugar, y notificar a los efectivos policiales",
-      "tecnologias": [
-        "Diseño",
-        "Desarrollo Web",
-        "Bases de Datos"
-      ],
-      "imagen": "🔒",
+      "tecnologias": ["Diseño", "Desarrollo Web", "Bases de Datos"],
+      "icon": "FaLock",
       "enlace": null
     },
     {
       "id": 6,
       "titulo": "Portafolios",
       "descripcion": "Portafolio profesional de una persona",
-      "tecnologias": [
-        "Diseño",
-        "Desarrollo Web",
-        "Bases de Datos"
-      ],
-      "imagen": "💼",
+      "tecnologias": ["Diseño", "Desarrollo Web", "Bases de Datos"],
+      "icon": "FaBriefcase",
       "enlace": null
     }
   ],
@@ -95,37 +67,37 @@
       "id": 1,
       "titulo": "Diseño Web",
       "descripcion": "Diseño moderno y responsivo para tu presencia en línea",
-      "icono": "🎨"
+      "icon": "FaPalette"
     },
     {
       "id": 2,
       "titulo": "Desarrollo Web",
       "descripcion": "Aplicaciones web robustas y escalables con las últimas tecnologías",
-      "icono": "💻"
+      "icon": "FaCode"
     },
     {
       "id": 3,
       "titulo": "Bases de Datos",
       "descripcion": "Diseño e implementación de sistemas de almacenamiento de datos",
-      "icono": "🗄️"
+      "icon": "FaDatabase"
     },
     {
       "id": 4,
       "titulo": "Sistemas de Información",
       "descripcion": "Soluciones integrales de sistemas para tu negocio",
-      "icono": "📊"
+      "icon": "FaChartBar"
     },
     {
       "id": 5,
       "titulo": "Auditoría de Sistemas",
       "descripcion": "Evaluación y optimización de tus sistemas informáticos",
-      "icono": "🔍"
+      "icon": "FaMagnifyingGlass"
     },
     {
       "id": 6,
       "titulo": "Consultoría TI",
       "descripcion": "Asesoramiento profesional en tecnología e información",
-      "icono": "🤝"
+      "icon": "FaHandshake"
     }
   ],
   "habilidades": [

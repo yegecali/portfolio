@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./Contacto.css";
 import { usePersonalInfo } from "../store/hooks/usePortfolioSelectors";
 import { useLoadPortfolioData } from "../store/hooks/useLoadPortfolioData";
+import { FaEnvelope, FaLocationDot, FaLink } from "react-icons/fa6";
 
 export default function Contacto() {
   useLoadPortfolioData();
@@ -27,9 +28,11 @@ export default function Contacto() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Aquí puedes agregar la lógica para enviar el formulario
-    const mailtoLink = `mailto:${personalInfo.email}?subject=${encodeURIComponent(
-      formData.asunto
-    )}&body=${encodeURIComponent(formData.mensaje)}`;
+    const mailtoLink = `mailto:${
+      personalInfo.email
+    }?subject=${encodeURIComponent(formData.asunto)}&body=${encodeURIComponent(
+      formData.mensaje
+    )}`;
     window.location.href = mailtoLink;
   };
 
@@ -44,15 +47,17 @@ export default function Contacto() {
             <h3>Información de Contacto</h3>
 
             <div className="info-item">
-              <span className="info-icon">📧</span>
+              <span className="info-icon"><FaEnvelope size={24} /></span>
               <div>
                 <h4>Email</h4>
-                <a href={`mailto:${personalInfo.email}`}>{personalInfo.email}</a>
+                <a href={`mailto:${personalInfo.email}`}>
+                  {personalInfo.email}
+                </a>
               </div>
             </div>
 
             <div className="info-item">
-              <span className="info-icon">📍</span>
+              <span className="info-icon"><FaLocationDot size={24} /></span>
               <div>
                 <h4>Ubicación</h4>
                 <p>
@@ -67,7 +72,7 @@ export default function Contacto() {
             </div>
 
             <div className="info-item">
-              <span className="info-icon">🔗</span>
+              <span className="info-icon"><FaLink size={24} /></span>
               <div>
                 <h4>Redes Sociales</h4>
                 <div className="social-links">

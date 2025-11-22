@@ -1,6 +1,7 @@
 import "./Portafolio.css";
 import { useProyectos } from "../store/hooks/usePortfolioSelectors";
 import { useLoadPortfolioData } from "../store/hooks/useLoadPortfolioData";
+import { renderIcon } from "../utils/iconRenderer";
 
 export default function Portafolio() {
   useLoadPortfolioData();
@@ -16,7 +17,7 @@ export default function Portafolio() {
           {proyectos.map((proyecto) => (
             <div key={proyecto.id} className="project-card">
               <div className="project-image">
-                <span className="project-emoji">{proyecto.imagen}</span>
+                <span className="project-icon">{renderIcon(proyecto.icon)}</span>
               </div>
               <div className="project-content">
                 <h3 className="project-title">{proyecto.titulo}</h3>

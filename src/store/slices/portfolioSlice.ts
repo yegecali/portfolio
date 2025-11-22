@@ -20,7 +20,7 @@ interface Proyecto {
   titulo: string;
   descripcion: string;
   tecnologias: string[];
-  imagen: string;
+  icon: string;
   enlace: string | null;
 }
 
@@ -28,7 +28,7 @@ interface Servicio {
   id: number;
   titulo: string;
   descripcion: string;
-  icono: string;
+  icon: string;
 }
 
 interface PortfolioState {

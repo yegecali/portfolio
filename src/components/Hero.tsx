@@ -1,6 +1,7 @@
 import "./Hero.css";
 import { usePersonalInfo } from "../store/hooks/usePortfolioSelectors";
 import { useLoadPortfolioData } from "../store/hooks/useLoadPortfolioData";
+import { FaGithub, FaLinkedinIn, FaFacebook, FaEnvelope } from "react-icons/fa6";
 
 export default function Hero() {
   useLoadPortfolioData();
@@ -23,7 +24,7 @@ export default function Hero() {
               rel="noopener noreferrer"
               title="GitHub"
             >
-              <i className="icon">📱</i>
+              <FaGithub size={24} />
             </a>
             <a
               href={personalInfo.redes.linkedin}
@@ -31,7 +32,7 @@ export default function Hero() {
               rel="noopener noreferrer"
               title="LinkedIn"
             >
-              <i className="icon">💼</i>
+              <FaLinkedinIn size={24} />
             </a>
             <a
               href={personalInfo.redes.facebook}
@@ -39,10 +40,10 @@ export default function Hero() {
               rel="noopener noreferrer"
               title="Facebook"
             >
-              <i className="icon">👤</i>
+              <FaFacebook size={24} />
             </a>
             <a href={`mailto:${personalInfo.email}`} title="Email">
-              <i className="icon">📧</i>
+              <FaEnvelope size={24} />
             </a>
           </div>
         </div>

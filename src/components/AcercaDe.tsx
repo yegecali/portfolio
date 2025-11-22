@@ -1,5 +1,9 @@
 import "./AcercaDe.css";
-import { usePersonalInfo, useHabilidades, useEstadisticas } from "../store/hooks/usePortfolioSelectors";
+import {
+  usePersonalInfo,
+  useHabilidades,
+  useEstadisticas,
+} from "../store/hooks/usePortfolioSelectors";
 import { useLoadPortfolioData } from "../store/hooks/useLoadPortfolioData";
 
 export default function AcercaDe() {
