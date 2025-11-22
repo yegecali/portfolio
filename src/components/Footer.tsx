@@ -1,6 +1,12 @@
 import { Link } from "react-router-dom";
 import "./Footer.css";
-import { FaGithub, FaLinkedin, FaFacebook, FaEnvelope, FaLocationDot } from "react-icons/fa6";
+import {
+  FaGithub,
+  FaLinkedin,
+  FaFacebook,
+  FaEnvelope,
+  FaLocationDot,
+} from "react-icons/fa6";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -75,7 +81,8 @@ export default function Footer() {
 
         <div className="footer-bottom">
           <p>
-            &copy; {year} Todos los derechos reservados | Ing. Genderson Canchari Lizarbe
+            &copy; {year} Todos los derechos reservados | Ing. Genderson
+            Canchari Lizarbe
           </p>
         </div>
       </div>
