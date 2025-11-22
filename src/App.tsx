@@ -1,14 +1,16 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import './App.css'
-import Navbar from './components/Navbar'
-import Hero from './components/Hero'
-import Portafolio from './components/Portafolio'
-import Servicios from './components/Servicios'
-import AcercaDe from './components/AcercaDe'
-import Contacto from './components/Contacto'
-import Footer from './components/Footer'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import "./App.css";
+import { store } from "./store/store";
+import Navbar from "./components/Navbar";
+import Hero from "./components/Hero";
+import Portafolio from "./components/Portafolio";
+import Servicios from "./components/Servicios";
+import AcercaDe from "./components/AcercaDe";
+import Contacto from "./components/Contacto";
+import Footer from "./components/Footer";
 
-function App() {
+function AppContent() {
   return (
     <Router basename="/portfolio/">
       <div className="app">
@@ -25,7 +27,15 @@ function App() {
         <Footer />
       </div>
     </Router>
-  )
+  );
 }
 
-export default App
+function App() {
+  return (
+    <Provider store={store}>
+      <AppContent />
+    </Provider>
+  );
+}
+
+export default App;

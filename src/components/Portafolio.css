@@ -25,7 +25,11 @@
 
 .project-image {
   height: 200px;
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
   display: flex;
   align-items: center;
   justify-content: center;

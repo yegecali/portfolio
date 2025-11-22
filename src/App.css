@@ -17,7 +17,7 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: var(--light-bg);
   color: var(--text-dark);
   line-height: 1.6;
@@ -57,7 +57,12 @@ button {
   transition: all 0.3s ease;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   line-height: 1.2;
 }
 
@@ -79,7 +84,7 @@ h1, h2, h3, h4, h5, h6 {
   .section-title {
     font-size: 2rem;
   }
-  
+
   .section-subtitle {
     font-size: 1rem;
     margin-bottom: 2rem;
