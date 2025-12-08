@@ -8,13 +8,21 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   :root {
-    --primary-color: #2563eb;
-    --secondary-color: #7c3aed;
-    --dark-bg: #0f172a;
-    --light-bg: #f0f4f8;
-    --text-dark: #1a202c;
-    --text-light: #4a5568;
-    --border-color: #e2e8f0;
+    --primary-color: #667eea;
+    --secondary-color: #764ba2;
+    --success-color: #10b981;
+    --error-color: #ef4444;
+    --warning-color: #f59e0b;
+  }
+
+  html.theme-light {
+    background-color: ${(props) => props.theme.colors.background.primary};
+    color: ${(props) => props.theme.colors.text.primary};
+  }
+
+  html.theme-dark {
+    background-color: ${(props) => props.theme.colors.background.primary};
+    color: ${(props) => props.theme.colors.text.primary};
   }
 
   body {
@@ -23,15 +31,17 @@ export const GlobalStyles = createGlobalStyle`
       sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #fff;
-    color: var(--text-dark);
+    background-color: ${(props) => props.theme.colors.background.primary};
+    color: ${(props) => props.theme.colors.text.primary};
+    transition: background-color ${(props) => props.theme.transitions.smooth}, 
+                color ${(props) => props.theme.transitions.smooth};
   }
 
   html, body, #root {
     height: 100%;
   }
 
-  #app {
+  #root {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -44,9 +54,42 @@ export const GlobalStyles = createGlobalStyle`
 
   button {
     font-family: inherit;
+    transition: all ${(props) => props.theme.transitions.base};
   }
 
   input, textarea, select {
     font-family: inherit;
+    background-color: ${(props) => props.theme.colors.input.background};
+    color: ${(props) => props.theme.colors.input.text};
+    border-color: ${(props) => props.theme.colors.input.border};
+    transition: all ${(props) => props.theme.transitions.base};
+
+    &::placeholder {
+      color: ${(props) => props.theme.colors.input.placeholder};
+    }
+
+    &:focus {
+      background-color: ${(props) => props.theme.colors.input.background};
+      border-color: ${(props) => props.theme.colors.primary};
+    }
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: ${(props) => props.theme.colors.background.secondary};
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: ${(props) => props.theme.colors.primary};
+    border-radius: 5px;
+
+    &:hover {
+      background: ${(props) => props.theme.colors.secondary};
+    }
   }
 `;

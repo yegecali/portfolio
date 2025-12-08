@@ -6,6 +6,7 @@ import {
   FaEnvelope,
   FaLocationDot,
 } from "react-icons/fa6";
+import { usePersonalInfo } from "../store/hooks/usePortfolioSelectors";
 import { Container } from "../styles/components";
 import {
   FooterElement,
@@ -22,6 +23,7 @@ import {
 } from "../styles/FooterStyles";
 
 export default function Footer() {
+  const personalInfo = usePersonalInfo();
   const year = new Date().getFullYear();
 
   return (
@@ -58,11 +60,11 @@ export default function Footer() {
             <FooterTitle>Contacto</FooterTitle>
             <FooterText>
               <FaEnvelope style={{ marginRight: "0.5rem" }} />
-              yegecali2@gmail.com
+              {personalInfo.email}
             </FooterText>
             <FooterText>
               <FaLocationDot style={{ marginRight: "0.5rem" }} />
-              Ayacucho, Perú
+              {personalInfo.ubicaciones?.[0] || "Ubicación no disponible"}
             </FooterText>
           </FooterSection>
 
@@ -70,7 +72,7 @@ export default function Footer() {
             <FooterTitle>Conéctate</FooterTitle>
             <SocialIconsContainer>
               <SocialIconLink
-                href="https://github.com/yegecali"
+                href={personalInfo.redes?.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 title="GitHub"
@@ -79,7 +81,7 @@ export default function Footer() {
                 GitHub
               </SocialIconLink>
               <SocialIconLink
-                href="https://linkedin.com/in/yemi-genderson-canchari-lizarbe-90bb98127/"
+                href={personalInfo.redes?.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 title="LinkedIn"
@@ -88,7 +90,7 @@ export default function Footer() {
                 LinkedIn
               </SocialIconLink>
               <SocialIconLink
-                href="https://facebook.com/yemigenderson.cancharilizarbe"
+                href={personalInfo.redes?.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Facebook"
@@ -102,8 +104,8 @@ export default function Footer() {
 
         <FooterBottom>
           <p>
-            &copy; {year} Todos los derechos reservados | Ing. Genderson
-            Canchari Lizarbe
+            &copy; {year} Todos los derechos reservados | Ing.{" "}
+            {personalInfo.nombre} {personalInfo.apellido}
           </p>
         </FooterBottom>
       </Container>
