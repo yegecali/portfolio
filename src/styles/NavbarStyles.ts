@@ -23,6 +23,7 @@ export const NavbarLogo = styled.div`
   display: flex;
   align-items: center;
   gap: 0.8rem;
+  flex-shrink: 0;
 
   h1 {
     width: 45px;
@@ -38,7 +39,7 @@ export const NavbarLogo = styled.div`
   }
 `;
 
-export const NavMenu = styled.ul`
+export const NavMenu = styled.ul<{ $isOpen?: boolean }>`
   display: flex;
   list-style: none;
   gap: 2rem;
@@ -46,7 +47,29 @@ export const NavMenu = styled.ul`
   padding: 0;
 
   @media (max-width: 768px) {
-    gap: 1rem;
+    position: fixed;
+    top: 70px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: linear-gradient(135deg, #1a1f3a 0%, #764ba2 100%);
+    gap: 0;
+    padding: ${(props) => (props.$isOpen ? "1rem 0" : "0")};
+    max-height: ${(props) => (props.$isOpen ? "400px" : "0")};
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    box-shadow: ${(props) =>
+      props.$isOpen ? "0 8px 16px rgba(0, 0, 0, 0.2)" : "none"};
+    visibility: ${(props) => (props.$isOpen ? "visible" : "hidden")};
+
+    li {
+      padding: 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
   }
 `;
 
@@ -62,6 +85,7 @@ export const NavLink = styled.a<{ $active?: boolean }>`
   cursor: pointer;
   transition: color 0.3s ease;
   border: none;
+  display: block;
 
   &::after {
     content: "";
@@ -93,7 +117,52 @@ export const NavLink = styled.a<{ $active?: boolean }>`
   `}
 
   @media (max-width: 768px) {
-    padding: 0.5rem 0.8rem;
-    font-size: 0.9rem;
+    padding: 1rem 1.5rem;
+    font-size: 0.95rem;
+    border-radius: 0;
+
+    &::after {
+      display: none;
+    }
+
+    &:hover {
+      background: rgba(102, 126, 234, 0.1);
+      color: #667eea;
+    }
+
+    ${(props) =>
+      props.$active &&
+      `
+      background: rgba(102, 126, 234, 0.1);
+      color: #667eea;
+    `}
+  }
+`;
+
+export const HamburgerButton = styled.button`
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 1001;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  @media (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
   }
 `;
