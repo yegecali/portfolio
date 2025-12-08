@@ -1,35 +1,55 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import { ThemeProvider } from "styled-components";
+import { store } from "./store/store";
+import { DataLoaderWrapper } from "./DataLoaderWrapper";
+import { GlobalStyles } from "./styles/GlobalStyles";
+import { useThemeContext } from "./context/useThemeContext";
+import { ThemeProviderComponent } from "./context/ThemeContextProvider";
+import { Home, AboutPage, PortfolioPage, ContactPage } from "./pages";
+import ThemeToggle from "./components/ThemeToggle";
 
-function App() {
-  const [count, setCount] = useState(0)
+function AppContent() {
+  return (
+    <DataLoaderWrapper>
+      <Router basename="/portfolio/">
+        <Routes>
+          {/* Home page with full Hero section */}
+          <Route path="/" element={<Home />} />
+
+          {/* Other pages with MainLayout (includes Navbar and Footer) */}
+          <Route path="/acerca" element={<AboutPage />} />
+          <Route path="/portafolio" element={<PortfolioPage />} />
+          <Route path="/contacto" element={<ContactPage />} />
+        </Routes>
+        <ThemeToggle />
+      </Router>
+    </DataLoaderWrapper>
+  );
+}
+
+function AppWithTheme() {
+  const { theme } = useThemeContext();
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+      <ThemeProvider theme={theme as any}>
+        <GlobalStyles />
+        <AppContent />
+      </ThemeProvider>
     </>
-  )
+  );
 }
 
-export default App
+function App() {
+  return (
+    <Provider store={store}>
+      <ThemeProviderComponent>
+        <AppWithTheme />
+      </ThemeProviderComponent>
+    </Provider>
+  );
+}
+
+export default App;
