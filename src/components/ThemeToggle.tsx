@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { FaMoon, FaSun } from "react-icons/fa6";
-import { useThemeContext } from "../context/useThemeContext";
+import { useTheme } from "../hooks/useTheme";
 
 const ToggleButton = styled.button`
   background: linear-gradient(
@@ -52,7 +52,7 @@ const ToggleButton = styled.button`
 `;
 
 export default function ThemeToggle() {
-  const { toggleTheme, isDark } = useThemeContext();
+  const { toggleTheme, isDark } = useTheme();
 
   return (
     <ToggleButton

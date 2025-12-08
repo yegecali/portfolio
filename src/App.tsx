@@ -1,13 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import { store } from "./store/store";
 import { DataLoaderWrapper } from "./DataLoaderWrapper";
 import { GlobalStyles } from "./styles/GlobalStyles";
-import { useThemeContext } from "./context/useThemeContext";
-import { ThemeProviderComponent } from "./context/ThemeContextProvider";
+import { lightTheme, darkTheme } from "./styles/theme";
 import { Home, AboutPage, PortfolioPage, ContactPage } from "./pages";
 import ThemeToggle from "./components/ThemeToggle";
+import type { RootState } from "./store/store";
 
 function AppContent() {
   return (
@@ -29,7 +29,8 @@ function AppContent() {
 }
 
 function AppWithTheme() {
-  const { theme } = useThemeContext();
+  const themeMode = useSelector((state: RootState) => state.theme.mode);
+  const theme = themeMode === "light" ? lightTheme : darkTheme;
 
   return (
     <>
@@ -45,9 +46,7 @@ function AppWithTheme() {
 function App() {
   return (
     <Provider store={store}>
-      <ThemeProviderComponent>
-        <AppWithTheme />
-      </ThemeProviderComponent>
+      <AppWithTheme />
     </Provider>
   );
 }
