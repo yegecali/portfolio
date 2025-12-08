@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { Container, Row } from "../styles/shared";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -20,6 +19,13 @@ const LayoutContainer = styled.div`
     color ${(props) => props.theme?.transitions?.base || "0.3s ease"};
 `;
 
+const MainContentWrapper = styled.div`
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
 const MainContent = styled.main`
   flex: 1;
   width: 100%;
@@ -29,11 +35,9 @@ export default function MainLayout({ children }: MainLayoutProps) {
   return (
     <LayoutContainer>
       <Navbar />
-      <Container>
-        <Row>
-          <MainContent>{children}</MainContent>
-        </Row>
-      </Container>
+      <MainContentWrapper>
+        <MainContent>{children}</MainContent>
+      </MainContentWrapper>
       <Footer />
     </LayoutContainer>
   );
