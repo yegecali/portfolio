@@ -4,9 +4,8 @@ export const FooterElement = styled.footer`
   background: linear-gradient(135deg, #1a1f3a 0%, #16213e 100%);
   color: white;
   padding: 4rem 0 2rem;
-  margin-top: auto;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 
   &::before {
     content: "";
