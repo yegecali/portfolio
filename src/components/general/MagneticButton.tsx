@@ -24,7 +24,7 @@ const MagneticButton = ({
   rel,
   onClick,
 }: MagneticButtonProps) => {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLElement>(null);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -32,7 +32,7 @@ const MagneticButton = ({
   const springX = useSpring(x, { stiffness: 200, damping: 18, mass: 0.5 });
   const springY = useSpring(y, { stiffness: 200, damping: 18, mass: 0.5 });
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const el = ref.current;
     if (!el) return;
     const { left, top, width, height } = el.getBoundingClientRect();
@@ -56,24 +56,32 @@ const MagneticButton = ({
     </motion.span>
   );
 
-  const sharedProps = {
-    ref,
-    className,
-    onMouseMove: handleMouseMove,
-    onMouseLeave: handleMouseLeave,
-    onClick,
-  };
-
   if (as === "a" && href) {
     return (
-      <a href={href} download={download} target={target} rel={rel} {...sharedProps}>
+      <a
+        ref={ref as React.RefObject<HTMLAnchorElement>}
+        href={href}
+        download={download}
+        target={target}
+        rel={rel}
+        className={className}
+        onMouseMove={handleMouseMove as React.MouseEventHandler<HTMLAnchorElement>}
+        onMouseLeave={handleMouseLeave}
+        onClick={onClick}
+      >
         {inner}
       </a>
     );
   }
 
   return (
-    <button {...sharedProps}>
+    <button
+      ref={ref as React.RefObject<HTMLButtonElement>}
+      className={className}
+      onMouseMove={handleMouseMove as React.MouseEventHandler<HTMLButtonElement>}
+      onMouseLeave={handleMouseLeave}
+      onClick={onClick}
+    >
       {inner}
     </button>
   );

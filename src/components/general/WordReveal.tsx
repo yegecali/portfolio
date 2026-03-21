@@ -10,18 +10,6 @@ interface WordRevealProps {
   trigger?: "inView" | "mount"; // inView = whileInView, mount = animate on mount
 }
 
-const wordVariants = {
-  hidden: { y: "110%", opacity: 0 },
-  visible: (i: number) => ({
-    y: "0%",
-    opacity: 1,
-    transition: {
-      duration: 0.5,
-      ease: [0.22, 1, 0.36, 1], // custom easing — snappy but smooth
-    },
-  }),
-};
-
 const containerVariants = (delay: number, stagger: number) => ({
   hidden: {},
   visible: {

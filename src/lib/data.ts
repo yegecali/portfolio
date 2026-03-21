@@ -92,6 +92,7 @@ export const TECHNOLOGIES: TechDetails[] = [
 export const EXPERIENCES: ExperienceDetails[] = [
   {
     logoAlt: "Company logo",
+    company: "Company",
     position: "Senior Developer",
     startDate: new Date(2022, 0),
     currentlyWorkHere: true,
@@ -103,6 +104,7 @@ export const EXPERIENCES: ExperienceDetails[] = [
   },
   {
     logoAlt: "Company logo",
+    company: "Company",
     position: "Full Stack Developer",
     startDate: new Date(2020, 5),
     endDate: new Date(2021, 11),

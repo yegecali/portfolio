@@ -17,7 +17,7 @@ const parse = (val: string) => {
   return { num: parseInt(match[1], 10), suffix: match[2] };
 };
 
-const AnimatedCounter = ({ value, className = "", duration = 1.5 }: AnimatedCounterProps) => {
+const AnimatedCounter = ({ value, className = "" }: AnimatedCounterProps) => {
   const { num, suffix } = parse(value);
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true, margin: "0px 0px -60px 0px" });
