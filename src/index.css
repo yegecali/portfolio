@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Typography Base Styles */
+@layer base {
+  body {
+    @apply font-body;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display;
+  }
+}
+
+/* Color Palette - Light & Dark Modes */
+:root {
+  /* Light Mode */
+  --bg-light: 247 247 248;
+  --surface-light: 255 255 255;
+  --muted-light: 237 237 239;
+  --border-light: 212 212 216;
+  --text-primary-light: 24 24 27;
+  --text-muted-light: 113 113 122;
+
+  /* Accent Colors (Shared) */
+  --accent: 99 102 241;
+  --accent-hover: 129 140 248;
+  --cyan: 34 211 238;
+  --violet: 167 139 250;
+}
+
+.dark {
+  /* Dark Mode */
+  --bg-light: 13 13 15;
+  --surface-light: 22 22 24;
+  --muted-light: 30 30 34;
+  --border-light: 46 46 52;
+  --text-primary-light: 255 255 255;
+  --text-muted-light: 161 161 170;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  transition:
+    background-color 0.5s ease-in-out,
+    color 0.5s ease-in-out;
+}
+
+html.theme-transitioning {
+  transition:
+    background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth color transitions for all elements */
+body {
+  overflow-x: hidden;
+  transition:
+    background-color 0.5s ease-in-out,
+    color 0.5s ease-in-out;
+}
+
+* {
+  @apply transition-colors duration-300;
+}
