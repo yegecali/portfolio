@@ -94,7 +94,10 @@ const Header = () => {
   const scrollTo = (href: string) => {
     setMobileOpen(false);
     const id = href.startsWith("#") ? href.slice(1) : href;
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    // Delay to let the mobile menu close animation finish before scrolling
+    setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    }, 300);
   };
 
   // Separate "Contact" as CTA, rest as normal links
@@ -104,7 +107,7 @@ const Header = () => {
   return (
     <header
       ref={headerRef}
-      className={`fixed top-0 left-0 w-screen max-w-full z-50 overflow-hidden transition-all duration-300 ${
+      className={`fixed top-0 left-0 w-screen max-w-full z-50 transition-all duration-300 ${
         scrolled
           ? "bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl shadow-lg shadow-black/5 dark:shadow-black/20 border-b border-gray-200/60 dark:border-gray-700/60"
           : "bg-transparent border-b border-transparent"
