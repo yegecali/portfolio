@@ -4,6 +4,7 @@ import type {
   TechDetails,
   TestimonialDetails,
   ExperienceDetails,
+  LanguageDetails,
 } from "@/lib/types";
 
 interface PortfolioContextType {
@@ -14,6 +15,7 @@ interface PortfolioContextType {
   email: string;
   phone: string;
   location: string;
+  cvUrl: string;
 
   // Navigation
   navLinks: Array<{ label: string; href: string }>;
@@ -42,6 +44,7 @@ interface PortfolioContextType {
   projects: ProjectDetails[];
   testimonials: TestimonialDetails[];
   experiences: ExperienceDetails[];
+  languages: LanguageDetails[];
 
   // External Links
   externalLinks: {
@@ -72,12 +75,14 @@ const defaultPortfolioData: PortfolioContextType = {
   email: "yemi@example.com",
   phone: "+51 (123) 456-7890",
   location: "Lima, Peru",
+  cvUrl: "/portfolio/cv-yemi-genderson.pdf",
 
   // Navigation
   navLinks: [
     { label: "Home", href: "#hero" },
     { label: "About", href: "#about" },
     { label: "Skills", href: "#skills" },
+    { label: "Experience", href: "#experience" },
     { label: "Work", href: "#work" },
     { label: "Contact", href: "#contact" },
   ],
@@ -118,7 +123,7 @@ const defaultPortfolioData: PortfolioContextType = {
 
   // Hero Section
   hero: {
-    badge: "� Full Stack Developer",
+    badge: "⚡ Full Stack Developer",
     title: "Hola, soy Yemi Genderson 👋",
     description:
       "Full Stack Developer con especialización en React para frontend y Java (Spring Boot, Quarkus) para backend. Diseño y desarrollo de aplicaciones de alto rendimiento en proyectos bancarios. Mi pasión es crear soluciones escalables, seguras y eficientes que transforman ideas en realidad.",
@@ -262,26 +267,58 @@ const defaultPortfolioData: PortfolioContextType = {
   // Experiences
   experiences: [
     {
-      logoAlt: "Company logo",
-      position: "Senior Developer",
-      startDate: new Date(2022, 0),
+      logoAlt: "BCP logo",
+      company: "Banco de Crédito del Perú (BCP)",
+      position: "Senior Full Stack Developer",
+      startDate: new Date(2022, 5),
       currentlyWorkHere: true,
       summary: [
-        "Building web applications with React and TypeScript",
-        "Mentoring junior developers",
-        "Designing system architecture",
+        "Diseño e implementación de sistemas de Rate Limiting con Saga Pattern sobre Apache Kafka para transacciones de alto volumen",
+        "Desarrollo de Resilience Proxy con fallback automático y sistema de alertas en tiempo real para servicios críticos bancarios",
+        "Migración de base de datos on-premise a Azure Cloud con 20M registros usando Azure Data Factory y pipelines ETL en Scala",
+        "Liderazgo técnico del squad de plataforma, definiendo estándares de arquitectura y revisión de código",
       ],
     },
     {
-      logoAlt: "Company logo",
+      logoAlt: "Interbank logo",
+      company: "Interbank",
       position: "Full Stack Developer",
-      startDate: new Date(2020, 5),
-      endDate: new Date(2021, 11),
+      startDate: new Date(2020, 8),
+      endDate: new Date(2022, 4),
       summary: [
-        "Developed full stack applications using MERN stack",
-        "Implemented RESTful APIs",
-        "Optimized database queries",
+        "Desarrollo de APIs REST y microservicios con Java Spring Boot y Quarkus para el módulo de pagos digitales",
+        "Implementación de plataforma de monitoreo y alertas con Grafana, ELK Stack y predicciones ML para detectar anomalías",
+        "Creación de dashboards en React/TypeScript consumiendo métricas en tiempo real con WebSockets",
+        "Integración con Jira y Power Automate para automatización de incidencias y notificaciones al equipo de soporte",
       ],
+    },
+    {
+      logoAlt: "Niubiz logo",
+      company: "Niubiz",
+      position: "Backend Developer",
+      startDate: new Date(2019, 2),
+      endDate: new Date(2020, 7),
+      summary: [
+        "Desarrollo de microservicios de procesamiento de pagos con Java Spring Boot y arquitectura event-driven",
+        "Optimización de consultas SQL Server reduciendo tiempos de respuesta en un 40% en módulos críticos de transacciones",
+        "Implementación de pruebas unitarias e integración con JUnit 5 y Testcontainers, alcanzando 85% de cobertura",
+      ],
+    },
+  ],
+
+  // Languages
+  languages: [
+    {
+      name: "Español",
+      flag: "🇵🇪",
+      level: "Nativo",
+      proficiency: 100,
+    },
+    {
+      name: "English",
+      flag: "🇺🇸",
+      level: "Professional",
+      proficiency: 80,
     },
   ],
 

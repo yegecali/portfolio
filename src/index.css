@@ -2,71 +2,105 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Typography Base Styles */
-@layer base {
-  body {
-    @apply font-body;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply font-display;
-  }
-}
-
-/* Color Palette - Light & Dark Modes */
+/* ── Design Tokens ──────────────────────────────────────────────────────────── */
 :root {
-  /* Light Mode */
-  --bg-light: 247 247 248;
-  --surface-light: 255 255 255;
-  --muted-light: 237 237 239;
-  --border-light: 212 212 216;
-  --text-primary-light: 24 24 27;
-  --text-muted-light: 113 113 122;
+  /* Backgrounds */
+  --bg:          247 247 248;
+  --surface:     255 255 255;
+  --muted:       237 237 239;
 
-  /* Accent Colors (Shared) */
-  --accent: 99 102 241;
-  --accent-hover: 129 140 248;
-  --cyan: 34 211 238;
-  --violet: 167 139 250;
+  /* Borders */
+  --border:      212 212 216;
+
+  /* Text */
+  --text-primary: 17  17  17;
+  --text-muted:   107 107 117;
+
+  /* Accent */
+  --accent:       99  102 241;
+  --accent-hover: 79  82  221;
+  --cyan:         34  211 238;
+  --violet:       167 139 250;
 }
 
 .dark {
-  /* Dark Mode */
-  --bg-light: 13 13 15;
-  --surface-light: 22 22 24;
-  --muted-light: 30 30 34;
-  --border-light: 46 46 52;
-  --text-primary-light: 255 255 255;
-  --text-muted-light: 161 161 170;
+  /* Backgrounds */
+  --bg:          10  10  12;
+  --surface:     20  20  24;
+  --muted:       30  30  36;
+
+  /* Borders */
+  --border:      48  48  56;
+
+  /* Text */
+  --text-primary: 242 242 242;
+  --text-muted:   155 155 165;
 }
 
-html {
-  scroll-behavior: smooth;
-  overflow-x: hidden;
-  transition:
-    background-color 0.5s ease-in-out,
-    color 0.5s ease-in-out;
+/* ── Base ───────────────────────────────────────────────────────────────────── */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    overflow-x: clip;
+    max-width: 100%;
+  }
+
+  body {
+    @apply font-body;
+    background-color: rgb(var(--bg));
+    color: rgb(var(--text-primary));
+    overflow-x: clip;
+    max-width: 100%;
+    width: 100%;
+    /* Smooth theme switch only on body bg/color */
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+    color: rgb(var(--text-primary));
+  }
+
+  /* Smooth transitions only on elements that actually change */
+  header,
+  nav,
+  footer,
+  section,
+  aside,
+  main {
+    transition: background-color 0.4s ease, border-color 0.4s ease;
+  }
+
+  /* Hide system cursor on non-touch devices (custom cursor takes over) */
+  @media (pointer: fine) {
+    *, *::before, *::after {
+      cursor: none !important;
+    }
+  }
+
+  /* Links */
+  a {
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  /* Buttons */
+  button {
+    transition: background-color 0.2s ease, color 0.2s ease,
+                border-color 0.2s ease, box-shadow 0.2s ease,
+                opacity 0.2s ease;
+  }
 }
 
-html.theme-transitioning {
-  transition:
-    background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-    color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* ── Utilities ──────────────────────────────────────────────────────────────── */
+@layer utilities {
+  /* Consistent card style */
+  .card {
+    background-color: rgb(var(--surface));
+    border: 1px solid rgb(var(--border));
+    border-radius: 1rem;
+  }
 
-/* Smooth color transitions for all elements */
-body {
-  overflow-x: hidden;
-  transition:
-    background-color 0.5s ease-in-out,
-    color 0.5s ease-in-out;
-}
-
-* {
-  @apply transition-colors duration-300;
+  /* Text shortcuts */
+  .text-base-primary { color: rgb(var(--text-primary)); }
+  .text-base-muted   { color: rgb(var(--text-muted));   }
 }

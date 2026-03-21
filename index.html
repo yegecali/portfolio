@@ -1,16 +1,159 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ── Primary Meta ──────────────────────────────────────────────────────── -->
+    <title>Yemi Genderson | Full Stack Developer — Lima, Perú</title>
+    <meta
+      name="description"
+      content="Portfolio de Yemi Genderson, Full Stack Developer especializado en React, TypeScript y Java (Spring Boot, Quarkus). 5+ años desarrollando sistemas de alto rendimiento en proyectos bancarios en Lima, Perú."
+    />
+    <meta
+      name="keywords"
+      content="Full Stack Developer, React, TypeScript, Java, Spring Boot, Quarkus, microservicios, Lima, Perú, portfolio, desarrollador web, backend, frontend"
+    />
+    <meta name="author" content="Yemi Genderson" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://yegecali.github.io/portfolio/" />
+
+    <!-- ── Open Graph (Facebook, LinkedIn, WhatsApp) ────────────────────────── -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://yegecali.github.io/portfolio/" />
+    <meta
+      property="og:title"
+      content="Yemi Genderson | Full Stack Developer"
+    />
+    <meta
+      property="og:description"
+      content="5+ años construyendo sistemas de alto rendimiento con React, TypeScript y Java. Especializado en arquitecturas distribuidas y proyectos bancarios en Lima, Perú."
+    />
+    <meta
+      property="og:image"
+      content="https://yegecali.github.io/portfolio/og-image.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Yemi Genderson — Full Stack Developer Portfolio" />
+    <meta property="og:locale" content="es_PE" />
+    <meta property="og:site_name" content="Yemi Genderson Portfolio" />
+
+    <!-- ── Twitter / X Card ─────────────────────────────────────────────────── -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://yegecali.github.io/portfolio/" />
+    <meta
+      name="twitter:title"
+      content="Yemi Genderson | Full Stack Developer"
+    />
+    <meta
+      name="twitter:description"
+      content="5+ años construyendo sistemas de alto rendimiento con React, TypeScript y Java. Especializado en arquitecturas distribuidas y proyectos bancarios."
+    />
+    <meta
+      name="twitter:image"
+      content="https://yegecali.github.io/portfolio/og-image.png"
+    />
+    <meta name="twitter:creator" content="@yemigenderson" />
+
+    <!-- ── Theme & PWA hints ─────────────────────────────────────────────────── -->
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1e1b4b" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
+
+    <!-- ── Favicon ───────────────────────────────────────────────────────────── -->
+    <link rel="icon" type="image/svg+xml" href="/portfolio/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/portfolio/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/portfolio/apple-touch-icon.png" />
+
+    <!-- ── Fonts ─────────────────────────────────────────────────────────────── -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@300&display=swap"
       rel="stylesheet"
     />
-    <title>meportfolio</title>
+
+    <!-- ── Structured Data (JSON-LD) ─────────────────────────────────────────── -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://yegecali.github.io/portfolio/#person",
+          "name": "Yemi Genderson",
+          "url": "https://yegecali.github.io/portfolio/",
+          "image": "https://yegecali.github.io/portfolio/og-image.png",
+          "jobTitle": "Full Stack Developer",
+          "description": "Full Stack Developer especializado en React, TypeScript y Java (Spring Boot, Quarkus), con 5+ años de experiencia en proyectos bancarios de alto rendimiento en Lima, Perú.",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Lima",
+            "addressCountry": "PE"
+          },
+          "email": "yemi@example.com",
+          "sameAs": [
+            "https://github.com/yemigenderson",
+            "https://linkedin.com/in/yemigenderson"
+          ],
+          "knowsAbout": [
+            "React",
+            "TypeScript",
+            "Java",
+            "Spring Boot",
+            "Quarkus",
+            "Apache Kafka",
+            "Microservicios",
+            "Arquitecturas distribuidas",
+            "Docker",
+            "PostgreSQL",
+            "SQL Server"
+          ],
+          "knowsLanguage": [
+            {
+              "@type": "Language",
+              "name": "Español",
+              "alternateName": "es"
+            },
+            {
+              "@type": "Language",
+              "name": "English",
+              "alternateName": "en"
+            }
+          ],
+          "hasOccupation": [
+            {
+              "@type": "Occupation",
+              "name": "Senior Full Stack Developer",
+              "occupationLocation": {
+                "@type": "Organization",
+                "name": "Banco de Crédito del Perú (BCP)"
+              }
+            }
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://yegecali.github.io/portfolio/#website",
+          "url": "https://yegecali.github.io/portfolio/",
+          "name": "Yemi Genderson — Portfolio",
+          "description": "Portfolio profesional de Yemi Genderson, Full Stack Developer en Lima, Perú.",
+          "author": { "@id": "https://yegecali.github.io/portfolio/#person" },
+          "inLanguage": "es-PE"
+        },
+        {
+          "@type": "ProfilePage",
+          "@id": "https://yegecali.github.io/portfolio/#profilepage",
+          "url": "https://yegecali.github.io/portfolio/",
+          "name": "Portfolio — Yemi Genderson",
+          "isPartOf": { "@id": "https://yegecali.github.io/portfolio/#website" },
+          "about": { "@id": "https://yegecali.github.io/portfolio/#person" },
+          "dateModified": "2026-03-21"
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>

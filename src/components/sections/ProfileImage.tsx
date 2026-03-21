@@ -7,105 +7,64 @@ interface ProfileImageProps {
   floatingTechs: TechDetails[];
 }
 
+const floatingPositions = [
+  { className: "top-6 left-0 md:-left-14", yAnim: [0, -10, 0] as number[], delay: 0 },
+  { className: "top-6 right-0 md:-right-14", yAnim: [0, -14, 0] as number[], delay: 0.5 },
+  { className: "bottom-6 left-0 md:-left-14", yAnim: [0, 10, 0] as number[], delay: 1 },
+  { className: "bottom-6 right-0 md:-right-14", yAnim: [0, 14, 0] as number[], delay: 1.5 },
+];
+
 const ProfileImage = ({ image, floatingTechs }: ProfileImageProps) => {
   return (
-    <div className="hidden md:flex md:flex-shrink-0 justify-center relative w-full max-w-md">
-      {/* Floating tech icons */}
-      {floatingTechs.map((tech, index) => {
-        const Icon = getDevicon(tech.iconName);
-        const positions = [
-          "top-0 left-0 -translate-x-1/2 -translate-y-1/2", // top-left
-          "top-0 right-0 translate-x-1/2 -translate-y-1/2", // top-right
-          "bottom-0 left-0 -translate-x-1/2 translate-y-1/2", // bottom-left
-          "bottom-0 right-0 translate-x-1/2 translate-y-1/2", // bottom-right
-        ];
-        const floatingY = [
-          [0, -12, 0], // top-left
-          [0, -15, 0], // top-right
-          [0, 12, 0], // bottom-left
-          [0, 15, 0], // bottom-right
-        ];
+    <motion.div
+      className="flex justify-center md:flex-shrink-0 relative"
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+    >
+      <div className="relative w-64 h-64 md:w-80 md:h-80">
 
-        return (
-          <motion.div
-            key={tech.label}
-            className={`absolute ${positions[index]} w-14 h-14 bg-gradient-to-br from-blue-400/80 to-purple-400/80 dark:from-blue-600/60 dark:to-purple-600/60 rounded-lg flex items-center justify-center shadow-lg backdrop-blur-sm`}
-            animate={{
-              y: floatingY[index],
-            }}
-            transition={{
-              duration: 3 + index * 0.3,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            whileHover={{
-              scale: 1.15,
-            }}
-          >
-            {Icon && <Icon size={32} />}
-          </motion.div>
-        );
-      })}
+        {/* Floating tech icons */}
+        {floatingTechs.map((tech, index) => {
+          const Icon = getDevicon(tech.iconName);
+          const pos = floatingPositions[index];
+          return (
+            <motion.div
+              key={tech.label}
+              className={`absolute ${pos.className} w-11 h-11 md:w-13 md:h-13 bg-white dark:bg-gray-800 rounded-xl flex items-center justify-center shadow-lg border border-gray-100 dark:border-gray-700 z-10`}
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1, y: pos.yAnim }}
+              transition={{
+                opacity: { duration: 0.4, delay: 0.8 + pos.delay },
+                scale: { duration: 0.4, delay: 0.8 + pos.delay, type: "spring", bounce: 0.4 },
+                y: { duration: 3 + index * 0.4, repeat: Infinity, ease: "easeInOut", delay: pos.delay },
+              }}
+              whileHover={{ scale: 1.25, rotate: 8, zIndex: 20 }}
+              title={tech.label}
+            >
+              {Icon && <Icon size={26} />}
+            </motion.div>
+          );
+        })}
 
-      <motion.div
-        className="relative w-96 h-96"
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
-        {/* Pulsing outer ring - synchronized with gradient */}
+        {/* Glowing halo */}
         <motion.div
-          className="absolute -inset-4 rounded-full border-2 border-blue-400/30 dark:border-blue-500/30"
-          animate={{
-            scale: [0.95, 1.08, 0.95],
-            opacity: [0.3, 0.6, 0.3],
-          }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 dark:from-blue-600 dark:via-purple-600 dark:to-pink-600 blur-3xl opacity-25 dark:opacity-20"
+          animate={{ scale: [1, 1.12, 1], opacity: [0.2, 0.35, 0.2] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
         />
 
-        {/* Animated dashed border circle */}
-        <motion.div
-          className="absolute inset-0 rounded-full border-3 border-dashed border-blue-500 dark:border-blue-400"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-        />
-
-        {/* Gradient background with pulse - synchronized */}
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-blue-300 via-purple-300 to-pink-300 dark:from-blue-900/40 dark:via-purple-900/40 dark:to-pink-900/40 rounded-full blur-2xl"
-          animate={{
-            scale: [0.95, 1.05, 0.95],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        />
-
-        {/* Floating glow effect - synchronized */}
-        <motion.div
-          className="absolute inset-0 rounded-full bg-gradient-to-t from-blue-500/15 to-transparent blur-3xl"
-          animate={{
-            opacity: [0.1, 0.4, 0.1],
-            scale: [0.95, 1.02, 0.95],
-          }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        />
-
-        {/* Image with floating animation - synchronized */}
+        {/* Image */}
         <motion.img
           src={image}
           alt="Profile"
-          className="relative w-full h-full object-cover rounded-full shadow-2xl border border-white/20 dark:border-gray-700/30"
-          animate={{
-            y: [0, -12, 0],
-          }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          whileHover={{
-            scale: 1.05,
-            y: 0,
-          }}
+          className="absolute inset-0 w-full h-full object-cover rounded-full shadow-2xl z-[1]"
+          animate={{ y: [0, -10, 0] }}
+          transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+          whileHover={{ scale: 1.04, y: 0 }}
         />
-      </motion.div>
-    </div>
+      </div>
+    </motion.div>
   );
 };
 

@@ -10,6 +10,7 @@ export type ExperienceDetails = {
   logo?: string;
   darkModeLogo?: string;
   logoAlt: string;
+  company: string;
   position: string;
   currentlyWorkHere?: boolean;
   startDate: Date;
@@ -30,4 +31,11 @@ export type TestimonialDetails = {
   personAvatar?: string;
   testimonial: string;
   title: string;
+};
+
+export type LanguageDetails = {
+  name: string;
+  flag: string;
+  level: string;
+  proficiency: number; // 0-100
 };
