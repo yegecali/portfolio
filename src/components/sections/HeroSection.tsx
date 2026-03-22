@@ -6,6 +6,7 @@ import HeroContent from "@/components/sections/HeroContent";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import type { TechDetails } from "@/lib/types";
 import { HERO_CODE_SNIPPETS } from "@/lib/constants";
+import HeroParticles from "@/components/general/HeroParticles";
 
 // Hook: parallax value from a section ref
 const useSectionParallax = (ref: React.RefObject<HTMLElement | null>, outputRange: [number, number]) => {
@@ -70,6 +71,9 @@ const HeroSection = () => {
         />
       </motion.div>
       </div>
+
+      {/* Layer 1.5 — Particles */}
+      <HeroParticles />
 
       {/* Layer 2 — Grid (very subtle parallax) */}
       <motion.div
