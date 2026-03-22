@@ -4,6 +4,8 @@ import WordReveal from "@/components/general/WordReveal";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { motion } from "framer-motion";
 import { Languages, Sparkles, MapPin, Briefcase, Rocket } from "lucide-react";
+import BackgroundBlobs from "@/components/general/BackgroundBlobs";
+import { staggerContainerVariants, fadeUpVariants } from "@/lib/animations";
 
 const highlightIcons = [Rocket, Briefcase, Sparkles];
 const highlightColors = [
@@ -22,15 +24,6 @@ const chipColors = [
   "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300",
 ];
 
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
-};
-const itemVariants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
-
 const AboutMeSection = () => {
   const { about, hero, languages } = usePortfolio();
 
@@ -39,24 +32,25 @@ const AboutMeSection = () => {
       className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 overflow-hidden"
       id="about"
     >
-      {/* Background decorative blobs */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-20 right-10 w-72 h-72 bg-blue-200/40 dark:bg-blue-900/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 left-10 w-64 h-64 bg-purple-200/40 dark:bg-purple-900/20 rounded-full blur-3xl" />
-      </div>
+      <BackgroundBlobs
+        blobs={[
+          { className: "absolute top-20 right-10 w-72 h-72 bg-blue-200/40 dark:bg-blue-900/20 rounded-full blur-3xl" },
+          { className: "absolute bottom-20 left-10 w-64 h-64 bg-purple-200/40 dark:bg-purple-900/20 rounded-full blur-3xl" },
+        ]}
+      />
 
       <div className="relative flex w-full flex-col justify-between gap-10 md:gap-16 md:flex-row md:items-center">
 
         {/* ── LEFT: Content ── */}
         <motion.div
           className="flex flex-col gap-8 md:max-w-lg"
-          variants={containerVariants}
+          variants={staggerContainerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
           {/* Label */}
-          <motion.div variants={itemVariants} className="flex items-center gap-2">
+          <motion.div variants={fadeUpVariants} className="flex items-center gap-2">
             <div className="h-px w-8 bg-gradient-to-r from-blue-500 to-purple-500" />
             <Typography className="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-widest">
               Sobre mí
@@ -64,7 +58,7 @@ const AboutMeSection = () => {
           </motion.div>
 
           {/* Title */}
-          <motion.div variants={itemVariants}>
+          <motion.div variants={fadeUpVariants}>
             <h2 className="text-3xl md:text-4xl font-bold leading-tight text-gray-900 dark:text-white">
               <WordReveal text="¿Quieres saber más? Aquí está" trigger="inView" delay={0} stagger={0.1} once={true} />
               {" "}
@@ -75,7 +69,7 @@ const AboutMeSection = () => {
           </motion.div>
 
           {/* Paragraphs */}
-          <motion.div variants={itemVariants} className="flex flex-col gap-4">
+          <motion.div variants={fadeUpVariants} className="flex flex-col gap-4">
             {about.paragraphs.map((paragraph, index) => (
               <Typography
                 key={index}
@@ -87,7 +81,7 @@ const AboutMeSection = () => {
           </motion.div>
 
           {/* Highlights as chip groups */}
-          <motion.div variants={itemVariants} className="flex flex-col gap-3">
+          <motion.div variants={fadeUpVariants} className="flex flex-col gap-3">
             {about.highlights.map((highlight, idx) => {
               const Icon = highlightIcons[idx % highlightIcons.length];
               return (
@@ -117,7 +111,7 @@ const AboutMeSection = () => {
 
           {/* Languages */}
           {languages?.length > 0 && (
-            <motion.div variants={itemVariants} className="flex flex-col gap-3">
+            <motion.div variants={fadeUpVariants} className="flex flex-col gap-3">
               <div className="flex items-center gap-2">
                 <Languages className="w-4 h-4 text-blue-500" />
                 <Typography className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest">
@@ -162,7 +156,7 @@ const AboutMeSection = () => {
 
           {/* Closing CTA */}
           <motion.div
-            variants={itemVariants}
+            variants={fadeUpVariants}
             className="flex items-start gap-3 rounded-xl bg-gradient-to-r from-blue-600/10 to-purple-600/10 dark:from-blue-500/10 dark:to-purple-500/10 border border-blue-200/60 dark:border-blue-700/30 p-4"
           >
             <span className="text-2xl">🚀</span>

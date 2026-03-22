@@ -6,6 +6,11 @@ import AnimatedCounter from "@/components/general/AnimatedCounter";
 import MagneticButton from "@/components/general/MagneticButton";
 import { motion } from "framer-motion";
 import { usePortfolio } from "@/hooks/usePortfolio";
+import {
+  heroContainerVariants,
+  heroItemVariants,
+  heroSubItemVariants,
+} from "@/lib/animations";
 
 interface HeroContentProps {
   badge: string;
@@ -21,45 +26,6 @@ const stats = [
   { icon: Briefcase,label: "Proyectos",    value: "10+" },
 ];
 
-// ── Shared variants ────────────────────────────────────────────────────────────
-const container = {
-  hidden: {},
-  visible: {
-    transition: {
-      delayChildren: 0.15,   // wait for page paint
-      staggerChildren: 0.14, // each block 140ms after previous
-    },
-  },
-};
-
-const item = {
-  hidden: {
-    opacity: 0,
-    y: 32,
-    filter: "blur(8px)",
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: {
-      duration: 0.65,
-      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-    },
-  },
-};
-
-// Faster variant for small sub-elements (stat cards)
-const subItem = {
-  hidden: { opacity: 0, y: 16, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
-  },
-};
-
 // ── Component ──────────────────────────────────────────────────────────────────
 const HeroContent = ({ badge, title, description, location, status }: HeroContentProps) => {
   const { cvUrl } = usePortfolio();
@@ -70,21 +36,21 @@ const HeroContent = ({ badge, title, description, location, status }: HeroConten
   return (
     <motion.div
       className="flex max-w-2xl flex-grow flex-col justify-center gap-6 md:items-start"
-      variants={container}
+      variants={heroContainerVariants}
       initial="hidden"
       animate="visible"
     >
 
       {/* 1 — Badge */}
       <motion.div
-        variants={item}
+        variants={heroItemVariants}
         className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/40 dark:to-purple-900/30 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-full text-sm font-bold w-fit border border-blue-200/80 dark:border-blue-700/40 shadow-sm"
       >
         {badge}
       </motion.div>
 
       {/* 2 — Title block */}
-      <motion.div variants={item} className="flex flex-col gap-3">
+      <motion.div variants={heroItemVariants} className="flex flex-col gap-3">
         <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold leading-[1.1] text-gray-900 dark:text-white">
           {/* "Hola, soy" — words stagger within the title block stagger */}
           <WordReveal
@@ -129,7 +95,7 @@ const HeroContent = ({ badge, title, description, location, status }: HeroConten
       </motion.div>
 
       {/* 3 — Location + Status pills */}
-      <motion.div variants={item} className="flex flex-wrap gap-3">
+      <motion.div variants={heroItemVariants} className="flex flex-wrap gap-3">
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
           <MapPin className="w-4 h-4 text-blue-500" />
           <Typography className="text-sm text-gray-700 dark:text-gray-300">
@@ -149,7 +115,7 @@ const HeroContent = ({ badge, title, description, location, status }: HeroConten
       </motion.div>
 
       {/* 4 — Stats (sub-stagger within parent stagger) */}
-      <motion.div variants={item} className="flex gap-3">
+      <motion.div variants={heroItemVariants} className="flex gap-3">
         <motion.div
           className="flex flex-wrap gap-3"
           variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
@@ -157,7 +123,7 @@ const HeroContent = ({ badge, title, description, location, status }: HeroConten
           {stats.map(({ icon: Icon, label, value }) => (
             <motion.div
               key={label}
-              variants={subItem}
+              variants={heroSubItemVariants}
               className="flex flex-col items-center gap-0.5 px-3 py-2 md:px-4 rounded-xl bg-white/70 dark:bg-gray-800/70 border border-gray-200 dark:border-gray-700 backdrop-blur-sm shadow-sm"
             >
               <div className="flex items-center gap-1.5">
@@ -176,7 +142,7 @@ const HeroContent = ({ badge, title, description, location, status }: HeroConten
       </motion.div>
 
       {/* 5 — CTA buttons */}
-      <motion.div variants={item} className="flex flex-col gap-4">
+      <motion.div variants={heroItemVariants} className="flex flex-col gap-4">
         <div className="flex flex-wrap gap-3">
           <MagneticButton
             as="a"

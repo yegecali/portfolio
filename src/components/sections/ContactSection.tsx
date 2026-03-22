@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Copy, Mail, Phone, CheckCheck, Clock, Send, Github, Linkedin, Instagram, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import Container from "@/components/layout/Container";
+import BackgroundBlobs from "@/components/general/BackgroundBlobs";
+import { customDelayFadeUpVariants, sectionHeaderProps } from "@/lib/animations";
 import WordReveal from "@/components/general/WordReveal";
 import { copyTextToClipboard } from "@/lib/utils";
 import { usePortfolio } from "@/hooks/usePortfolio";
@@ -43,10 +45,6 @@ const getSocialMeta = (url: string) => {
   return null;
 };
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (d: number) => ({ opacity: 1, y: 0, transition: { duration: 0.5, delay: d } }),
-};
 
 const ContactSection = () => {
   const { email, phone, socialLinks } = usePortfolio();
@@ -69,29 +67,27 @@ const ContactSection = () => {
       id="contact"
       className="min-h-screen flex flex-col items-center justify-center bg-white dark:bg-gray-950 overflow-hidden"
     >
-      {/* Background */}
-      <div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-72 h-48 md:w-[600px] md:h-[400px] bg-gradient-to-b from-blue-100/50 to-transparent dark:from-blue-900/10 rounded-full blur-3xl"
-          animate={{ scale: [1, 1.1, 1] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute bottom-0 right-0 w-80 h-80 bg-purple-100/40 dark:bg-purple-900/10 rounded-full blur-3xl"
-          animate={{ x: [0, -20, 0] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-        />
-      </div>
+      <BackgroundBlobs
+        blobs={[
+          {
+            className: "absolute top-0 left-1/2 -translate-x-1/2 w-72 h-48 md:w-[600px] md:h-[400px] bg-gradient-to-b from-blue-100/50 to-transparent dark:from-blue-900/10 rounded-full blur-3xl",
+            animate: { scale: [1, 1.1, 1] },
+            transition: { duration: 10, repeat: Infinity, ease: "easeInOut" },
+          },
+          {
+            className: "absolute bottom-0 right-0 w-80 h-80 bg-purple-100/40 dark:bg-purple-900/10 rounded-full blur-3xl",
+            animate: { x: [0, -20, 0] },
+            transition: { duration: 12, repeat: Infinity, ease: "easeInOut" },
+          },
+        ]}
+      />
 
       <div className="relative z-10 w-full flex flex-col gap-10 md:gap-16">
 
         {/* Header */}
         <motion.div
           className="flex flex-col items-center gap-4 text-center"
-          initial={{ opacity: 0, y: -24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+          {...sectionHeaderProps}
         >
           <div className="flex items-center gap-2">
             <div className="h-px w-8 bg-gradient-to-r from-blue-500 to-purple-500" />
@@ -123,7 +119,7 @@ const ContactSection = () => {
               custom={0.1}
               initial="hidden"
               whileInView="visible"
-              variants={itemVariants}
+              variants={customDelayFadeUpVariants}
               viewport={{ once: true }}
               className="inline-flex items-center gap-2 w-fit px-4 py-2 rounded-full bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700/50"
             >
@@ -141,7 +137,7 @@ const ContactSection = () => {
               custom={0.2}
               initial="hidden"
               whileInView="visible"
-              variants={itemVariants}
+              variants={customDelayFadeUpVariants}
               viewport={{ once: true }}
               className="flex items-center gap-2 text-gray-500 dark:text-gray-400"
             >
@@ -154,7 +150,7 @@ const ContactSection = () => {
               custom={0.3}
               initial="hidden"
               whileInView="visible"
-              variants={itemVariants}
+              variants={customDelayFadeUpVariants}
               viewport={{ once: true }}
               className="flex flex-col gap-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-5 shadow-sm"
             >
@@ -206,7 +202,7 @@ const ContactSection = () => {
               custom={0.4}
               initial="hidden"
               whileInView="visible"
-              variants={itemVariants}
+              variants={customDelayFadeUpVariants}
               viewport={{ once: true }}
               className="flex flex-col gap-3"
             >
@@ -245,7 +241,7 @@ const ContactSection = () => {
             custom={0.25}
             initial="hidden"
             whileInView="visible"
-            variants={itemVariants}
+            variants={customDelayFadeUpVariants}
             viewport={{ once: true }}
             className="relative flex flex-col justify-between gap-6 rounded-2xl overflow-hidden p-6 md:p-10 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 shadow-2xl shadow-blue-500/20"
           >
