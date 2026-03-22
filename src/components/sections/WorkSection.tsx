@@ -5,6 +5,7 @@ import { usePortfolio } from "@/hooks/usePortfolio";
 import { motion } from "framer-motion";
 import BackgroundBlobs from "@/components/general/BackgroundBlobs";
 import { sectionHeaderProps } from "@/lib/animations";
+import Reveal from "@/components/general/Reveal";
 import {
   Gauge,
   ShieldCheck,
@@ -129,12 +130,10 @@ const WorkSection = () => {
             const num = String(index + 1).padStart(2, "0");
 
             return (
-              <motion.div
+              <Reveal
                 key={index}
-                initial={{ opacity: 0, y: 28 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                animation={index % 2 === 0 ? "fade-right" : "fade-left"}
+                delay={index * 0.1}
               >
               <TiltCard maxTilt={8} scale={1.01} className="h-full">
                 <div
@@ -200,7 +199,7 @@ const WorkSection = () => {
                 </div>
                 </div>
               </TiltCard>
-              </motion.div>
+              </Reveal>
             );
           })}
         </div>

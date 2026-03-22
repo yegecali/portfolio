@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { Languages, Sparkles, MapPin, Briefcase, Rocket } from "lucide-react";
 import BackgroundBlobs from "@/components/general/BackgroundBlobs";
 import { staggerContainerVariants, fadeUpVariants } from "@/lib/animations";
+import Reveal from "@/components/general/Reveal";
 
 const highlightIcons = [Rocket, Briefcase, Sparkles];
 const highlightColors = [
@@ -120,12 +121,10 @@ const AboutMeSection = () => {
               </div>
               <div className="flex flex-wrap gap-3">
                 {languages.map((lang, idx) => (
-                  <motion.div
+                  <Reveal
                     key={idx}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.4, delay: idx * 0.1 }}
-                    viewport={{ once: true }}
+                    animation="zoom-in"
+                    delay={idx * 0.1}
                     className="flex flex-col gap-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-3 shadow-sm min-w-[120px]"
                   >
                     <div className="flex items-center gap-2">
@@ -148,7 +147,7 @@ const AboutMeSection = () => {
                         viewport={{ once: true }}
                       />
                     </div>
-                  </motion.div>
+                  </Reveal>
                 ))}
               </div>
             </motion.div>
@@ -207,8 +206,13 @@ const AboutMeSection = () => {
             </div>
 
             {/* Floating card — Location */}
+            <Reveal
+              animation="fade-right"
+              delay={0.4}
+              className="absolute -left-2 md:-left-10 top-16"
+            >
             <motion.div
-              className="absolute -left-2 md:-left-10 top-16 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 px-3 py-2 flex items-center gap-2"
+              className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 px-3 py-2 flex items-center gap-2"
               animate={{ y: [0, -8, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             >
@@ -224,10 +228,16 @@ const AboutMeSection = () => {
                 </Typography>
               </div>
             </motion.div>
+            </Reveal>
 
             {/* Floating card — Experiencia */}
+            <Reveal
+              animation="fade-left"
+              delay={0.55}
+              className="absolute -right-2 md:-right-10 top-32"
+            >
             <motion.div
-              className="absolute -right-2 md:-right-10 top-32 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 px-3 py-2 flex items-center gap-2"
+              className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 px-3 py-2 flex items-center gap-2"
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
             >
@@ -243,10 +253,16 @@ const AboutMeSection = () => {
                 </Typography>
               </div>
             </motion.div>
+            </Reveal>
 
             {/* Floating card — Open to work */}
+            <Reveal
+              animation="fade-right"
+              delay={0.7}
+              className="absolute -left-2 md:-left-8 bottom-24"
+            >
             <motion.div
-              className="absolute -left-2 md:-left-8 bottom-24 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-emerald-200 dark:border-emerald-700/50 px-3 py-2 flex items-center gap-2"
+              className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-emerald-200 dark:border-emerald-700/50 px-3 py-2 flex items-center gap-2"
               animate={{ y: [0, -6, 0] }}
               transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
             >
@@ -258,6 +274,7 @@ const AboutMeSection = () => {
                 Open to work
               </Typography>
             </motion.div>
+            </Reveal>
           </div>
         </motion.div>
       </div>

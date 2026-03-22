@@ -6,6 +6,7 @@ import { usePortfolio } from "@/hooks/usePortfolio";
 import { motion } from "framer-motion";
 import { Briefcase, Calendar, MapPin } from "lucide-react";
 import StatusBadge from "@/components/general/StatusBadge";
+import Reveal from "@/components/general/Reveal";
 
 const formatDate = (date: Date) =>
   date.toLocaleDateString("es-PE", { month: "short", year: "numeric" });
@@ -159,12 +160,12 @@ const ExperienceCard = ({ exp }: CardProps) => (
     {/* Summary */}
     <ul className="flex flex-col gap-2">
       {exp.summary.map((point, i) => (
-        <li key={i} className="flex items-start gap-2">
+        <Reveal key={i} as="li" animation="fade-right" delay={i * 0.08} amount={0.05} className="flex items-start gap-2">
           <span className="mt-1.5 flex-shrink-0 w-1.5 h-1.5 rounded-full bg-gradient-to-br from-blue-500 to-purple-500" />
           <Typography className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
             {point}
           </Typography>
-        </li>
+        </Reveal>
       ))}
     </ul>
   </div>
