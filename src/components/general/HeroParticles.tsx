@@ -1,18 +1,13 @@
-import { useEffect, useRef } from "react";
-import "particles.js";
+import { useEffect, useState } from "react";
+import Particles, { initParticlesEngine } from "@tsparticles/react";
+import { loadSlim } from "@tsparticles/slim";
+import type { ISourceOptions } from "@tsparticles/engine";
 import { useTheme } from "@/hooks/useThemeHook";
 
-// particles.js agrega estas propiedades al window global
-declare global {
-  interface Window {
-    particlesJS: (id: string, config: object) => void;
-    pJSDom: Array<{ pJS: { fn: { vendors: { destroypJS: () => void } } } }>;
-  }
-}
-
-const buildConfig = (isDark: boolean) => ({
+const buildConfig = (isDark: boolean): ISourceOptions => ({
+  fullScreen: { enable: false },
   particles: {
-    number: { value: 60, density: { enable: true, value_area: 900 } },
+    number: { value: 60, density: { enable: true, width: 900 } },
     color: {
       value: isDark
         ? ["#3b82f6", "#8b5cf6", "#ec4899"]
@@ -20,16 +15,14 @@ const buildConfig = (isDark: boolean) => ({
     },
     shape: { type: "circle" },
     opacity: {
-      value: isDark ? 0.22 : 0.16,
-      random: true,
-      anim: { enable: true, speed: 0.6, opacity_min: 0.05, sync: false },
+      value: { min: 0.05, max: isDark ? 0.22 : 0.16 },
+      animation: { enable: true, speed: 0.6, sync: false },
     },
     size: {
-      value: 2.5,
-      random: true,
-      anim: { enable: true, speed: 1.5, size_min: 0.8, sync: false },
+      value: { min: 0.8, max: 2.5 },
+      animation: { enable: true, speed: 1.5, sync: false },
     },
-    line_linked: {
+    links: {
       enable: true,
       distance: 140,
       color: isDark ? "#6366f1" : "#a5b4fc",
@@ -42,56 +35,43 @@ const buildConfig = (isDark: boolean) => ({
       direction: "none",
       random: true,
       straight: false,
-      out_mode: "out",
-      bounce: false,
+      outModes: { default: "out" },
     },
   },
   interactivity: {
-    detect_on: "canvas",
+    detectsOn: "canvas",
     events: {
-      onhover: { enable: true, mode: "grab" },
-      onclick: { enable: false },
-      resize: true,
+      onHover: { enable: true, mode: "grab" },
+      onClick: { enable: false },
+      resize: { enable: true },
     },
     modes: {
       grab: {
         distance: 120,
-        line_linked: { opacity: isDark ? 0.35 : 0.45 },
+        links: { opacity: isDark ? 0.35 : 0.45 },
       },
     },
   },
-  retina_detect: true,
+  detectRetina: true,
 });
-
-const CONTAINER_ID = "hero-particles-js";
 
 const HeroParticles = () => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
-  const instanceRef = useRef<number | null>(null);
+  const [engineReady, setEngineReady] = useState(false);
 
   useEffect(() => {
-    // Destruye instancia anterior si existe
-    if (instanceRef.current !== null && window.pJSDom?.[instanceRef.current]) {
-      window.pJSDom[instanceRef.current].pJS.fn.vendors.destroypJS();
-    }
+    initParticlesEngine(async (engine) => {
+      await loadSlim(engine);
+    }).then(() => setEngineReady(true));
+  }, []);
 
-    window.particlesJS(CONTAINER_ID, buildConfig(isDark));
-
-    // Guarda el índice de la nueva instancia
-    instanceRef.current = (window.pJSDom?.length ?? 1) - 1;
-
-    return () => {
-      if (instanceRef.current !== null && window.pJSDom?.[instanceRef.current]) {
-        window.pJSDom[instanceRef.current].pJS.fn.vendors.destroypJS();
-        instanceRef.current = null;
-      }
-    };
-  }, [isDark]);
+  if (!engineReady) return null;
 
   return (
-    <div
-      id={CONTAINER_ID}
+    <Particles
+      id="hero-particles-js"
+      options={buildConfig(isDark)}
       className="absolute inset-0 pointer-events-none"
       style={{ zIndex: 0 }}
     />
