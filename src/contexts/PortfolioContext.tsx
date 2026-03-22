@@ -1,4 +1,4 @@
-import React, { createContext } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import type {
   ProjectDetails,
   TechDetails,
@@ -52,6 +52,9 @@ interface PortfolioContextType {
     TWITTER: string;
     LINKEDIN: string;
   };
+
+  // Loading state
+  isLoading: boolean;
 
   // Methods
   getProjectByName: (name: string) => ProjectDetails | undefined;
@@ -329,6 +332,9 @@ const defaultPortfolioData: PortfolioContextType = {
     LINKEDIN: "https://www.linkedin.com",
   },
 
+  // Loading state
+  isLoading: false,
+
   // Methods
   getProjectByName: () => undefined,
   getTechByLabel: () => undefined,
@@ -338,9 +344,19 @@ export const PortfolioProvider: React.FC<PortfolioProviderProps> = ({
   children,
   value,
 }) => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // One animation frame is enough to let the initial paint happen
+    // before we reveal real content, giving skeletons a chance to show.
+    const id = requestAnimationFrame(() => setIsLoading(false));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
   const mergedValue: PortfolioContextType = {
     ...defaultPortfolioData,
     ...value,
+    isLoading,
     getProjectByName: (name: string) => {
       const data = value || defaultPortfolioData;
       return data.projects?.find((p) => p.name === name);
