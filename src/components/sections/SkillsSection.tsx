@@ -2,6 +2,8 @@ import Container from "@/components/layout/Container";
 import WordReveal from "@/components/general/WordReveal";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { motion, AnimatePresence } from "framer-motion";
+import BackgroundBlobs from "@/components/general/BackgroundBlobs";
+import { sectionHeaderProps } from "@/lib/animations";
 import { useState } from "react";
 import { Monitor, Server, Database, Container as ContainerIcon, ExternalLink } from "lucide-react";
 import { getDevicon } from "@/lib/devicons";
@@ -107,29 +109,27 @@ const SkillsSection = () => {
       id="skills"
       className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-950 overflow-hidden"
     >
-      {/* Background blobs */}
-      <div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          className="absolute top-16 right-16 w-80 h-80 bg-blue-200/30 dark:bg-blue-900/15 rounded-full blur-3xl"
-          animate={{ y: [0, 40, 0] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute bottom-16 left-16 w-80 h-80 bg-purple-200/30 dark:bg-purple-900/15 rounded-full blur-3xl"
-          animate={{ y: [0, -40, 0] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-        />
-      </div>
+      <BackgroundBlobs
+        blobs={[
+          {
+            className: "absolute top-16 right-16 w-80 h-80 bg-blue-200/30 dark:bg-blue-900/15 rounded-full blur-3xl",
+            animate: { y: [0, 40, 0] },
+            transition: { duration: 10, repeat: Infinity, ease: "easeInOut" },
+          },
+          {
+            className: "absolute bottom-16 left-16 w-80 h-80 bg-purple-200/30 dark:bg-purple-900/15 rounded-full blur-3xl",
+            animate: { y: [0, -40, 0] },
+            transition: { duration: 12, repeat: Infinity, ease: "easeInOut" },
+          },
+        ]}
+      />
 
       <div className="relative z-10 w-full flex flex-col gap-12">
 
         {/* Header */}
         <motion.div
           className="flex flex-col items-center gap-4 text-center"
-          initial={{ opacity: 0, y: -24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+          {...sectionHeaderProps}
         >
           <div className="flex items-center gap-2">
             <div className="h-px w-8 bg-gradient-to-r from-blue-500 to-purple-500" />

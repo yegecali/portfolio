@@ -3,6 +3,8 @@ import WordReveal from "@/components/general/WordReveal";
 import TiltCard from "@/components/general/TiltCard";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { motion } from "framer-motion";
+import BackgroundBlobs from "@/components/general/BackgroundBlobs";
+import { sectionHeaderProps } from "@/lib/animations";
 import {
   Gauge,
   ShieldCheck,
@@ -74,29 +76,27 @@ const WorkSection = () => {
       id="work"
       className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 overflow-hidden"
     >
-      {/* Background */}
-      <div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          className="absolute top-0 right-0 w-48 h-48 md:w-96 md:h-96 bg-blue-200/25 dark:bg-blue-900/10 rounded-full blur-3xl"
-          animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
-          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute bottom-0 left-0 w-48 h-48 md:w-96 md:h-96 bg-purple-200/25 dark:bg-purple-900/10 rounded-full blur-3xl"
-          animate={{ x: [0, -20, 0], y: [0, 20, 0] }}
-          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        />
-      </div>
+      <BackgroundBlobs
+        blobs={[
+          {
+            className: "absolute top-0 right-0 w-48 h-48 md:w-96 md:h-96 bg-blue-200/25 dark:bg-blue-900/10 rounded-full blur-3xl",
+            animate: { x: [0, 30, 0], y: [0, -20, 0] },
+            transition: { duration: 14, repeat: Infinity, ease: "easeInOut" },
+          },
+          {
+            className: "absolute bottom-0 left-0 w-48 h-48 md:w-96 md:h-96 bg-purple-200/25 dark:bg-purple-900/10 rounded-full blur-3xl",
+            animate: { x: [0, -20, 0], y: [0, 20, 0] },
+            transition: { duration: 16, repeat: Infinity, ease: "easeInOut", delay: 2 },
+          },
+        ]}
+      />
 
       <div className="relative z-10 w-full flex flex-col gap-14">
 
         {/* Header */}
         <motion.div
           className="flex flex-col items-center gap-4 text-center"
-          initial={{ opacity: 0, y: -24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+          {...sectionHeaderProps}
         >
           <div className="flex items-center gap-2">
             <div className="h-px w-8 bg-gradient-to-r from-blue-500 to-purple-500" />
