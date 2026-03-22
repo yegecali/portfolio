@@ -1,99 +1,99 @@
-import { useCallback, useEffect, useState } from "react";
-import Particles, { initParticlesEngine } from "@tsparticles/react";
-import { loadSlim } from "@tsparticles/slim";
-import type { ISourceOptions } from "@tsparticles/engine";
+import { useEffect, useRef } from "react";
+import "particles.js";
 import { useTheme } from "@/hooks/useThemeHook";
 
-// Initialise the engine once (singleton — safe to call multiple times)
-let engineReady = false;
-let enginePromise: Promise<void> | null = null;
-
-const ensureEngine = () => {
-  if (!enginePromise) {
-    enginePromise = initParticlesEngine((engine) => loadSlim(engine)).then(
-      () => { engineReady = true; }
-    );
+// particles.js agrega estas propiedades al window global
+declare global {
+  interface Window {
+    particlesJS: (id: string, config: object) => void;
+    pJSDom: Array<{ pJS: { fn: { vendors: { destroypJS: () => void } } } }>;
   }
-  return enginePromise;
-};
+}
 
-const buildOptions = (isDark: boolean): ISourceOptions => ({
-  fullScreen: { enable: false },
-  background: { color: { value: "transparent" } },
-  fpsLimit: 60,
+const buildConfig = (isDark: boolean) => ({
   particles: {
-    number: { value: 55, density: { enable: true } },
+    number: { value: 60, density: { enable: true, value_area: 900 } },
     color: {
       value: isDark
-        ? ["#3b82f6", "#8b5cf6", "#ec4899"]   // blue-500, violet-500, pink-500
-        : ["#93c5fd", "#c4b5fd", "#f9a8d4"],   // blue-300, violet-300, pink-300
+        ? ["#3b82f6", "#8b5cf6", "#ec4899"]
+        : ["#93c5fd", "#c4b5fd", "#f9a8d4"],
     },
     shape: { type: "circle" },
     opacity: {
-      value: { min: 0.08, max: isDark ? 0.25 : 0.18 },
-      animation: { enable: true, speed: 0.6, sync: false },
+      value: isDark ? 0.22 : 0.16,
+      random: true,
+      anim: { enable: true, speed: 0.6, opacity_min: 0.05, sync: false },
     },
     size: {
-      value: { min: 1, max: 3 },
-      animation: { enable: true, speed: 1.5, sync: false },
+      value: 2.5,
+      random: true,
+      anim: { enable: true, speed: 1.5, size_min: 0.8, sync: false },
     },
-    links: {
+    line_linked: {
       enable: true,
       distance: 140,
-      color: isDark ? "#6366f1" : "#a5b4fc", // indigo-500 / indigo-300
+      color: isDark ? "#6366f1" : "#a5b4fc",
       opacity: isDark ? 0.12 : 0.18,
       width: 1,
     },
     move: {
       enable: true,
       speed: 0.5,
-      direction: "none" as const,
+      direction: "none",
       random: true,
       straight: false,
-      outModes: { default: "out" as const },
+      out_mode: "out",
+      bounce: false,
     },
   },
   interactivity: {
+    detect_on: "canvas",
     events: {
-      onHover: { enable: true, mode: "grab" },
-      resize: { enable: true },
+      onhover: { enable: true, mode: "grab" },
+      onclick: { enable: false },
+      resize: true,
     },
     modes: {
       grab: {
         distance: 120,
-        links: { opacity: isDark ? 0.35 : 0.45 },
+        line_linked: { opacity: isDark ? 0.35 : 0.45 },
       },
     },
   },
-  detectRetina: true,
+  retina_detect: true,
 });
+
+const CONTAINER_ID = "hero-particles-js";
 
 const HeroParticles = () => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
-
-  const [ready, setReady] = useState(engineReady);
+  const instanceRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (!ready) {
-      ensureEngine().then(() => setReady(true));
+    // Destruye instancia anterior si existe
+    if (instanceRef.current !== null && window.pJSDom?.[instanceRef.current]) {
+      window.pJSDom[instanceRef.current].pJS.fn.vendors.destroypJS();
     }
-  }, [ready]);
 
-  const options = buildOptions(isDark);
+    window.particlesJS(CONTAINER_ID, buildConfig(isDark));
 
-  // Stable no-op callback for particlesLoaded
-  const particlesInit = useCallback(async () => {}, []);
+    // Guarda el índice de la nueva instancia
+    instanceRef.current = (window.pJSDom?.length ?? 1) - 1;
 
-  if (!ready) return null;
+    return () => {
+      if (instanceRef.current !== null && window.pJSDom?.[instanceRef.current]) {
+        window.pJSDom[instanceRef.current].pJS.fn.vendors.destroypJS();
+        instanceRef.current = null;
+      }
+    };
+  }, [isDark]);
 
   return (
-    <Particles
-      key={theme} // remount on theme change so colours update instantly
-      id="hero-particles"
+    <div
+      id={CONTAINER_ID}
       className="absolute inset-0 pointer-events-none"
-      options={options}
-      particlesLoaded={particlesInit}
+      style={{ zIndex: 0 }}
     />
   );
 };
