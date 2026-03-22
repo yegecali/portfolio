@@ -1,66 +1,19 @@
-import { useState } from "react";
-import { Copy, Mail, Phone, CheckCheck, Clock, Send, Github, Linkedin, Instagram, MessageCircle } from "lucide-react";
+import { Copy, Mail, Phone, CheckCheck, Clock, Send } from "lucide-react";
 import { motion } from "framer-motion";
 import Container from "@/components/layout/Container";
 import BackgroundBlobs from "@/components/general/BackgroundBlobs";
+import StatusBadge from "@/components/general/StatusBadge";
 import { customDelayFadeUpVariants, sectionHeaderProps } from "@/lib/animations";
+import { getSocialMeta } from "@/lib/constants";
 import WordReveal from "@/components/general/WordReveal";
-import { copyTextToClipboard } from "@/lib/utils";
 import { usePortfolio } from "@/hooks/usePortfolio";
+import useCopyToClipboard from "@/hooks/useCopyToClipboard";
 
 type CopyValue = "email" | "phone";
 
-const SOCIAL_META: Record<string, { label: string; icon: React.ElementType; gradient: string; bg: string }> = {
-  github: {
-    label: "GitHub",
-    icon: Github,
-    gradient: "from-gray-700 to-gray-900",
-    bg: "bg-gray-100 dark:bg-gray-800",
-  },
-  linkedin: {
-    label: "LinkedIn",
-    icon: Linkedin,
-    gradient: "from-blue-600 to-blue-800",
-    bg: "bg-blue-50 dark:bg-blue-900/20",
-  },
-  instagram: {
-    label: "Instagram",
-    icon: Instagram,
-    gradient: "from-pink-500 to-purple-600",
-    bg: "bg-pink-50 dark:bg-pink-900/20",
-  },
-  whatsapp: {
-    label: "WhatsApp",
-    icon: MessageCircle,
-    gradient: "from-emerald-500 to-green-600",
-    bg: "bg-emerald-50 dark:bg-emerald-900/20",
-  },
-};
-
-const getSocialMeta = (url: string) => {
-  const lower = url.toLowerCase();
-  for (const [key, meta] of Object.entries(SOCIAL_META)) {
-    if (lower.includes(key)) return meta;
-  }
-  return null;
-};
-
-
 const ContactSection = () => {
   const { email, phone, socialLinks } = usePortfolio();
-  const [isCopied, setIsCopied] = useState(false);
-  const [copiedValueType, setCopiedValueType] = useState<CopyValue | null>(null);
-
-  const handleCopy = async (text: string, type: CopyValue) => {
-    try {
-      await copyTextToClipboard(text);
-      setIsCopied(true);
-      setCopiedValueType(type);
-      setTimeout(() => { setIsCopied(false); setCopiedValueType(null); }, 2000);
-    } catch {
-      alert("No se pudo copiar");
-    }
-  };
+  const { copiedKey, copy } = useCopyToClipboard<CopyValue>();
 
   return (
     <Container
@@ -121,15 +74,9 @@ const ContactSection = () => {
               whileInView="visible"
               variants={customDelayFadeUpVariants}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 w-fit px-4 py-2 rounded-full bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700/50"
+              className="w-fit"
             >
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
-              </span>
-              <span className="text-sm font-semibold text-emerald-700 dark:text-emerald-400">
-                Disponible para nuevos proyectos
-              </span>
+              <StatusBadge label="Disponible para nuevos proyectos" className="text-sm px-4 py-2" />
             </motion.div>
 
             {/* Response time */}
@@ -166,10 +113,10 @@ const ContactSection = () => {
                   </div>
                 </div>
                 <button
-                  onClick={() => handleCopy(email, "email")}
+                  onClick={() => copy(email, "email")}
                   className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-all"
                 >
-                  {isCopied && copiedValueType === "email"
+                  {copiedKey === "email"
                     ? <><CheckCheck className="w-3.5 h-3.5" /> Copiado</>
                     : <><Copy className="w-3.5 h-3.5" /> Copiar</>}
                 </button>
@@ -187,10 +134,10 @@ const ContactSection = () => {
                   </div>
                 </div>
                 <button
-                  onClick={() => handleCopy(phone.replace(/\s/g, ""), "phone")}
+                  onClick={() => copy(phone.replace(/\s/g, ""), "phone")}
                   className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold transition-all"
                 >
-                  {isCopied && copiedValueType === "phone"
+                  {copiedKey === "phone"
                     ? <><CheckCheck className="w-3.5 h-3.5" /> Copiado</>
                     : <><Copy className="w-3.5 h-3.5" /> Copiar</>}
                 </button>

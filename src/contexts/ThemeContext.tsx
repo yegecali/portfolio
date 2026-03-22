@@ -1,4 +1,5 @@
 import React, { createContext, useLayoutEffect, useState } from "react";
+import { ANIMATION_TIMINGS } from "@/lib/constants";
 
 type ThemeType = "light" | "dark";
 
@@ -37,7 +38,7 @@ function applyTheme(theme: ThemeType) {
   // Remove transition class after animation completes
   setTimeout(() => {
     html.classList.remove("theme-transitioning");
-  }, 600);
+  }, ANIMATION_TIMINGS.THEME_TRANSITION);
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {

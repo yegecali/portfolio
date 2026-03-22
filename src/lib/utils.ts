@@ -8,3 +8,11 @@ export async function copyTextToClipboard(text: string) {
   }
   return await navigator.clipboard.writeText(text);
 }
+
+/**
+ * Smoothly scrolls to a section by id or href (e.g. "#about" or "about").
+ */
+export function scrollToSection(href: string) {
+  const id = href.startsWith("#") ? href.slice(1) : href;
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+}

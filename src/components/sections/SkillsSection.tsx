@@ -4,6 +4,7 @@ import { usePortfolio } from "@/hooks/usePortfolio";
 import { motion, AnimatePresence } from "framer-motion";
 import BackgroundBlobs from "@/components/general/BackgroundBlobs";
 import { sectionHeaderProps } from "@/lib/animations";
+import Reveal from "@/components/general/Reveal";
 import { useState } from "react";
 import { Monitor, Server, Database, Container as ContainerIcon, ExternalLink } from "lucide-react";
 import { getDevicon } from "@/lib/devicons";
@@ -75,7 +76,8 @@ const SkillCard = ({ tech, index }: SkillCardProps) => {
       rel="noopener noreferrer"
       className="group flex flex-col items-center gap-2 cursor-pointer"
       initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.35, delay: index * 0.06 }}
       whileHover={{ y: -4 }}
     >
@@ -158,13 +160,7 @@ const SkillsSection = () => {
         </motion.div>
 
         {/* Category filter tabs */}
-        <motion.div
-          className="flex flex-wrap justify-center gap-2"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          viewport={{ once: true }}
-        >
+        <Reveal animation="fade-up" delay={0.2} className="flex flex-wrap justify-center gap-2">
           <button
             onClick={() => setActiveCategory(null)}
             className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 ${
@@ -193,7 +189,7 @@ const SkillsSection = () => {
               </button>
             );
           })}
-        </motion.div>
+        </Reveal>
 
         {/* Category cards grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

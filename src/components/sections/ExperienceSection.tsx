@@ -5,6 +5,8 @@ import TiltCard from "@/components/general/TiltCard";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { motion } from "framer-motion";
 import { Briefcase, Calendar, MapPin } from "lucide-react";
+import StatusBadge from "@/components/general/StatusBadge";
+import Reveal from "@/components/general/Reveal";
 
 const formatDate = (date: Date) =>
   date.toLocaleDateString("es-PE", { month: "short", year: "numeric" });
@@ -126,15 +128,7 @@ const ExperienceCard = ({ exp }: CardProps) => (
 
     {/* Current badge */}
     {exp.currentlyWorkHere && (
-      <div className="inline-flex items-center gap-1.5 mb-3 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700/50">
-        <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-        </span>
-        <Typography className="text-xs font-semibold text-emerald-700 dark:text-emerald-400">
-          Actualmente aquí
-        </Typography>
-      </div>
+      <StatusBadge label="Actualmente aquí" size="sm" className="text-xs mb-3" />
     )}
 
     {/* Company & Position */}
@@ -166,12 +160,12 @@ const ExperienceCard = ({ exp }: CardProps) => (
     {/* Summary */}
     <ul className="flex flex-col gap-2">
       {exp.summary.map((point, i) => (
-        <li key={i} className="flex items-start gap-2">
+        <Reveal key={i} as="li" animation="fade-right" delay={i * 0.08} amount={0.05} className="flex items-start gap-2">
           <span className="mt-1.5 flex-shrink-0 w-1.5 h-1.5 rounded-full bg-gradient-to-br from-blue-500 to-purple-500" />
           <Typography className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
             {point}
           </Typography>
-        </li>
+        </Reveal>
       ))}
     </ul>
   </div>
