@@ -5,6 +5,7 @@ import TiltCard from "@/components/general/TiltCard";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { motion } from "framer-motion";
 import { Briefcase, Calendar, MapPin } from "lucide-react";
+import StatusBadge from "@/components/general/StatusBadge";
 
 const formatDate = (date: Date) =>
   date.toLocaleDateString("es-PE", { month: "short", year: "numeric" });
@@ -126,15 +127,7 @@ const ExperienceCard = ({ exp }: CardProps) => (
 
     {/* Current badge */}
     {exp.currentlyWorkHere && (
-      <div className="inline-flex items-center gap-1.5 mb-3 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700/50">
-        <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-        </span>
-        <Typography className="text-xs font-semibold text-emerald-700 dark:text-emerald-400">
-          Actualmente aquí
-        </Typography>
-      </div>
+      <StatusBadge label="Actualmente aquí" size="sm" className="text-xs mb-3" />
     )}
 
     {/* Company & Position */}

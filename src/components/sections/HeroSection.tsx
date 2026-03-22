@@ -5,19 +5,7 @@ import ProfileImage from "@/components/sections/ProfileImage";
 import HeroContent from "@/components/sections/HeroContent";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import type { TechDetails } from "@/lib/types";
-
-const codeSnippets = [
-  { text: "const dev = () => 🚀",  x: "8%",  y: "12%", duration: 18, delay: 0,   parallax: -60 },
-  { text: "<FullStack />",          x: "72%", y: "8%",  duration: 22, delay: 1,   parallax: -90 },
-  { text: "async/await",            x: "85%", y: "30%", duration: 16, delay: 2.5, parallax: -50 },
-  { text: "{ microservices }",      x: "5%",  y: "45%", duration: 20, delay: 0.8, parallax: -70 },
-  { text: "git commit -m '✨'",     x: "78%", y: "65%", duration: 24, delay: 1.5, parallax: -40 },
-  { text: "SELECT * FROM skills",   x: "10%", y: "75%", duration: 19, delay: 3,   parallax: -80 },
-  { text: "@SpringBootApplication", x: "60%", y: "82%", duration: 21, delay: 0.4, parallax: -55 },
-  { text: "docker build .",         x: "30%", y: "18%", duration: 17, delay: 2,   parallax: -65 },
-  { text: "type Safe = true",       x: "50%", y: "90%", duration: 23, delay: 1.2, parallax: -45 },
-  { text: "=> Promise<T>",          x: "88%", y: "50%", duration: 15, delay: 3.5, parallax: -75 },
-];
+import { HERO_CODE_SNIPPETS } from "@/lib/constants";
 
 // Hook: parallax value from a section ref
 const useSectionParallax = (ref: React.RefObject<HTMLElement | null>, outputRange: [number, number]) => {
@@ -96,7 +84,7 @@ const HeroSection = () => {
           className="absolute inset-0"
           style={{ y: snippetsY }}
         >
-          {codeSnippets.map((snippet, i) => (
+          {HERO_CODE_SNIPPETS.map((snippet, i) => (
             <motion.span
               key={i}
               className="absolute font-mono text-xs font-medium text-blue-600/20 dark:text-blue-400/15 select-none whitespace-nowrap"

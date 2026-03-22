@@ -1,21 +1,8 @@
 import { motion } from "framer-motion";
-import { Github, Linkedin, Instagram, MessageCircle, Code2, Heart, ArrowUp } from "lucide-react";
+import { Code2, Heart, ArrowUp } from "lucide-react";
 import { usePortfolio } from "@/hooks/usePortfolio";
-
-const SOCIAL_META: Record<string, { icon: React.ElementType; label: string }> = {
-  github:    { icon: Github,         label: "GitHub"    },
-  linkedin:  { icon: Linkedin,       label: "LinkedIn"  },
-  instagram: { icon: Instagram,      label: "Instagram" },
-  whatsapp:  { icon: MessageCircle,  label: "WhatsApp"  },
-};
-
-const getSocialMeta = (url: string) => {
-  const lower = url.toLowerCase();
-  for (const [key, meta] of Object.entries(SOCIAL_META)) {
-    if (lower.includes(key)) return meta;
-  }
-  return null;
-};
+import { getSocialMeta } from "@/lib/constants";
+import { scrollToSection } from "@/lib/utils";
 
 const NAV_COLS = [
   {
@@ -35,11 +22,6 @@ const NAV_COLS = [
     ],
   },
 ];
-
-const scrollTo = (href: string) => {
-  const id = href.startsWith("#") ? href.slice(1) : href;
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-};
 
 const Footer = () => {
   const { siteName, socialLinks, email } = usePortfolio();
@@ -125,7 +107,7 @@ const Footer = () => {
               {col.links.map((link) => (
                 <li key={link.href}>
                   <button
-                    onClick={() => scrollTo(link.href)}
+                    onClick={() => scrollToSection(link.href)}
                     className="text-sm text-gray-400 hover:text-white transition-colors duration-200 text-left"
                   >
                     {link.label}
@@ -149,7 +131,7 @@ const Footer = () => {
 
           {/* Back to top */}
           <motion.button
-            onClick={() => scrollTo("#hero")}
+            onClick={() => scrollToSection("#hero")}
             whileHover={{ y: -2 }}
             className="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-white transition-colors group"
           >

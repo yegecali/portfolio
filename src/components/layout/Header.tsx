@@ -7,6 +7,7 @@ import useActiveSection from "@/hooks/useActiveSection";
 import useScrolled from "@/hooks/useScrolled";
 import DesktopNav from "@/components/navigation/DesktopNav";
 import MobileMenu from "@/components/navigation/MobileMenu";
+import { scrollToSection } from "@/lib/utils";
 
 // ── Logo ──────────────────────────────────────────────────────────────────────
 const Logo = () => (
@@ -55,10 +56,7 @@ const Header = () => {
 
   const scrollTo = (href: string) => {
     setMobileOpen(false);
-    const id = href.startsWith("#") ? href.slice(1) : href;
-    setTimeout(() => {
-      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-    }, 300);
+    setTimeout(() => scrollToSection(href), 300);
   };
 
   const mainLinks = navLinks.filter((l) => l.label !== "Contact");

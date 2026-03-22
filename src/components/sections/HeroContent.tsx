@@ -11,6 +11,7 @@ import {
   heroItemVariants,
   heroSubItemVariants,
 } from "@/lib/animations";
+import StatusBadge from "@/components/general/StatusBadge";
 
 interface HeroContentProps {
   badge: string;
@@ -103,15 +104,7 @@ const HeroContent = ({ badge, title, description, location, status }: HeroConten
           </Typography>
         </div>
 
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white dark:bg-gray-800 border border-emerald-200 dark:border-emerald-700/50 shadow-sm">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-          </span>
-          <Typography className="text-sm font-medium text-emerald-700 dark:text-emerald-400">
-            {status}
-          </Typography>
-        </div>
+        <StatusBadge label={status} size="sm" className="text-sm bg-white dark:bg-gray-800 shadow-sm" />
       </motion.div>
 
       {/* 4 — Stats (sub-stagger within parent stagger) */}
