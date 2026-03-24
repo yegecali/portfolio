@@ -11,6 +11,7 @@ import CustomCursor from "@/components/general/CustomCursor";
 import { useTheme } from "@/hooks/useTheme";
 import { PortfolioProvider } from "@/contexts/PortfolioContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { I18nProvider } from "@/contexts/I18nContext";
 
 /**
  * PageLayout — contenedor raíz de ancho fijo.
@@ -65,11 +66,13 @@ function AppContent() {
 
 function App() {
   return (
-    <ThemeProvider>
-      <PortfolioProvider>
-        <AppContent />
-      </PortfolioProvider>
-    </ThemeProvider>
+    <I18nProvider>
+      <ThemeProvider>
+        <PortfolioProvider>
+          <AppContent />
+        </PortfolioProvider>
+      </ThemeProvider>
+    </I18nProvider>
   );
 }
 

@@ -3,11 +3,13 @@ import Typography from "@/components/general/Typography";
 import WordReveal from "@/components/general/WordReveal";
 import TiltCard from "@/components/general/TiltCard";
 import { usePortfolio } from "@/hooks/usePortfolio";
+import { useI18n } from "@/hooks/useI18n";
 import { motion } from "framer-motion";
 import { Briefcase, Calendar, MapPin } from "lucide-react";
 import StatusBadge from "@/components/general/StatusBadge";
 import Reveal from "@/components/general/Reveal";
 import { ExperienceCardSkeleton } from "@/components/general/Skeleton";
+import { BRAND } from "@/lib/theme";
 
 const formatDate = (date: Date) =>
   date.toLocaleDateString("es-PE", { month: "short", year: "numeric" });
@@ -56,13 +58,15 @@ const HighlightedBullet = ({ text }: { text: string }) => {
 
 const ExperienceSection = () => {
   const { experiences, isLoading } = usePortfolio();
+  const { t } = useI18n();
+  const ui = t.ui.experience;
 
   const SKELETON_COUNT = 3;
 
   return (
     <Container
       id="experience"
-      className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 overflow-hidden"
+      className="min-h-screen flex flex-col items-center justify-center bg-section-bg overflow-hidden"
     >
       {/* Header */}
       <motion.div
@@ -73,15 +77,15 @@ const ExperienceSection = () => {
         className="flex flex-col items-center gap-4 mb-10 md:mb-16 w-full"
       >
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg">
+          <div className={`p-3 rounded-2xl bg-gradient-to-br ${BRAND.ctaGradient} shadow-lg`}>
             <Briefcase className="w-6 h-6 text-white" />
           </div>
           <Typography
             variant="h1"
-            className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white"
+            className="text-4xl md:text-5xl font-bold text-heading"
           >
             <WordReveal
-              text="Experiencia Laboral"
+              text={ui.title}
               trigger="inView"
               delay={0}
               stagger={0.1}
@@ -89,10 +93,9 @@ const ExperienceSection = () => {
             />
           </Typography>
         </div>
-        <div className="h-1 w-24 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full" />
-        <Typography className="max-w-2xl text-center text-gray-600 dark:text-gray-300 text-lg">
-          Mi trayectoria profesional en el sector bancario peruano, construyendo
-          sistemas de alto rendimiento y arquitecturas distribuidas.
+        <div className={`h-1 w-24 bg-gradient-to-r ${BRAND.lineGradient} via-purple-500 to-pink-500 rounded-full`} />
+        <Typography className="max-w-2xl text-center text-body text-lg">
+          {ui.subtitle}
         </Typography>
       </motion.div>
 
@@ -159,7 +162,7 @@ const ExperienceSection = () => {
                   >
                     {/* Mobile dot */}
                     <div className="relative z-10 flex-shrink-0 md:hidden">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg ring-4 ring-white dark:ring-gray-900">
+                      <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${BRAND.ctaGradient} flex items-center justify-center shadow-lg ring-4 ring-white dark:ring-gray-900`}>
                         <Briefcase className="w-5 h-5 text-white" />
                       </div>
                     </div>
@@ -168,7 +171,7 @@ const ExperienceSection = () => {
                     <div className="hidden md:flex md:w-1/2 md:justify-end md:pr-10">
                       {isLeft && (
                         <div className="w-full max-w-sm">
-                          <ExperienceCard exp={exp} />
+                          <ExperienceCard exp={exp} currentLabel={ui.currentLabel} presentLabel={ui.presentLabel} />
                         </div>
                       )}
                     </div>
@@ -182,14 +185,14 @@ const ExperienceSection = () => {
                     <div className="hidden md:flex md:w-1/2 md:pl-10">
                       {!isLeft && (
                         <div className="w-full max-w-sm">
-                          <ExperienceCard exp={exp} />
+                          <ExperienceCard exp={exp} currentLabel={ui.currentLabel} presentLabel={ui.presentLabel} />
                         </div>
                       )}
                     </div>
 
                     {/* Mobile card */}
                     <div className="md:hidden flex-1">
-                      <ExperienceCard exp={exp} />
+                      <ExperienceCard exp={exp} currentLabel={ui.currentLabel} presentLabel={ui.presentLabel} />
                     </div>
                   </motion.div>
                 );
@@ -209,46 +212,41 @@ interface CardProps {
     endDate?: Date;
     summary: string[];
   };
+  currentLabel: string;
+  presentLabel: string;
 }
 
-const ExperienceCard = ({ exp }: CardProps) => (
+const ExperienceCard = ({ exp, currentLabel, presentLabel }: CardProps) => (
   <TiltCard maxTilt={6} scale={1.01}>
-    <div className="group relative bg-white dark:bg-gray-800 rounded-2xl p-4 md:p-6 shadow-md hover:shadow-xl border border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-700 transition-shadow duration-300">
+    <div className="group relative bg-card-bg rounded-2xl p-4 md:p-6 shadow-md hover:shadow-xl border border-card-border hover:border-blue-200 dark:hover:border-blue-700 transition-shadow duration-300">
       {/* Gradient accent top bar */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${BRAND.lineGradient} via-purple-500 to-pink-500 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
 
       {/* Current badge */}
       {exp.currentlyWorkHere && (
-        <StatusBadge
-          label="Actualmente aquí"
-          size="sm"
-          className="text-xs mb-3"
-        />
+        <StatusBadge label={currentLabel} size="sm" className="text-xs mb-3" />
       )}
 
       {/* Position */}
-      <Typography
-        variant="h3"
-        className="text-lg font-bold text-gray-900 dark:text-white mb-1"
-      >
+      <Typography variant="h3" className="text-lg font-bold text-heading mb-1">
         {exp.position}
       </Typography>
 
       {/* Company */}
       <div className="flex items-center gap-2 mb-1">
         <MapPin className="w-4 h-4 text-blue-500 flex-shrink-0" />
-        <Typography className="text-blue-600 dark:text-blue-400 font-semibold text-sm">
+        <Typography className={`${BRAND.labelText} font-semibold text-sm`}>
           {exp.company}
         </Typography>
       </div>
 
       {/* Dates */}
       <div className="flex items-center gap-2 mb-4">
-        <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
-        <Typography className="text-gray-500 dark:text-gray-400 text-sm">
+        <Calendar className="w-4 h-4 text-faint flex-shrink-0" />
+        <Typography className="text-subtle text-sm">
           {formatDate(exp.startDate)} —{" "}
           {exp.currentlyWorkHere
-            ? "Presente"
+            ? presentLabel
             : exp.endDate
               ? formatDate(exp.endDate)
               : ""}
@@ -256,7 +254,7 @@ const ExperienceCard = ({ exp }: CardProps) => (
       </div>
 
       {/* Divider */}
-      <div className="h-px bg-gray-100 dark:bg-gray-700 mb-4" />
+      <div className="h-px bg-card-border mb-4" />
 
       {/* Summary with metric highlighting */}
       <ul className="flex flex-col gap-2">
@@ -269,8 +267,8 @@ const ExperienceCard = ({ exp }: CardProps) => (
             amount={0.05}
             className="flex items-start gap-2"
           >
-            <span className="mt-1.5 flex-shrink-0 w-1.5 h-1.5 rounded-full bg-gradient-to-br from-blue-500 to-purple-500" />
-            <Typography className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+            <span className={`mt-1.5 flex-shrink-0 w-1.5 h-1.5 rounded-full bg-gradient-to-br ${BRAND.progressGradient}`} />
+            <Typography className="text-body text-sm leading-relaxed">
               <HighlightedBullet text={point} />
             </Typography>
           </Reveal>

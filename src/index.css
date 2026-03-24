@@ -4,37 +4,50 @@
 
 /* ── Design Tokens ──────────────────────────────────────────────────────────── */
 :root {
-  /* Backgrounds */
+  /* ── Legacy tokens (kept for backwards compat) ──────── */
   --bg:          247 247 248;
   --surface:     255 255 255;
   --muted:       237 237 239;
-
-  /* Borders */
   --border:      212 212 216;
-
-  /* Text */
   --text-primary: 17  17  17;
   --text-muted:   107 107 117;
-
-  /* Accent */
   --accent:       99  102 241;
   --accent-hover: 79  82  221;
   --cyan:         34  211 238;
   --violet:       167 139 250;
+
+  /* ── Semantic section / card tokens ─────────────────── */
+  /* Section backgrounds */
+  --section-bg:    249 250 251;   /* gray-50  */
+  --section-alt:   255 255 255;   /* white    */
+  /* Card tokens */
+  --card-bg:       255 255 255;   /* white    */
+  --card-border:   243 244 246;   /* gray-100 */
+  /* Typography scale */
+  --text-heading:  17  24  39;    /* gray-900 */
+  --text-body:     75  85  99;    /* gray-600 */
+  --text-subtle:   107 114 128;   /* gray-500 */
+  --text-faint:    156 163 175;   /* gray-400 */
 }
 
 .dark {
-  /* Backgrounds */
+  /* ── Legacy tokens ───────────────────────────────────── */
   --bg:          10  10  12;
   --surface:     20  20  24;
   --muted:       30  30  36;
-
-  /* Borders */
   --border:      48  48  56;
-
-  /* Text */
   --text-primary: 242 242 242;
   --text-muted:   155 155 165;
+
+  /* ── Semantic section / card tokens ─────────────────── */
+  --section-bg:    17  24  39;    /* gray-900 */
+  --section-alt:   3   7   18;    /* gray-950 */
+  --card-bg:       31  41  55;    /* gray-800 */
+  --card-border:   55  65  81;    /* gray-700 */
+  --text-heading:  255 255 255;   /* white    */
+  --text-body:     209 213 219;   /* gray-300 */
+  --text-subtle:   156 163 175;   /* gray-400 */
+  --text-faint:    107 114 128;   /* gray-500 */
 }
 
 /* ── Base ───────────────────────────────────────────────────────────────────── */

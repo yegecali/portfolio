@@ -2,35 +2,24 @@ import Container from "@/components/layout/Container";
 import Typography from "@/components/general/Typography";
 import WordReveal from "@/components/general/WordReveal";
 import { usePortfolio } from "@/hooks/usePortfolio";
+import { useI18n } from "@/hooks/useI18n";
 import { motion } from "framer-motion";
-import { Languages, Sparkles, MapPin, Briefcase, Rocket } from "lucide-react";
+import { Languages, Sparkles, Briefcase, Rocket, MapPin } from "lucide-react";
 import BackgroundBlobs from "@/components/general/BackgroundBlobs";
 import { staggerContainerVariants, fadeUpVariants } from "@/lib/animations";
 import Reveal from "@/components/general/Reveal";
+import { CARD_ACCENTS, BRAND } from "@/lib/theme";
 
 const highlightIcons = [Rocket, Briefcase, Sparkles];
-const highlightColors = [
-  "from-blue-500 to-cyan-500",
-  "from-purple-500 to-pink-500",
-  "from-emerald-500 to-teal-500",
-];
-const highlightBg = [
-  "bg-blue-50 dark:bg-blue-900/20 border-blue-100 dark:border-blue-800/40",
-  "bg-purple-50 dark:bg-purple-900/20 border-purple-100 dark:border-purple-800/40",
-  "bg-emerald-50 dark:bg-emerald-900/20 border-emerald-100 dark:border-emerald-800/40",
-];
-const chipColors = [
-  "bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300",
-  "bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300",
-  "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300",
-];
 
 const AboutMeSection = () => {
   const { about, hero, languages } = usePortfolio();
+  const { t } = useI18n();
+  const ui = t.ui.about;
 
   return (
     <Container
-      className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 overflow-hidden"
+      className="min-h-screen flex items-center justify-center bg-section-bg overflow-hidden"
       id="about"
     >
       <BackgroundBlobs
@@ -52,18 +41,18 @@ const AboutMeSection = () => {
         >
           {/* Label */}
           <motion.div variants={fadeUpVariants} className="flex items-center gap-2">
-            <div className="h-px w-8 bg-gradient-to-r from-blue-500 to-purple-500" />
-            <Typography className="text-sm font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-widest">
-              Sobre mí
+            <div className={`h-px w-8 bg-gradient-to-r ${BRAND.lineGradient}`} />
+            <Typography className={`text-sm font-semibold ${BRAND.labelText} uppercase tracking-widest`}>
+              {ui.sectionLabel}
             </Typography>
           </motion.div>
 
           {/* Title */}
           <motion.div variants={fadeUpVariants}>
-            <h2 className="text-3xl md:text-4xl font-bold leading-tight text-gray-900 dark:text-white">
-              <WordReveal text="¿Quieres saber más? Aquí está" trigger="inView" delay={0} stagger={0.1} once={true} />
+            <h2 className="text-3xl md:text-4xl font-bold leading-tight text-heading">
+              <WordReveal text={ui.title} trigger="inView" delay={0} stagger={0.1} once={true} />
               {" "}
-              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+              <span className={`bg-gradient-to-r ${BRAND.gradient} bg-clip-text text-transparent`}>
                 <WordReveal text="👨‍💻" trigger="inView" delay={0.5} stagger={0.1} once={true} />
               </span>
             </h2>
@@ -74,24 +63,25 @@ const AboutMeSection = () => {
             {about.paragraphs.map((paragraph, index) => (
               <Typography
                 key={index}
-                className="text-gray-600 dark:text-gray-300 leading-relaxed text-sm md:text-base"
+                className="text-body leading-relaxed text-sm md:text-base"
               >
                 {paragraph}
               </Typography>
             ))}
           </motion.div>
 
-          {/* Highlights as chip groups */}
+          {/* Highlights */}
           <motion.div variants={fadeUpVariants} className="flex flex-col gap-3">
             {about.highlights.map((highlight, idx) => {
               const Icon = highlightIcons[idx % highlightIcons.length];
+              const accent = CARD_ACCENTS[idx % CARD_ACCENTS.length];
               return (
                 <div
                   key={idx}
-                  className={`flex flex-col gap-2 rounded-xl border p-4 ${highlightBg[idx % highlightBg.length]}`}
+                  className={`flex flex-col gap-2 rounded-xl border p-4 ${accent.highlightBg}`}
                 >
                   <div className="flex items-center gap-2 mb-1">
-                    <div className={`p-1.5 rounded-lg bg-gradient-to-br ${highlightColors[idx % highlightColors.length]}`}>
+                    <div className={`p-1.5 rounded-lg bg-gradient-to-br ${accent.gradient}`}>
                       <Icon className="w-3.5 h-3.5 text-white" />
                     </div>
                   </div>
@@ -99,7 +89,7 @@ const AboutMeSection = () => {
                     {highlight.items.map((item, itemIdx) => (
                       <span
                         key={itemIdx}
-                        className={`text-xs font-semibold px-3 py-1 rounded-full ${chipColors[idx % chipColors.length]}`}
+                        className={`text-xs font-semibold px-3 py-1 rounded-full ${accent.chipSolid}`}
                       >
                         {item}
                       </span>
@@ -115,8 +105,8 @@ const AboutMeSection = () => {
             <motion.div variants={fadeUpVariants} className="flex flex-col gap-3">
               <div className="flex items-center gap-2">
                 <Languages className="w-4 h-4 text-blue-500" />
-                <Typography className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest">
-                  Idiomas
+                <Typography className="text-xs font-semibold text-subtle uppercase tracking-widest">
+                  {ui.languagesLabel}
                 </Typography>
               </div>
               <div className="flex flex-wrap gap-3">
@@ -125,22 +115,22 @@ const AboutMeSection = () => {
                     key={idx}
                     animation="zoom-in"
                     delay={idx * 0.1}
-                    className="flex flex-col gap-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-3 shadow-sm min-w-[120px]"
+                    className="flex flex-col gap-2 bg-card-bg border border-card-border rounded-xl px-3 py-3 shadow-sm min-w-[120px]"
                   >
                     <div className="flex items-center gap-2">
                       <span className="text-xl">{lang.flag}</span>
                       <div className="flex flex-col">
-                        <Typography className="text-sm font-semibold text-gray-900 dark:text-white leading-tight">
+                        <Typography className="text-sm font-semibold text-heading leading-tight">
                           {lang.name}
                         </Typography>
-                        <Typography className="text-xs text-blue-600 dark:text-blue-400">
+                        <Typography className={`text-xs ${BRAND.labelText}`}>
                           {lang.level}
                         </Typography>
                       </div>
                     </div>
                     <div className="h-1.5 w-full bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                       <motion.div
-                        className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
+                        className={`h-full bg-gradient-to-r ${BRAND.progressGradient} rounded-full`}
                         initial={{ width: 0 }}
                         whileInView={{ width: `${lang.proficiency}%` }}
                         transition={{ duration: 0.9, delay: idx * 0.15 + 0.3, ease: "easeOut" }}
@@ -189,7 +179,6 @@ const AboutMeSection = () => {
                 alt="Yemi Genderson"
                 className="w-full h-full object-cover"
               />
-              {/* Bottom gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent" />
 
               {/* Name tag at bottom */}
@@ -206,74 +195,62 @@ const AboutMeSection = () => {
             </div>
 
             {/* Floating card — Location */}
-            <Reveal
-              animation="fade-right"
-              delay={0.4}
-              className="absolute -left-2 md:-left-10 top-16"
-            >
-            <motion.div
-              className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 px-3 py-2 flex items-center gap-2"
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <div className="p-1.5 rounded-lg bg-blue-100 dark:bg-blue-900/40">
-                <MapPin className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-              </div>
-              <div>
-                <Typography className="text-xs font-bold text-gray-900 dark:text-white leading-none">
-                  Lima, Perú
-                </Typography>
-                <Typography className="text-[10px] text-gray-500 dark:text-gray-400">
-                  Disponible remote
-                </Typography>
-              </div>
-            </motion.div>
+            <Reveal animation="fade-right" delay={0.4} className="absolute -left-2 md:-left-10 top-16">
+              <motion.div
+                className="bg-card-bg rounded-2xl shadow-xl border border-card-border px-3 py-2 flex items-center gap-2"
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <div className="p-1.5 rounded-lg bg-blue-100 dark:bg-blue-900/40">
+                  <MapPin className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                </div>
+                <div>
+                  <Typography className="text-xs font-bold text-heading leading-none">
+                    {hero.location}
+                  </Typography>
+                  <Typography className="text-[10px] text-subtle">
+                    {ui.availableRemote}
+                  </Typography>
+                </div>
+              </motion.div>
             </Reveal>
 
-            {/* Floating card — Experiencia */}
-            <Reveal
-              animation="fade-left"
-              delay={0.55}
-              className="absolute -right-2 md:-right-10 top-32"
-            >
-            <motion.div
-              className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 px-3 py-2 flex items-center gap-2"
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
-            >
-              <div className="p-1.5 rounded-lg bg-purple-100 dark:bg-purple-900/40">
-                <Briefcase className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
-              </div>
-              <div>
-                <Typography className="text-xs font-bold text-gray-900 dark:text-white leading-none">
-                  5+ años
-                </Typography>
-                <Typography className="text-[10px] text-gray-500 dark:text-gray-400">
-                  de experiencia
-                </Typography>
-              </div>
-            </motion.div>
+            {/* Floating card — Experience */}
+            <Reveal animation="fade-left" delay={0.55} className="absolute -right-2 md:-right-10 top-32">
+              <motion.div
+                className="bg-card-bg rounded-2xl shadow-xl border border-card-border px-3 py-2 flex items-center gap-2"
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
+              >
+                <div className="p-1.5 rounded-lg bg-purple-100 dark:bg-purple-900/40">
+                  <Briefcase className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+                </div>
+                <div>
+                  <Typography className="text-xs font-bold text-heading leading-none">
+                    {ui.yearsExp}
+                  </Typography>
+                  <Typography className="text-[10px] text-subtle">
+                    {ui.experienceOf}
+                  </Typography>
+                </div>
+              </motion.div>
             </Reveal>
 
             {/* Floating card — Open to work */}
-            <Reveal
-              animation="fade-right"
-              delay={0.7}
-              className="absolute -left-2 md:-left-8 bottom-24"
-            >
-            <motion.div
-              className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-emerald-200 dark:border-emerald-700/50 px-3 py-2 flex items-center gap-2"
-              animate={{ y: [0, -6, 0] }}
-              transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-            >
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
-              </span>
-              <Typography className="text-xs font-bold text-emerald-700 dark:text-emerald-400">
-                Open to work
-              </Typography>
-            </motion.div>
+            <Reveal animation="fade-right" delay={0.7} className="absolute -left-2 md:-left-8 bottom-24">
+              <motion.div
+                className="bg-card-bg rounded-2xl shadow-xl border border-emerald-200 dark:border-emerald-700/50 px-3 py-2 flex items-center gap-2"
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+              >
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
+                </span>
+                <Typography className="text-xs font-bold text-emerald-700 dark:text-emerald-400">
+                  {ui.openToWork}
+                </Typography>
+              </motion.div>
             </Reveal>
           </div>
         </motion.div>
