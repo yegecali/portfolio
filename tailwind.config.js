@@ -9,16 +9,29 @@ export default {
         body: ["Lato", "sans-serif"],
       },
       colors: {
-        bg: "rgb(var(--bg-light) / <alpha-value>)",
-        surface: "rgb(var(--surface-light) / <alpha-value>)",
-        muted: "rgb(var(--muted-light) / <alpha-value>)",
-        border: "rgb(var(--border-light) / <alpha-value>)",
-        "text-primary": "rgb(var(--text-primary-light) / <alpha-value>)",
-        "text-muted": "rgb(var(--text-muted-light) / <alpha-value>)",
+        // ── Legacy tokens ────────────────────────────────────
+        bg: "rgb(var(--bg) / <alpha-value>)",
+        surface: "rgb(var(--surface) / <alpha-value>)",
+        muted: "rgb(var(--muted) / <alpha-value>)",
+        "text-primary": "rgb(var(--text-primary) / <alpha-value>)",
+        "text-muted": "rgb(var(--text-muted) / <alpha-value>)",
         accent: "rgb(var(--accent) / <alpha-value>)",
         "accent-hover": "rgb(var(--accent-hover) / <alpha-value>)",
         cyan: "rgb(var(--cyan) / <alpha-value>)",
         violet: "rgb(var(--violet) / <alpha-value>)",
+
+        // ── Semantic tokens (use these in new code) ──────────
+        // Section backgrounds
+        "section-bg":  "rgb(var(--section-bg)  / <alpha-value>)",
+        "section-alt": "rgb(var(--section-alt) / <alpha-value>)",
+        // Card
+        "card-bg":     "rgb(var(--card-bg)     / <alpha-value>)",
+        "card-border": "rgb(var(--card-border) / <alpha-value>)",
+        // Typography
+        heading:  "rgb(var(--text-heading) / <alpha-value>)",
+        body:     "rgb(var(--text-body)    / <alpha-value>)",
+        subtle:   "rgb(var(--text-subtle)  / <alpha-value>)",
+        faint:    "rgb(var(--text-faint)   / <alpha-value>)",
       },
       keyframes: {
         open: {

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import ThemeSwitcher from "@/components/general/ThemeSwitcher";
+import LanguageSwitcher from "@/components/general/LanguageSwitcher";
 import { Menu, X, Code2 } from "lucide-react";
 import { usePortfolio } from "@/hooks/usePortfolio";
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
@@ -89,6 +90,7 @@ const Header = () => {
 
         {/* Right side: theme + CTA + hamburger */}
         <div className="flex items-center gap-3">
+          <LanguageSwitcher />
           <ThemeSwitcher />
 
           {ctaLink && (

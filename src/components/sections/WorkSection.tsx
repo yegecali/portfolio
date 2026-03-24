@@ -2,11 +2,13 @@ import Container from "@/components/layout/Container";
 import WordReveal from "@/components/general/WordReveal";
 import TiltCard from "@/components/general/TiltCard";
 import { usePortfolio } from "@/hooks/usePortfolio";
+import { useI18n } from "@/hooks/useI18n";
 import { motion } from "framer-motion";
 import BackgroundBlobs from "@/components/general/BackgroundBlobs";
 import { sectionHeaderProps } from "@/lib/animations";
 import Reveal from "@/components/general/Reveal";
 import { ProjectCardSkeleton } from "@/components/general/Skeleton";
+import { CARD_ACCENTS, BRAND } from "@/lib/theme";
 import {
   Gauge,
   ShieldCheck,
@@ -18,49 +20,6 @@ import {
 
 // One icon per project (backend-themed, no images needed)
 const PROJECT_ICONS = [Gauge, ShieldCheck, Activity, Database];
-
-const PROJECT_ACCENTS = [
-  {
-    gradient: "from-blue-500 to-cyan-500",
-    bg: "bg-blue-50 dark:bg-blue-950/30",
-    border: "border-blue-200/60 dark:border-blue-800/40",
-    chip: "bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800/50",
-    glow: "from-blue-500/10",
-    num: "text-blue-100 dark:text-blue-900/60",
-    highlight:
-      "bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700/50",
-  },
-  {
-    gradient: "from-purple-500 to-pink-500",
-    bg: "bg-purple-50 dark:bg-purple-950/30",
-    border: "border-purple-200/60 dark:border-purple-800/40",
-    chip: "bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800/50",
-    glow: "from-purple-500/10",
-    num: "text-purple-100 dark:text-purple-900/60",
-    highlight:
-      "bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-700/50",
-  },
-  {
-    gradient: "from-emerald-500 to-teal-500",
-    bg: "bg-emerald-50 dark:bg-emerald-950/30",
-    border: "border-emerald-200/60 dark:border-emerald-800/40",
-    chip: "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/50",
-    glow: "from-emerald-500/10",
-    num: "text-emerald-100 dark:text-emerald-900/60",
-    highlight:
-      "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700/50",
-  },
-  {
-    gradient: "from-orange-500 to-red-500",
-    bg: "bg-orange-50 dark:bg-orange-950/30",
-    border: "border-orange-200/60 dark:border-orange-800/40",
-    chip: "bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-800/50",
-    glow: "from-orange-500/10",
-    num: "text-orange-100 dark:text-orange-900/60",
-    highlight:
-      "bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300 border border-orange-200 dark:border-orange-700/50",
-  },
-];
 
 // Extract a key metric from the description for the header badge
 const extractMetric = (description: string): string | null => {
@@ -128,11 +87,13 @@ const HighlightedDescription = ({
 
 const WorkSection = () => {
   const { projects, isLoading } = usePortfolio();
+  const { t } = useI18n();
+  const ui = t.ui.work;
 
   return (
     <Container
       id="work"
-      className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 overflow-hidden"
+      className="min-h-screen flex flex-col items-center justify-center bg-section-bg overflow-hidden"
     >
       <BackgroundBlobs
         blobs={[
@@ -163,47 +124,34 @@ const WorkSection = () => {
           {...sectionHeaderProps}
         >
           <div className="flex items-center gap-2">
-            <div className="h-px w-8 bg-gradient-to-r from-blue-500 to-purple-500" />
-            <span className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-widest">
-              Proyectos destacados
+            <div className={`h-px w-8 bg-gradient-to-r ${BRAND.lineGradient}`} />
+            <span className={`text-xs font-semibold ${BRAND.labelText} uppercase tracking-widest`}>
+              {ui.sectionLabel}
             </span>
-            <div className="h-px w-8 bg-gradient-to-r from-purple-500 to-blue-500" />
+            <div className={`h-px w-8 bg-gradient-to-r ${BRAND.lineGradient}`} />
           </div>
 
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight">
-            <WordReveal
-              text="Sistemas de"
-              trigger="inView"
-              delay={0}
-              stagger={0.1}
-              once={true}
-            />
+          <h2 className="text-4xl md:text-5xl font-bold text-heading leading-tight">
+            <WordReveal text={ui.title1} trigger="inView" delay={0} stagger={0.1} once={true} />
             {" "}
-            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
-              <WordReveal
-                text="Alto Rendimiento"
-                trigger="inView"
-                delay={0.2}
-                stagger={0.1}
-                once={true}
-              />
+            <span className={`bg-gradient-to-r ${BRAND.gradient} bg-clip-text text-transparent`}>
+              <WordReveal text={ui.title2} trigger="inView" delay={0.2} stagger={0.1} once={true} />
             </span>
           </h2>
 
-          <p className="max-w-2xl text-gray-500 dark:text-gray-400 text-sm md:text-base leading-relaxed">
-            Arquitecturas distribuidas, resiliencia extrema y observabilidad en
-            tiempo real — proyectos con impacto real en producción bancaria.
+          <p className="max-w-2xl text-subtle text-sm md:text-base leading-relaxed">
+            {ui.subtitle}
           </p>
         </motion.div>
 
         {/* Projects 2×2 grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {isLoading
-            ? PROJECT_ACCENTS.map((accent, i) => (
+            ? CARD_ACCENTS.map((accent, i) => (
                 <ProjectCardSkeleton key={i} accent={accent} />
               ))
             : projects?.map((project, index) => {
-                const accent = PROJECT_ACCENTS[index % PROJECT_ACCENTS.length];
+                const accent = CARD_ACCENTS[index % CARD_ACCENTS.length];
                 const Icon = PROJECT_ICONS[index % PROJECT_ICONS.length];
                 const metric = extractMetric(project.description);
                 const num = String(index + 1).padStart(2, "0");
@@ -287,7 +235,7 @@ const WorkSection = () => {
                             className={`inline-flex items-center gap-2 text-sm font-semibold bg-gradient-to-r ${accent.gradient} bg-clip-text text-transparent hover:opacity-80 transition-opacity`}
                           >
                             <Github className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                            Ver en GitHub
+                            {ui.viewOnGithub}
                             <ArrowUpRight className="w-3.5 h-3.5 text-gray-400" />
                           </a>
                         </div>

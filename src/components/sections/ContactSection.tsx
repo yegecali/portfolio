@@ -7,18 +7,22 @@ import { customDelayFadeUpVariants, sectionHeaderProps } from "@/lib/animations"
 import { getSocialMeta } from "@/lib/constants";
 import WordReveal from "@/components/general/WordReveal";
 import { usePortfolio } from "@/hooks/usePortfolio";
+import { useI18n } from "@/hooks/useI18n";
 import useCopyToClipboard from "@/hooks/useCopyToClipboard";
+import { BRAND } from "@/lib/theme";
 
 type CopyValue = "email" | "phone";
 
 const ContactSection = () => {
   const { email, phone, socialLinks } = usePortfolio();
+  const { t } = useI18n();
+  const ui = t.ui.contact;
   const { copiedKey, copy } = useCopyToClipboard<CopyValue>();
 
   return (
     <Container
       id="contact"
-      className="min-h-screen flex flex-col items-center justify-center bg-white dark:bg-gray-950 overflow-hidden"
+      className="min-h-screen flex flex-col items-center justify-center bg-section-alt overflow-hidden"
     >
       <BackgroundBlobs
         blobs={[
@@ -43,21 +47,21 @@ const ContactSection = () => {
           {...sectionHeaderProps}
         >
           <div className="flex items-center gap-2">
-            <div className="h-px w-8 bg-gradient-to-r from-blue-500 to-purple-500" />
-            <span className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-widest">
-              Contacto
+            <div className={`h-px w-8 bg-gradient-to-r ${BRAND.lineGradient}`} />
+            <span className={`text-xs font-semibold ${BRAND.labelText} uppercase tracking-widest`}>
+              {ui.sectionLabel}
             </span>
-            <div className="h-px w-8 bg-gradient-to-r from-purple-500 to-blue-500" />
+            <div className={`h-px w-8 bg-gradient-to-r ${BRAND.lineGradient}`} />
           </div>
-          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight">
-            <WordReveal text="Hablemos sobre tu" trigger="inView" delay={0} stagger={0.1} once={true} />
+          <h2 className="text-3xl md:text-5xl font-bold text-heading leading-tight">
+            <WordReveal text={ui.title1} trigger="inView" delay={0} stagger={0.1} once={true} />
             {" "}
-            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
-              <WordReveal text="próximo proyecto" trigger="inView" delay={0.3} stagger={0.1} once={true} />
+            <span className={`bg-gradient-to-r ${BRAND.gradient} bg-clip-text text-transparent`}>
+              <WordReveal text={ui.title2} trigger="inView" delay={0.3} stagger={0.1} once={true} />
             </span>
           </h2>
-          <p className="max-w-xl text-gray-500 dark:text-gray-400 text-sm md:text-base">
-            Estoy disponible para nuevos desafíos y colaboraciones. Escríbeme y te respondo pronto.
+          <p className="max-w-xl text-subtle text-sm md:text-base">
+            {ui.subtitle}
           </p>
         </motion.div>
 
@@ -76,7 +80,7 @@ const ContactSection = () => {
               viewport={{ once: true }}
               className="w-fit"
             >
-              <StatusBadge label="Disponible para nuevos proyectos" className="text-sm px-4 py-2" />
+              <StatusBadge label={ui.available} className="text-sm px-4 py-2" />
             </motion.div>
 
             {/* Response time */}
@@ -86,10 +90,13 @@ const ContactSection = () => {
               whileInView="visible"
               variants={customDelayFadeUpVariants}
               viewport={{ once: true }}
-              className="flex items-center gap-2 text-gray-500 dark:text-gray-400"
+              className="flex items-center gap-2 text-subtle"
             >
               <Clock className="w-4 h-4 text-blue-500" />
-              <span className="text-sm">Tiempo de respuesta: <strong className="text-gray-700 dark:text-gray-300">menos de 24 horas</strong></span>
+              <span className="text-sm">
+                {ui.responseTime}{" "}
+                <strong className="text-body">{ui.responseValue}</strong>
+              </span>
             </motion.div>
 
             {/* Contact methods */}
@@ -99,17 +106,17 @@ const ContactSection = () => {
               whileInView="visible"
               variants={customDelayFadeUpVariants}
               viewport={{ once: true }}
-              className="flex flex-col gap-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-5 shadow-sm"
+              className="flex flex-col gap-3 rounded-2xl border border-card-border bg-section-bg p-5 shadow-sm"
             >
               {/* Email row */}
-              <div className="flex items-center justify-between gap-4 p-4 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-700 transition-colors group">
+              <div className="flex items-center justify-between gap-4 p-4 rounded-xl bg-card-bg border border-card-border hover:border-blue-200 dark:hover:border-blue-700 transition-colors group">
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="p-2.5 rounded-xl bg-blue-100 dark:bg-blue-900/40 flex-shrink-0">
                     <Mail className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs text-gray-400 dark:text-gray-500 font-medium">Email</p>
-                    <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 truncate">{email}</p>
+                    <p className="text-xs text-faint font-medium">{ui.emailLabel}</p>
+                    <p className="text-sm font-semibold text-heading truncate">{email}</p>
                   </div>
                 </div>
                 <button
@@ -117,20 +124,20 @@ const ContactSection = () => {
                   className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-all"
                 >
                   {copiedKey === "email"
-                    ? <><CheckCheck className="w-3.5 h-3.5" /> Copiado</>
-                    : <><Copy className="w-3.5 h-3.5" /> Copiar</>}
+                    ? <><CheckCheck className="w-3.5 h-3.5" /> {ui.copied}</>
+                    : <><Copy className="w-3.5 h-3.5" /> {ui.copy}</>}
                 </button>
               </div>
 
               {/* Phone row */}
-              <div className="flex items-center justify-between gap-4 p-4 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:border-purple-200 dark:hover:border-purple-700 transition-colors group">
+              <div className="flex items-center justify-between gap-4 p-4 rounded-xl bg-card-bg border border-card-border hover:border-purple-200 dark:hover:border-purple-700 transition-colors group">
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="p-2.5 rounded-xl bg-purple-100 dark:bg-purple-900/40 flex-shrink-0">
                     <Phone className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs text-gray-400 dark:text-gray-500 font-medium">Teléfono</p>
-                    <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">{phone}</p>
+                    <p className="text-xs text-faint font-medium">{ui.phoneLabel}</p>
+                    <p className="text-sm font-semibold text-heading">{phone}</p>
                   </div>
                 </div>
                 <button
@@ -138,8 +145,8 @@ const ContactSection = () => {
                   className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold transition-all"
                 >
                   {copiedKey === "phone"
-                    ? <><CheckCheck className="w-3.5 h-3.5" /> Copiado</>
-                    : <><Copy className="w-3.5 h-3.5" /> Copiar</>}
+                    ? <><CheckCheck className="w-3.5 h-3.5" /> {ui.copied}</>
+                    : <><Copy className="w-3.5 h-3.5" /> {ui.copy}</>}
                 </button>
               </div>
             </motion.div>
@@ -153,8 +160,8 @@ const ContactSection = () => {
               viewport={{ once: true }}
               className="flex flex-col gap-3"
             >
-              <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
-                Redes sociales
+              <p className="text-xs font-semibold text-faint uppercase tracking-widest">
+                {ui.socialLabel}
               </p>
               <div className="grid grid-cols-2 gap-3">
                 {socialLinks.map((link, i) => {
@@ -168,12 +175,12 @@ const ContactSection = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       whileHover={{ y: -2 }}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 ${meta.bg} hover:shadow-md transition-all duration-200`}
+                      className={`flex items-center gap-3 px-4 py-3 rounded-xl border border-card-border ${meta.bg} hover:shadow-md transition-all duration-200`}
                     >
                       <div className={`p-2 rounded-lg bg-gradient-to-br ${meta.gradient} shadow-sm`}>
                         <Icon className="w-4 h-4 text-white" />
                       </div>
-                      <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                      <span className="text-sm font-semibold text-body">
                         {meta.label}
                       </span>
                     </motion.a>
@@ -190,7 +197,7 @@ const ContactSection = () => {
             whileInView="visible"
             variants={customDelayFadeUpVariants}
             viewport={{ once: true }}
-            className="relative flex flex-col justify-between gap-6 rounded-2xl overflow-hidden p-6 md:p-10 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 shadow-2xl shadow-blue-500/20"
+            className={`relative flex flex-col justify-between gap-6 rounded-2xl overflow-hidden p-6 md:p-10 bg-gradient-to-br ${BRAND.ctaGradient} via-purple-600 to-pink-600 shadow-2xl shadow-blue-500/20`}
           >
             {/* Background pattern */}
             <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
@@ -202,20 +209,14 @@ const ContactSection = () => {
               <span className="text-5xl">👋</span>
               <div className="flex flex-col gap-3">
                 <h3 className="text-2xl md:text-3xl font-bold text-white leading-tight">
-                  ¿Listo para construir algo increíble?
+                  {ui.ctaTitle}
                 </h3>
                 <p className="text-blue-100 text-sm md:text-base leading-relaxed">
-                  Ya sea un sistema bancario de alto rendimiento, una arquitectura de microservicios o una migración cloud — me encantaría ser parte del equipo.
+                  {ui.ctaSubtitle}
                 </p>
               </div>
-
-              {/* Highlights */}
               <div className="flex flex-col gap-2">
-                {[
-                  "✅ Backend con Java, Spring Boot & Quarkus",
-                  "✅ Frontend moderno con React & TypeScript",
-                  "✅ Experiencia en proyectos bancarios reales",
-                ].map((item, i) => (
+                {ui.ctaHighlights.map((item, i) => (
                   <p key={i} className="text-white/90 text-sm font-medium">{item}</p>
                 ))}
               </div>
@@ -228,7 +229,7 @@ const ContactSection = () => {
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-blue-700 font-bold text-sm hover:bg-blue-50 transition-colors shadow-lg hover:shadow-xl hover:scale-105 transform duration-200"
               >
                 <Send className="w-4 h-4" />
-                Enviarme un mensaje
+                {ui.ctaButton}
               </a>
             </div>
           </motion.div>
