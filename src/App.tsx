@@ -14,13 +14,19 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { I18nProvider } from "@/contexts/I18nContext";
 import AdminPage from "@/pages/AdminPage";
 
-/** Detect admin route: /portfolio/admin, /admin, or ?admin query param */
+/**
+ * Detect admin route.
+ * Supported URLs (Vite base = /portfolio/):
+ *   - http://localhost:5173/portfolio/?admin          ← recommended
+ *   - http://localhost:5173/portfolio/admin
+ *   - http://localhost:5173/portfolio/#/admin
+ */
 function isAdminRoute(): boolean {
-  const path = window.location.pathname;
-  const search = window.location.search;
+  const { pathname, search, hash } = window.location;
   return (
-    path.endsWith("/admin") ||
-    new URLSearchParams(search).has("admin")
+    new URLSearchParams(search).has("admin") ||
+    pathname.endsWith("/admin") ||
+    hash === "#/admin"
   );
 }
 

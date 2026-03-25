@@ -15,12 +15,13 @@ import {
 } from "@/lib/adminOverrides";
 import { es } from "@/lib/i18n/es";
 import { en } from "@/lib/i18n/en";
-import { useTheme } from "@/hooks/useTheme";
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
+/** URL of the portfolio root — strips ?admin so "Ver Portafolio" works cleanly */
 function portfolioRoot(): string {
-  return import.meta.env.BASE_URL || "/";
+  const base = import.meta.env.BASE_URL || "/";
+  return base;
 }
 
 // ── Small UI primitives ───────────────────────────────────────────────────────
@@ -675,11 +676,8 @@ function ProjectsSection() {
 // ── Main AdminPage ─────────────────────────────────────────────────────────────
 
 export default function AdminPage() {
-  const { mounted } = useTheme();
   const [cfg, setCfg] = useState<AdminConfig>(readAdminConfig);
   const [resetConfirm, setResetConfirm] = useState(false);
-
-  if (!mounted) return null;
 
   function handleSave(next: AdminConfig) {
     writeAdminConfig(next);
