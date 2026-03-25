@@ -1,0 +1,8 @@
+portfolio.db
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+dist/
+.env
