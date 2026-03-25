@@ -12,6 +12,7 @@ import type {
   LanguageDetails,
 } from "@/lib/types";
 import I18nContext from "@/contexts/I18nContext";
+import { readAdminConfig } from "@/lib/adminOverrides";
 
 interface PortfolioContextType {
   // ── Site meta ─────────────────────────────────────────────────────────────
@@ -73,9 +74,9 @@ const PortfolioContext = createContext<PortfolioContextType | undefined>(
   undefined,
 );
 
-// ── Non-translatable static data ──────────────────────────────────────────────
+// ── Non-translatable static defaults ──────────────────────────────────────────
 
-const STATIC = {
+const DEFAULTS = {
   siteName:        "Yemi Genderson",
   siteDescription: "Full Stack Developer",
   author:          "Yemi Genderson",
@@ -84,12 +85,12 @@ const STATIC = {
   location:        "Lima, Peru",
   cvUrl:           "/portfolio/cv-yemi-genderson.pdf",
 
-  socialLinks: [
-    { url: "https://github.com/yemigenderson"      },
-    { url: "https://linkedin.com/in/yemigenderson" },
-    { url: "https://wa.me/51987654321"             },
-    { url: "https://instagram.com/yemigenderson"   },
-  ],
+  socialLinks: {
+    github:    "https://github.com/yemigenderson",
+    linkedin:  "https://linkedin.com/in/yemigenderson",
+    whatsapp:  "https://wa.me/51987654321",
+    instagram: "https://instagram.com/yemigenderson",
+  },
 
   technologies: [
     { label: "JavaScript",  url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript", iconName: "javascript"  },
@@ -127,6 +128,30 @@ const STATIC = {
     "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop",
 };
 
+/** Build the static (non-translatable) data, merging any admin overrides. */
+function buildStatic() {
+  const cfg = readAdminConfig();
+  const p = cfg.personal ?? {};
+  const s = cfg.social ?? {};
+  return {
+    ...DEFAULTS,
+    siteName:        p.siteName        ?? DEFAULTS.siteName,
+    siteDescription: p.siteDescription ?? DEFAULTS.siteDescription,
+    author:          p.siteName        ?? DEFAULTS.author,
+    email:           p.email           ?? DEFAULTS.email,
+    phone:           p.phone           ?? DEFAULTS.phone,
+    location:        p.location        ?? DEFAULTS.location,
+    cvUrl:           p.cvUrl           ?? DEFAULTS.cvUrl,
+    heroImage:       p.heroImage       ?? DEFAULTS.heroImage,
+    socialLinks: [
+      { url: s.github    ?? DEFAULTS.socialLinks.github    },
+      { url: s.linkedin  ?? DEFAULTS.socialLinks.linkedin  },
+      { url: s.whatsapp  ?? DEFAULTS.socialLinks.whatsapp  },
+      { url: s.instagram ?? DEFAULTS.socialLinks.instagram },
+    ],
+  };
+}
+
 // ── Provider ──────────────────────────────────────────────────────────────────
 
 export const PortfolioProvider: React.FC<PortfolioProviderProps> = ({
@@ -140,6 +165,9 @@ export const PortfolioProvider: React.FC<PortfolioProviderProps> = ({
     const id = requestAnimationFrame(() => setIsLoading(false));
     return () => cancelAnimationFrame(id);
   }, []);
+
+  // Rebuild static each render so overrides from localStorage are always fresh
+  const STATIC = buildStatic();
 
   // Locale-driven content (falls back to Spanish if I18nContext is absent)
   const locale = i18n?.t;
