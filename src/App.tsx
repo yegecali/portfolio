@@ -12,6 +12,17 @@ import { useTheme } from "@/hooks/useTheme";
 import { PortfolioProvider } from "@/contexts/PortfolioContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { I18nProvider } from "@/contexts/I18nContext";
+import AdminPage from "@/pages/AdminPage";
+
+/** Detect admin route: /portfolio/admin, /admin, or ?admin query param */
+function isAdminRoute(): boolean {
+  const path = window.location.pathname;
+  const search = window.location.search;
+  return (
+    path.endsWith("/admin") ||
+    new URLSearchParams(search).has("admin")
+  );
+}
 
 /**
  * PageLayout — contenedor raíz de ancho fijo.
@@ -65,6 +76,16 @@ function AppContent() {
 }
 
 function App() {
+  if (isAdminRoute()) {
+    return (
+      <I18nProvider>
+        <ThemeProvider>
+          <AdminPage />
+        </ThemeProvider>
+      </I18nProvider>
+    );
+  }
+
   return (
     <I18nProvider>
       <ThemeProvider>
