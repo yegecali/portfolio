@@ -122,17 +122,28 @@ const Footer = () => {
             usando React & TypeScript
           </p>
 
-          {/* Back to top */}
-          <motion.button
-            onClick={() => scrollToSection("#hero")}
-            whileHover={{ y: -2 }}
-            className="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-white transition-colors group"
-          >
-            Volver arriba
-            <span className="w-6 h-6 rounded-md bg-gray-800 group-hover:bg-gray-700 flex items-center justify-center transition-colors">
-              <ArrowUp className="w-3 h-3" />
-            </span>
-          </motion.button>
+          <div className="flex items-center gap-4">
+            {/* Admin panel link */}
+            <a
+              href="?admin"
+              title="Panel de administración"
+              className="text-xs text-gray-700 hover:text-gray-500 transition-colors"
+            >
+              ⚙
+            </a>
+
+            {/* Back to top */}
+            <motion.button
+              onClick={() => scrollToSection("#hero")}
+              whileHover={{ y: -2 }}
+              className="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-white transition-colors group"
+            >
+              Volver arriba
+              <span className="w-6 h-6 rounded-md bg-gray-800 group-hover:bg-gray-700 flex items-center justify-center transition-colors">
+                <ArrowUp className="w-3 h-3" />
+              </span>
+            </motion.button>
+          </div>
         </Reveal>
       </div>
     </footer>
