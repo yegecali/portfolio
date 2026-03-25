@@ -43,6 +43,23 @@ export interface AboutConfig {
   closing?: string;
 }
 
+export interface ProjectOverrideItem {
+  name: string;
+  description: string;
+  url: string;
+  technologies: string[];
+}
+
+export interface ExperienceOverrideItem {
+  company: string;
+  position: string;
+  logoAlt: string;
+  summary: string[];
+  startDate: string;       // "YYYY-MM"
+  endDate?: string;        // "YYYY-MM" | undefined = present
+  currentlyWorkHere?: boolean;
+}
+
 // ── Root config shape ─────────────────────────────────────────────────────────
 
 export interface AdminConfig {
@@ -50,6 +67,8 @@ export interface AdminConfig {
   social?: SocialConfig;
   hero?: { es?: HeroConfig; en?: HeroConfig };
   about?: { es?: AboutConfig; en?: AboutConfig };
+  projects?: { es?: ProjectOverrideItem[]; en?: ProjectOverrideItem[] };
+  experiences?: { es?: ExperienceOverrideItem[]; en?: ExperienceOverrideItem[] };
 }
 
 // ── Utilities ─────────────────────────────────────────────────────────────────
@@ -86,6 +105,14 @@ export function mergeAdminConfig(
     about: {
       es: { ...base.about?.es, ...patch.about?.es },
       en: { ...base.about?.en, ...patch.about?.en },
+    },
+    projects: {
+      es: patch.projects?.es ?? base.projects?.es,
+      en: patch.projects?.en ?? base.projects?.en,
+    },
+    experiences: {
+      es: patch.experiences?.es ?? base.experiences?.es,
+      en: patch.experiences?.en ?? base.experiences?.en,
     },
   };
 }

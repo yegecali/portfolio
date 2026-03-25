@@ -12,6 +12,8 @@ import {
   writeAdminConfig,
   clearAdminConfig,
   type AdminConfig,
+  type ProjectOverrideItem,
+  type ExperienceOverrideItem,
 } from "@/lib/adminOverrides";
 import { es } from "@/lib/i18n/es";
 import { en } from "@/lib/i18n/en";
@@ -576,99 +578,502 @@ function TechnologiesSection() {
   );
 }
 
-// ── Section: Experiences (read-only) ─────────────────────────────────────────
+// ── Helpers for experience/project forms ──────────────────────────────────────
 
-function ExperiencesSection() {
+function dateToYYYYMM(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  return `${y}-${m}`;
+}
+
+interface ProjectFormItem {
+  nameEs: string;
+  nameEn: string;
+  descriptionEs: string;
+  descriptionEn: string;
+  url: string;
+  technologies: string; // comma-separated
+}
+
+interface ExperienceFormItem {
+  company: string;
+  positionEs: string;
+  positionEn: string;
+  logoAlt: string;
+  summaryEs: string; // newline-separated
+  summaryEn: string;
+  startDate: string; // "YYYY-MM"
+  endDate: string;   // "YYYY-MM" | "" = present
+  currentlyWorkHere: boolean;
+}
+
+function initProjectForm(cfg: AdminConfig): ProjectFormItem[] {
+  const esOvr = cfg.projects?.es;
+  const enOvr = cfg.projects?.en;
+  if (!esOvr && !enOvr) {
+    return es.projects.map((proj, i) => {
+      const enProj = en.projects[i] ?? proj;
+      return {
+        nameEs: proj.name,
+        nameEn: enProj.name,
+        descriptionEs: proj.description,
+        descriptionEn: enProj.description,
+        url: proj.url,
+        technologies: proj.technologies.join(", "),
+      };
+    });
+  }
+  const base = esOvr ?? enOvr ?? [];
+  return base.map((proj, i) => {
+    const enProj = enOvr?.[i];
+    return {
+      nameEs: proj.name,
+      nameEn: enProj?.name ?? proj.name,
+      descriptionEs: proj.description,
+      descriptionEn: enProj?.description ?? proj.description,
+      url: proj.url,
+      technologies: proj.technologies.join(", "),
+    };
+  });
+}
+
+function initExperienceForm(cfg: AdminConfig): ExperienceFormItem[] {
+  const esOvr = cfg.experiences?.es;
+  const enOvr = cfg.experiences?.en;
+  if (!esOvr && !enOvr) {
+    return es.experiences.map((exp, i) => {
+      const enExp = en.experiences[i] ?? exp;
+      return {
+        company: exp.company,
+        positionEs: exp.position,
+        positionEn: enExp.position,
+        logoAlt: exp.logoAlt,
+        summaryEs: exp.summary.join("\n"),
+        summaryEn: enExp.summary.join("\n"),
+        startDate: dateToYYYYMM(exp.startDate),
+        endDate: exp.endDate ? dateToYYYYMM(exp.endDate) : "",
+        currentlyWorkHere: exp.currentlyWorkHere ?? false,
+      };
+    });
+  }
+  const base = esOvr ?? enOvr ?? [];
+  return base.map((exp, i) => {
+    const enExp = enOvr?.[i];
+    return {
+      company: exp.company,
+      positionEs: exp.position,
+      positionEn: enExp?.position ?? exp.position,
+      logoAlt: exp.logoAlt,
+      summaryEs: exp.summary.join("\n"),
+      summaryEn: enExp?.summary.join("\n") ?? exp.summary.join("\n"),
+      startDate: exp.startDate,
+      endDate: exp.endDate ?? "",
+      currentlyWorkHere: exp.currentlyWorkHere ?? false,
+    };
+  });
+}
+
+// ── Section: Experiences (editable) ──────────────────────────────────────────
+
+function ExperiencesSection({
+  cfg,
+  onSave,
+}: {
+  cfg: AdminConfig;
+  onSave: (next: AdminConfig) => void;
+}) {
+  const [items, setItems] = useState<ExperienceFormItem[]>(() =>
+    initExperienceForm(cfg)
+  );
+  const [activeLang, setActiveLang] = useState<"es" | "en">("es");
+  const [saved, setSaved] = useState(false);
+
+  const hasOverrides = !!(
+    cfg.experiences?.es?.length || cfg.experiences?.en?.length
+  );
+
+  function updateItem(index: number, patch: Partial<ExperienceFormItem>) {
+    setItems((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, ...patch } : item))
+    );
+  }
+
+  function addItem() {
+    setItems((prev) => [
+      ...prev,
+      {
+        company: "",
+        positionEs: "",
+        positionEn: "",
+        logoAlt: "",
+        summaryEs: "",
+        summaryEn: "",
+        startDate: "",
+        endDate: "",
+        currentlyWorkHere: false,
+      },
+    ]);
+  }
+
+  function removeItem(index: number) {
+    setItems((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  function handleSave() {
+    const toArray = (
+      lang: "es" | "en"
+    ): ExperienceOverrideItem[] =>
+      items.map((e) => ({
+        company: e.company,
+        position: lang === "es" ? e.positionEs : e.positionEn,
+        logoAlt: e.logoAlt,
+        summary: (lang === "es" ? e.summaryEs : e.summaryEn)
+          .split("\n")
+          .map((s) => s.trim())
+          .filter(Boolean),
+        startDate: e.startDate,
+        endDate: e.endDate || undefined,
+        currentlyWorkHere: e.currentlyWorkHere,
+      }));
+
+    onSave({ ...cfg, experiences: { es: toArray("es"), en: toArray("en") } });
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  }
+
   return (
-    <SectionCard icon="💼" title="Experiencias Laborales">
-      <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
-        Para modificar las experiencias, edita{" "}
-        <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded">
-          src/lib/i18n/es.ts
-        </code>{" "}
-        y{" "}
-        <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded">
-          en.ts
-        </code>
-      </p>
-      <div className="space-y-3">
-        {es.experiences.map((exp) => (
+    <SectionCard
+      icon="💼"
+      title="Experiencias Laborales"
+      badge={hasOverrides ? "Modificado" : undefined}
+    >
+      <div className="flex gap-2 mb-5">
+        <LangTab
+          lang="es"
+          active={activeLang === "es"}
+          onClick={() => setActiveLang("es")}
+        />
+        <LangTab
+          lang="en"
+          active={activeLang === "en"}
+          onClick={() => setActiveLang("en")}
+        />
+      </div>
+
+      <div className="space-y-4 mb-4">
+        {items.map((item, i) => (
           <div
-            key={exp.company}
-            className="rounded-xl border border-gray-100 dark:border-gray-700 p-4"
+            key={i}
+            className="rounded-xl border border-gray-200 dark:border-gray-700 p-4 space-y-3"
           >
-            <div className="flex items-center justify-between mb-2">
-              <div>
-                <p className="font-semibold text-gray-900 dark:text-white text-sm">
-                  {exp.position}
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {exp.company}
-                  {exp.currentlyWorkHere && (
-                    <span className="ml-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs px-1.5 py-0.5 rounded-full">
-                      Actual
-                    </span>
-                  )}
-                </p>
-              </div>
-              <span className="text-xs text-gray-400 dark:text-gray-500">
-                {exp.startDate.getFullYear()} →{" "}
-                {exp.endDate ? exp.endDate.getFullYear() : "Presente"}
+            {/* Card header */}
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+                Experiencia {i + 1}
               </span>
+              <button
+                onClick={() => removeItem(i)}
+                className="text-xs text-red-500 hover:text-red-700 px-2 py-1 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+              >
+                Eliminar
+              </button>
             </div>
-            <ul className="space-y-1">
-              {exp.summary.map((s, i) => (
-                <li
-                  key={i}
-                  className="text-xs text-gray-600 dark:text-gray-400 flex gap-2"
-                >
-                  <span className="text-blue-400 flex-shrink-0">•</span>
-                  {s}
-                </li>
-              ))}
-            </ul>
+
+            {/* Shared fields */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <Label>Empresa</Label>
+                <Input
+                  value={item.company}
+                  onChange={(v) => updateItem(i, { company: v })}
+                  placeholder="Nombre de la empresa"
+                />
+              </div>
+              <div>
+                <Label>Logo Alt</Label>
+                <Input
+                  value={item.logoAlt}
+                  onChange={(v) => updateItem(i, { logoAlt: v })}
+                  placeholder="Logo de Empresa XYZ"
+                />
+              </div>
+            </div>
+
+            {/* Date + currentlyWorkHere */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <Label>Inicio</Label>
+                <input
+                  type="month"
+                  value={item.startDate}
+                  onChange={(e) => updateItem(i, { startDate: e.target.value })}
+                  className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800
+                    text-gray-900 dark:text-gray-100 px-3 py-2 text-sm
+                    focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div>
+                <Label>Fin (vacío = Presente)</Label>
+                <input
+                  type="month"
+                  value={item.endDate}
+                  onChange={(e) => updateItem(i, { endDate: e.target.value })}
+                  className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800
+                    text-gray-900 dark:text-gray-100 px-3 py-2 text-sm
+                    focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <div className="flex items-end pb-2">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={item.currentlyWorkHere}
+                    onChange={(e) =>
+                      updateItem(i, { currentlyWorkHere: e.target.checked })
+                    }
+                    className="w-4 h-4 rounded border-gray-300 accent-blue-600"
+                  />
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    Trabajo actual
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            {/* Translatable fields */}
+            <div className="pt-3 border-t border-gray-100 dark:border-gray-700 space-y-3">
+              <div>
+                <Label>
+                  {activeLang === "es" ? "Cargo (ES)" : "Position (EN)"}
+                </Label>
+                <Input
+                  value={
+                    activeLang === "es" ? item.positionEs : item.positionEn
+                  }
+                  onChange={(v) =>
+                    updateItem(
+                      i,
+                      activeLang === "es"
+                        ? { positionEs: v }
+                        : { positionEn: v }
+                    )
+                  }
+                  placeholder="Backend Developer"
+                />
+              </div>
+              <div>
+                <Label>
+                  {activeLang === "es"
+                    ? "Resumen ES (una línea = un punto)"
+                    : "Summary EN (one line = one bullet)"}
+                </Label>
+                <Textarea
+                  value={
+                    activeLang === "es" ? item.summaryEs : item.summaryEn
+                  }
+                  onChange={(v) =>
+                    updateItem(
+                      i,
+                      activeLang === "es"
+                        ? { summaryEs: v }
+                        : { summaryEn: v }
+                    )
+                  }
+                  rows={4}
+                  placeholder={
+                    activeLang === "es"
+                      ? "Desarrollé APIs REST...\nOptimicé consultas SQL..."
+                      : "Developed REST APIs...\nOptimized SQL queries..."
+                  }
+                />
+              </div>
+            </div>
           </div>
         ))}
       </div>
+
+      <button
+        onClick={addItem}
+        className="w-full border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl py-3 text-sm text-gray-500 dark:text-gray-400 hover:border-blue-400 hover:text-blue-500 transition-colors mb-4"
+      >
+        + Añadir experiencia
+      </button>
+
+      <SaveButton onClick={handleSave} saved={saved} />
     </SectionCard>
   );
 }
 
-// ── Section: Projects (read-only) ─────────────────────────────────────────────
+// ── Section: Projects (editable) ──────────────────────────────────────────────
 
-function ProjectsSection() {
+function ProjectsSection({
+  cfg,
+  onSave,
+}: {
+  cfg: AdminConfig;
+  onSave: (next: AdminConfig) => void;
+}) {
+  const [items, setItems] = useState<ProjectFormItem[]>(() =>
+    initProjectForm(cfg)
+  );
+  const [activeLang, setActiveLang] = useState<"es" | "en">("es");
+  const [saved, setSaved] = useState(false);
+
+  const hasOverrides = !!(
+    cfg.projects?.es?.length || cfg.projects?.en?.length
+  );
+
+  function updateItem(index: number, patch: Partial<ProjectFormItem>) {
+    setItems((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, ...patch } : item))
+    );
+  }
+
+  function addItem() {
+    setItems((prev) => [
+      ...prev,
+      {
+        nameEs: "",
+        nameEn: "",
+        descriptionEs: "",
+        descriptionEn: "",
+        url: "",
+        technologies: "",
+      },
+    ]);
+  }
+
+  function removeItem(index: number) {
+    setItems((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  function handleSave() {
+    const toArray = (lang: "es" | "en"): ProjectOverrideItem[] =>
+      items.map((p) => ({
+        name: lang === "es" ? p.nameEs : p.nameEn,
+        description: lang === "es" ? p.descriptionEs : p.descriptionEn,
+        url: p.url,
+        technologies: p.technologies
+          .split(",")
+          .map((t) => t.trim())
+          .filter(Boolean),
+      }));
+
+    onSave({ ...cfg, projects: { es: toArray("es"), en: toArray("en") } });
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  }
+
   return (
-    <SectionCard icon="🚀" title="Proyectos Destacados">
-      <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
-        Para modificar los proyectos, edita{" "}
-        <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded">
-          src/lib/i18n/es.ts
-        </code>{" "}
-        y{" "}
-        <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded">
-          en.ts
-        </code>
-      </p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {es.projects.map((proj) => (
+    <SectionCard
+      icon="🚀"
+      title="Proyectos Destacados"
+      badge={hasOverrides ? "Modificado" : undefined}
+    >
+      <div className="flex gap-2 mb-5">
+        <LangTab
+          lang="es"
+          active={activeLang === "es"}
+          onClick={() => setActiveLang("es")}
+        />
+        <LangTab
+          lang="en"
+          active={activeLang === "en"}
+          onClick={() => setActiveLang("en")}
+        />
+      </div>
+
+      <div className="space-y-4 mb-4">
+        {items.map((item, i) => (
           <div
-            key={proj.name}
-            className="rounded-xl border border-gray-100 dark:border-gray-700 p-4"
+            key={i}
+            className="rounded-xl border border-gray-200 dark:border-gray-700 p-4 space-y-3"
           >
-            <p className="font-semibold text-gray-900 dark:text-white text-sm mb-1">
-              {proj.name}
-            </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mb-2">
-              {proj.description}
-            </p>
-            <div className="flex flex-wrap gap-1">
-              {proj.technologies.map((t) => (
-                <ReadOnlyChip key={t} label={t} />
-              ))}
+            {/* Card header */}
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+                Proyecto {i + 1}
+              </span>
+              <button
+                onClick={() => removeItem(i)}
+                className="text-xs text-red-500 hover:text-red-700 px-2 py-1 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+              >
+                Eliminar
+              </button>
+            </div>
+
+            {/* Translatable fields */}
+            <div>
+              <Label>
+                {activeLang === "es" ? "Nombre (ES)" : "Name (EN)"}
+              </Label>
+              <Input
+                value={activeLang === "es" ? item.nameEs : item.nameEn}
+                onChange={(v) =>
+                  updateItem(
+                    i,
+                    activeLang === "es" ? { nameEs: v } : { nameEn: v }
+                  )
+                }
+                placeholder="Nombre del proyecto"
+              />
+            </div>
+            <div>
+              <Label>
+                {activeLang === "es"
+                  ? "Descripción (ES)"
+                  : "Description (EN)"}
+              </Label>
+              <Textarea
+                value={
+                  activeLang === "es"
+                    ? item.descriptionEs
+                    : item.descriptionEn
+                }
+                onChange={(v) =>
+                  updateItem(
+                    i,
+                    activeLang === "es"
+                      ? { descriptionEs: v }
+                      : { descriptionEn: v }
+                  )
+                }
+                rows={2}
+                placeholder="Descripción breve del proyecto..."
+              />
+            </div>
+
+            {/* Shared fields */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+              <div>
+                <Label>URL del proyecto</Label>
+                <Input
+                  value={item.url}
+                  onChange={(v) => updateItem(i, { url: v })}
+                  placeholder="https://github.com/..."
+                />
+              </div>
+              <div>
+                <Label>Tecnologías (separadas por coma)</Label>
+                <Input
+                  value={item.technologies}
+                  onChange={(v) => updateItem(i, { technologies: v })}
+                  placeholder="React, Node.js, PostgreSQL"
+                />
+              </div>
             </div>
           </div>
         ))}
       </div>
+
+      <button
+        onClick={addItem}
+        className="w-full border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl py-3 text-sm text-gray-500 dark:text-gray-400 hover:border-blue-400 hover:text-blue-500 transition-colors mb-4"
+      >
+        + Añadir proyecto
+      </button>
+
+      <SaveButton onClick={handleSave} saved={saved} />
     </SectionCard>
   );
 }
@@ -701,7 +1106,9 @@ export default function AdminPage() {
     Object.keys(cfg.hero?.es ?? {}).length > 0 ||
     Object.keys(cfg.hero?.en ?? {}).length > 0 ||
     Object.keys(cfg.about?.es ?? {}).length > 0 ||
-    Object.keys(cfg.about?.en ?? {}).length > 0;
+    Object.keys(cfg.about?.en ?? {}).length > 0 ||
+    (cfg.projects?.es?.length ?? 0) > 0 ||
+    (cfg.experiences?.es?.length ?? 0) > 0;
 
   return (
     <div
@@ -793,8 +1200,8 @@ export default function AdminPage() {
 
         {/* Read-only sections */}
         <TechnologiesSection />
-        <ExperiencesSection />
-        <ProjectsSection />
+        <ExperiencesSection cfg={cfg} onSave={handleSave} />
+        <ProjectsSection cfg={cfg} onSave={handleSave} />
 
         {/* Bottom CTA */}
         <div className="rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-center text-white">

@@ -7,6 +7,12 @@ import { readAdminConfig } from "@/lib/adminOverrides";
 const LOCALES: Record<LangCode, Locale> = { es, en };
 const STORAGE_KEY = "portfolio_lang";
 
+/** Parse "YYYY-MM" string into a Date (1st of that month). */
+function parseYYYYMM(str: string): Date {
+  const [year, month] = str.split("-").map(Number);
+  return new Date(year, month - 1);
+}
+
 /** Apply any admin-saved overrides on top of the raw locale. */
 function applyOverrides(locale: Locale): Locale {
   const cfg = readAdminConfig();
@@ -19,6 +25,29 @@ function applyOverrides(locale: Locale): Locale {
   if (aboutOvr.paragraph1 !== undefined) paragraphs[1] = aboutOvr.paragraph1;
   if (aboutOvr.paragraph2 !== undefined) paragraphs[2] = aboutOvr.paragraph2;
 
+  const projectsOvr = cfg.projects?.[lang];
+  const projects = projectsOvr
+    ? projectsOvr.map((p) => ({
+        name: p.name,
+        description: p.description,
+        url: p.url,
+        technologies: p.technologies,
+      }))
+    : locale.projects;
+
+  const experiencesOvr = cfg.experiences?.[lang];
+  const experiences = experiencesOvr
+    ? experiencesOvr.map((e) => ({
+        company: e.company,
+        position: e.position,
+        logoAlt: e.logoAlt,
+        summary: e.summary,
+        startDate: parseYYYYMM(e.startDate),
+        endDate: e.endDate ? parseYYYYMM(e.endDate) : undefined,
+        currentlyWorkHere: e.currentlyWorkHere,
+      }))
+    : locale.experiences;
+
   return {
     ...locale,
     hero: { ...locale.hero, ...heroOvr },
@@ -27,6 +56,8 @@ function applyOverrides(locale: Locale): Locale {
       paragraphs,
       closing: aboutOvr.closing ?? locale.about.closing,
     },
+    projects,
+    experiences,
   };
 }
 
