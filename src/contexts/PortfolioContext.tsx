@@ -93,22 +93,22 @@ const DEFAULTS = {
   },
 
   technologies: [
-    { label: "JavaScript",  url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript", iconName: "javascript"  },
-    { label: "TypeScript",  url: "https://www.typescriptlang.org/",                          iconName: "typescript"  },
-    { label: "React",       url: "https://react.dev/",                                       iconName: "react"       },
-    { label: "Vite",        url: "https://vitejs.dev/",                                      iconName: "vite"        },
-    { label: "Node.js",     url: "https://nodejs.org/en",                                    iconName: "nodejs"      },
-    { label: "Express.js",  url: "https://expressjs.com/",                                   iconName: "expressjs"   },
-    { label: "MongoDB",     url: "https://www.mongodb.com/",                                 iconName: "mongodb"     },
-    { label: "PostgreSQL",  url: "https://www.postgresql.org/",                              iconName: "postgresql"  },
-    { label: "Tailwindcss", url: "https://tailwindcss.com/",                                 iconName: "tailwindcss" },
-    { label: "Git",         url: "https://git-scm.com/",                                     iconName: "git"         },
-    { label: "Java",        url: "https://www.java.com/",                                    iconName: "java"        },
-    { label: "Spring Boot", url: "https://spring.io/projects/spring-boot",                   iconName: "spring"      },
-    { label: "Quarkus",     url: "https://quarkus.io/",                                      iconName: "quarkus"     },
-    { label: "SQL Server",  url: "https://www.microsoft.com/en-us/sql-server",               iconName: "sqlserver"   },
-    { label: "Docker",      url: "https://www.docker.com/",                                  iconName: "docker"      },
-    { label: "Linux",       url: "https://www.linux.org/",                                   iconName: "linux"       },
+    { label: "JavaScript",  url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript", iconName: "javascript",  category: "Frontend"  },
+    { label: "TypeScript",  url: "https://www.typescriptlang.org/",                          iconName: "typescript",  category: "Frontend"  },
+    { label: "React",       url: "https://react.dev/",                                       iconName: "react",       category: "Frontend"  },
+    { label: "Vite",        url: "https://vitejs.dev/",                                      iconName: "vite",        category: "Frontend"  },
+    { label: "Tailwindcss", url: "https://tailwindcss.com/",                                 iconName: "tailwindcss", category: "Frontend"  },
+    { label: "Java",        url: "https://www.java.com/",                                    iconName: "java",        category: "Backend"   },
+    { label: "Spring Boot", url: "https://spring.io/projects/spring-boot",                   iconName: "spring",      category: "Backend"   },
+    { label: "Quarkus",     url: "https://quarkus.io/",                                      iconName: "quarkus",     category: "Backend"   },
+    { label: "Node.js",     url: "https://nodejs.org/en",                                    iconName: "nodejs",      category: "Backend"   },
+    { label: "Express.js",  url: "https://expressjs.com/",                                   iconName: "expressjs",   category: "Backend"   },
+    { label: "MongoDB",     url: "https://www.mongodb.com/",                                 iconName: "mongodb",     category: "Databases" },
+    { label: "PostgreSQL",  url: "https://www.postgresql.org/",                              iconName: "postgresql",  category: "Databases" },
+    { label: "SQL Server",  url: "https://www.microsoft.com/en-us/sql-server",               iconName: "sqlserver",   category: "Databases" },
+    { label: "Docker",      url: "https://www.docker.com/",                                  iconName: "docker",      category: "DevOps"    },
+    { label: "Linux",       url: "https://www.linux.org/",                                   iconName: "linux",       category: "DevOps"    },
+    { label: "Git",         url: "https://git-scm.com/",                                     iconName: "git",         category: "DevOps"    },
   ] satisfies TechDetails[],
 
   testimonials: [
@@ -127,6 +127,9 @@ const DEFAULTS = {
   heroImage:
     "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop",
 };
+
+/** Default technologies exported for AdminPage initialization. */
+export const DEFAULT_TECHNOLOGIES = DEFAULTS.technologies;
 
 /** Build the static (non-translatable) data, merging any admin overrides. */
 function buildStatic() {
@@ -149,6 +152,7 @@ function buildStatic() {
       { url: s.whatsapp  ?? DEFAULTS.socialLinks.whatsapp  },
       { url: s.instagram ?? DEFAULTS.socialLinks.instagram },
     ],
+    technologies: cfg.technologies ?? DEFAULTS.technologies,
   };
 }
 

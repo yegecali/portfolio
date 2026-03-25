@@ -12,9 +12,11 @@ import {
   writeAdminConfig,
   clearAdminConfig,
   type AdminConfig,
+  type TechOverrideItem,
   type ProjectOverrideItem,
   type ExperienceOverrideItem,
 } from "@/lib/adminOverrides";
+import { DEFAULT_TECHNOLOGIES } from "@/contexts/PortfolioContext";
 import { es } from "@/lib/i18n/es";
 import { en } from "@/lib/i18n/en";
 
@@ -521,59 +523,180 @@ function AboutSection({
   );
 }
 
-// ── Section: Technologies (read-only) ─────────────────────────────────────────
+// ── Available devicon names (for admin helper text) ───────────────────────────
 
-function TechnologiesSection() {
-  const techs = [
-    { label: "JavaScript",  category: "Frontend"  },
-    { label: "TypeScript",  category: "Frontend"  },
-    { label: "React",       category: "Frontend"  },
-    { label: "Tailwindcss", category: "Frontend"  },
-    { label: "Vite",        category: "Frontend"  },
-    { label: "Java",        category: "Backend"   },
-    { label: "Spring Boot", category: "Backend"   },
-    { label: "Quarkus",     category: "Backend"   },
-    { label: "Node.js",     category: "Backend"   },
-    { label: "Express.js",  category: "Backend"   },
-    { label: "MongoDB",     category: "Databases" },
-    { label: "PostgreSQL",  category: "Databases" },
-    { label: "SQL Server",  category: "Databases" },
-    { label: "Docker",      category: "DevOps"    },
-    { label: "Linux",       category: "DevOps"    },
-    { label: "Git",         category: "DevOps"    },
-  ];
+const AVAILABLE_ICONS = [
+  "javascript", "typescript", "react", "vite", "tailwindcss", "nodejs",
+  "expressjs", "nestjs", "java", "spring", "quarkus", "hibernate",
+  "mongodb", "postgresql", "sqlserver", "mysql", "redis",
+  "docker", "kubernetes", "linux", "git", "github",
+  "rabbitmq", "junit", "gradle", "maven", "azure",
+];
 
-  const categories = ["Frontend", "Backend", "Databases", "DevOps"] as const;
-  const categoryColors: Record<string, string> = {
-    Frontend:  "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700",
-    Backend:   "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-700",
-    Databases: "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-700",
-    DevOps:    "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-700",
-  };
+const PRESET_CATEGORIES = ["Frontend", "Backend", "Databases", "DevOps"];
+
+// ── Section: Technologies (editable) ─────────────────────────────────────────
+
+function TechnologiesSection({
+  cfg,
+  onSave,
+}: {
+  cfg: AdminConfig;
+  onSave: (next: AdminConfig) => void;
+}) {
+  const [items, setItems] = useState<TechOverrideItem[]>(
+    () => cfg.technologies ?? DEFAULT_TECHNOLOGIES.map((t) => ({
+      label: t.label,
+      url: t.url,
+      iconName: t.iconName ?? "",
+      category: t.category ?? "Frontend",
+    }))
+  );
+  const [saved, setSaved] = useState(false);
+  const [showIcons, setShowIcons] = useState(false);
+
+  const hasOverrides = !!(cfg.technologies?.length);
+
+  function updateItem(index: number, patch: Partial<TechOverrideItem>) {
+    setItems((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, ...patch } : item))
+    );
+  }
+
+  function addItem() {
+    setItems((prev) => [
+      ...prev,
+      { label: "", url: "", iconName: "", category: "Frontend" },
+    ]);
+  }
+
+  function removeItem(index: number) {
+    setItems((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  function handleSave() {
+    onSave({ ...cfg, technologies: items });
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  }
+
+  // Group by category for display
+  const allCategories = [...new Set(items.map((t) => t.category))];
 
   return (
-    <SectionCard icon="🛠️" title="Stack de Tecnologías">
-      <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
-        Para modificar el stack, edita <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded">src/contexts/PortfolioContext.tsx</code>
-      </p>
-      <div className="space-y-3">
-        {categories.map((cat) => (
-          <div key={cat} className="flex items-start gap-3">
-            <span
-              className={`text-xs font-semibold px-2 py-1 rounded-lg border w-24 text-center flex-shrink-0 ${categoryColors[cat]}`}
-            >
-              {cat}
-            </span>
-            <div className="flex flex-wrap gap-1.5">
-              {techs
+    <SectionCard
+      icon="🛠️"
+      title="Stack de Tecnologías"
+      badge={hasOverrides ? "Modificado" : undefined}
+    >
+      {/* Icon names reference */}
+      <div className="mb-4">
+        <button
+          onClick={() => setShowIcons(!showIcons)}
+          className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+        >
+          {showIcons ? "▲ Ocultar" : "▼ Ver"} nombres de iconos disponibles
+        </button>
+        {showIcons && (
+          <div className="mt-2 flex flex-wrap gap-1.5 p-3 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700">
+            {AVAILABLE_ICONS.map((name) => (
+              <button
+                key={name}
+                onClick={() => navigator.clipboard?.writeText(name)}
+                title="Clic para copiar"
+                className="text-xs px-2 py-0.5 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-blue-400 hover:text-blue-600 transition-colors font-mono"
+              >
+                {name}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Group view by category */}
+      <div className="space-y-2 mb-4">
+        {allCategories.map((cat) => (
+          <div key={cat} className="flex items-center gap-2 flex-wrap">
+            <span className="text-xs font-semibold text-gray-500 w-20 flex-shrink-0">{cat}</span>
+            <div className="flex flex-wrap gap-1">
+              {items
                 .filter((t) => t.category === cat)
                 .map((t) => (
-                  <ReadOnlyChip key={t.label} label={t.label} />
+                  <ReadOnlyChip key={t.label} label={t.label || "…"} />
                 ))}
             </div>
           </div>
         ))}
       </div>
+
+      {/* Editable list */}
+      <div className="space-y-3 mb-4">
+        {items.map((item, i) => (
+          <div
+            key={i}
+            className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_1fr_auto_auto] gap-2 items-end p-3 rounded-xl border border-gray-200 dark:border-gray-700"
+          >
+            <div>
+              <Label>Nombre</Label>
+              <Input
+                value={item.label}
+                onChange={(v) => updateItem(i, { label: v })}
+                placeholder="React"
+              />
+            </div>
+            <div>
+              <Label>URL</Label>
+              <Input
+                value={item.url}
+                onChange={(v) => updateItem(i, { url: v })}
+                placeholder="https://react.dev"
+              />
+            </div>
+            <div>
+              <Label>Icono</Label>
+              <Input
+                value={item.iconName ?? ""}
+                onChange={(v) => updateItem(i, { iconName: v })}
+                placeholder="react"
+              />
+            </div>
+            <div>
+              <Label>Categoría</Label>
+              <select
+                value={item.category}
+                onChange={(e) => updateItem(i, { category: e.target.value })}
+                className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800
+                  text-gray-900 dark:text-gray-100 px-3 py-2 text-sm
+                  focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {PRESET_CATEGORIES.map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+                {!PRESET_CATEGORIES.includes(item.category) && (
+                  <option value={item.category}>{item.category}</option>
+                )}
+              </select>
+            </div>
+            <div className="flex items-end pb-0.5">
+              <button
+                onClick={() => removeItem(i)}
+                className="text-xs text-red-500 hover:text-red-700 px-2 py-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors whitespace-nowrap"
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <button
+        onClick={addItem}
+        className="w-full border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl py-3 text-sm text-gray-500 dark:text-gray-400 hover:border-blue-400 hover:text-blue-500 transition-colors mb-4"
+      >
+        + Añadir tecnología
+      </button>
+
+      <SaveButton onClick={handleSave} saved={saved} />
     </SectionCard>
   );
 }
@@ -1107,6 +1230,7 @@ export default function AdminPage() {
     Object.keys(cfg.hero?.en ?? {}).length > 0 ||
     Object.keys(cfg.about?.es ?? {}).length > 0 ||
     Object.keys(cfg.about?.en ?? {}).length > 0 ||
+    (cfg.technologies?.length ?? 0) > 0 ||
     (cfg.projects?.es?.length ?? 0) > 0 ||
     (cfg.experiences?.es?.length ?? 0) > 0;
 
@@ -1198,8 +1322,7 @@ export default function AdminPage() {
         <HeroSection cfg={cfg} onSave={handleSave} />
         <AboutSection cfg={cfg} onSave={handleSave} />
 
-        {/* Read-only sections */}
-        <TechnologiesSection />
+        <TechnologiesSection cfg={cfg} onSave={handleSave} />
         <ExperiencesSection cfg={cfg} onSave={handleSave} />
         <ProjectsSection cfg={cfg} onSave={handleSave} />
 

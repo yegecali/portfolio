@@ -43,6 +43,13 @@ export interface AboutConfig {
   closing?: string;
 }
 
+export interface TechOverrideItem {
+  label: string;
+  url: string;
+  iconName?: string;
+  category: string; // e.g. "Frontend" | "Backend" | "Databases" | "DevOps"
+}
+
 export interface ProjectOverrideItem {
   name: string;
   description: string;
@@ -67,6 +74,7 @@ export interface AdminConfig {
   social?: SocialConfig;
   hero?: { es?: HeroConfig; en?: HeroConfig };
   about?: { es?: AboutConfig; en?: AboutConfig };
+  technologies?: TechOverrideItem[];
   projects?: { es?: ProjectOverrideItem[]; en?: ProjectOverrideItem[] };
   experiences?: { es?: ExperienceOverrideItem[]; en?: ExperienceOverrideItem[] };
 }
@@ -106,6 +114,7 @@ export function mergeAdminConfig(
       es: { ...base.about?.es, ...patch.about?.es },
       en: { ...base.about?.en, ...patch.about?.en },
     },
+    technologies: patch.technologies ?? base.technologies,
     projects: {
       es: patch.projects?.es ?? base.projects?.es,
       en: patch.projects?.en ?? base.projects?.en,

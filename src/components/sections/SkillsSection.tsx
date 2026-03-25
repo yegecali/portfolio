@@ -19,12 +19,7 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
   DevOps:    ContainerIcon,
 };
 
-const categories: Record<string, string[]> = {
-  Frontend:  ["JavaScript", "TypeScript", "React", "Tailwindcss", "Vite"],
-  Backend:   ["Java", "Spring Boot", "Quarkus", "Node.js", "Express.js"],
-  Databases: ["MongoDB", "PostgreSQL", "SQL Server"],
-  DevOps:    ["Docker", "Linux", "Git"],
-};
+const CATEGORY_ORDER = ["Frontend", "Backend", "Databases", "DevOps"];
 
 interface SkillCardProps {
   tech: TechDetails;
@@ -64,12 +59,17 @@ const SkillsSection = () => {
   const ui = t.ui.skills;
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
-  const getTechs = (category: string) => {
-    const names = categories[category] || [];
-    return technologies.filter((t) => names.includes(t.label));
-  };
+  // Derive categories dynamically from tech.category; respect preferred order
+  const allCategories = [...new Set(technologies.map((t) => t.category ?? "Other"))];
+  const orderedCategories = [
+    ...CATEGORY_ORDER.filter((c) => allCategories.includes(c)),
+    ...allCategories.filter((c) => !CATEGORY_ORDER.includes(c)),
+  ];
 
-  const totalSkills = Object.values(categories).flat().length;
+  const getTechs = (category: string) =>
+    technologies.filter((t) => (t.category ?? "Other") === category);
+
+  const totalSkills = technologies.length;
 
   return (
     <Container
@@ -135,21 +135,21 @@ const SkillsSection = () => {
           >
             {ui.allFilter} · {totalSkills}
           </button>
-          {Object.keys(categories).map((cat) => {
-            const cfg = SKILL_ACCENTS[cat];
-            const Icon = CATEGORY_ICONS[cat];
+          {orderedCategories.map((cat) => {
+            const accent = SKILL_ACCENTS[cat] ?? SKILL_ACCENTS["Frontend"];
+            const Icon = CATEGORY_ICONS[cat] ?? Monitor;
             return (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
                 className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-300 ${
                   activeCategory === cat
-                    ? `bg-gradient-to-r ${cfg.gradient} text-white shadow-lg`
+                    ? `bg-gradient-to-r ${accent.gradient} text-white shadow-lg`
                     : "bg-gray-100 dark:bg-gray-800 text-subtle hover:bg-gray-200 dark:hover:bg-gray-700"
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />
-                {cat} · {categories[cat].length}
+                {cat} · {getTechs(cat).length}
               </button>
             );
           })}
@@ -157,9 +157,9 @@ const SkillsSection = () => {
 
         {/* Category cards grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {Object.keys(categories).map((category, idx) => {
-            const cfg = SKILL_ACCENTS[category];
-            const Icon = CATEGORY_ICONS[category];
+          {orderedCategories.map((category, idx) => {
+            const cfg = SKILL_ACCENTS[category] ?? SKILL_ACCENTS["Frontend"];
+            const Icon = CATEGORY_ICONS[category] ?? Monitor;
             const techs = getTechs(category);
             const isFiltered = activeCategory !== null && activeCategory !== category;
             const catLabel = ui.categoryLabels[category] ?? category;
