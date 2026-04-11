@@ -520,16 +520,6 @@ function TechnologiesSection() {
     DevOps:    "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-700",
   };
 
-  // Technology → category mapping derived from DEFAULTS so it stays in sync.
-  const techCategories: Record<string, string> = {
-    JavaScript: "Frontend", TypeScript: "Frontend", React: "Frontend",
-    Tailwindcss: "Frontend", Vite: "Frontend",
-    Java: "Backend", "Spring Boot": "Backend", Quarkus: "Backend",
-    "Node.js": "Backend", "Express.js": "Backend",
-    MongoDB: "Databases", PostgreSQL: "Databases", "SQL Server": "Databases",
-    Docker: "DevOps", Linux: "DevOps", Git: "DevOps",
-  };
-
   return (
     <SectionCard icon="🛠️" title="Stack de Tecnologías">
       <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
@@ -545,7 +535,7 @@ function TechnologiesSection() {
             </span>
             <div className="flex flex-wrap gap-1.5">
               {DEFAULTS.technologies
-                .filter((t) => techCategories[t.label] === cat)
+                .filter((t) => t.category === cat)
                 .map((t) => (
                   <ReadOnlyChip key={t.label} label={t.label} />
                 ))}
