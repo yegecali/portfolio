@@ -15,6 +15,7 @@ import {
   type ProjectOverrideItem,
   type ExperienceOverrideItem,
 } from "@/lib/adminOverrides";
+import { DEFAULTS } from "@/lib/defaults";
 import { es } from "@/lib/i18n/es";
 import { en } from "@/lib/i18n/en";
 
@@ -175,20 +176,15 @@ function PersonalSection({
   onSave: (next: AdminConfig) => void;
 }) {
   const p = cfg.personal ?? {};
-  const [siteName, setSiteName] = useState(p.siteName ?? "Yemi Genderson");
+  const [siteName, setSiteName] = useState(p.siteName ?? DEFAULTS.siteName);
   const [siteDescription, setSiteDescription] = useState(
-    p.siteDescription ?? "Full Stack Developer"
+    p.siteDescription ?? DEFAULTS.siteDescription
   );
-  const [email, setEmail] = useState(p.email ?? "yemi@example.com");
-  const [phone, setPhone] = useState(p.phone ?? "+51 (123) 456-7890");
-  const [location, setLocation] = useState(p.location ?? "Lima, Peru");
-  const [cvUrl, setCvUrl] = useState(
-    p.cvUrl ?? "/portfolio/cv-yemi-genderson.pdf"
-  );
-  const [heroImage, setHeroImage] = useState(
-    p.heroImage ??
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop"
-  );
+  const [email, setEmail] = useState(p.email ?? DEFAULTS.email);
+  const [phone, setPhone] = useState(p.phone ?? DEFAULTS.phone);
+  const [location, setLocation] = useState(p.location ?? DEFAULTS.location);
+  const [cvUrl, setCvUrl] = useState(p.cvUrl ?? DEFAULTS.cvUrl);
+  const [heroImage, setHeroImage] = useState(p.heroImage ?? DEFAULTS.heroImage);
   const [saved, setSaved] = useState(false);
 
   const hasOverrides = Object.keys(cfg.personal ?? {}).length > 0;
@@ -269,18 +265,10 @@ function SocialSection({
   onSave: (next: AdminConfig) => void;
 }) {
   const s = cfg.social ?? {};
-  const [github, setGithub] = useState(
-    s.github ?? "https://github.com/yemigenderson"
-  );
-  const [linkedin, setLinkedin] = useState(
-    s.linkedin ?? "https://linkedin.com/in/yemigenderson"
-  );
-  const [whatsapp, setWhatsapp] = useState(
-    s.whatsapp ?? "https://wa.me/51987654321"
-  );
-  const [instagram, setInstagram] = useState(
-    s.instagram ?? "https://instagram.com/yemigenderson"
-  );
+  const [github, setGithub] = useState(s.github ?? DEFAULTS.socialLinks.github);
+  const [linkedin, setLinkedin] = useState(s.linkedin ?? DEFAULTS.socialLinks.linkedin);
+  const [whatsapp, setWhatsapp] = useState(s.whatsapp ?? DEFAULTS.socialLinks.whatsapp);
+  const [instagram, setInstagram] = useState(s.instagram ?? DEFAULTS.socialLinks.instagram);
   const [saved, setSaved] = useState(false);
 
   const hasOverrides = Object.keys(cfg.social ?? {}).length > 0;
@@ -524,25 +512,6 @@ function AboutSection({
 // ── Section: Technologies (read-only) ─────────────────────────────────────────
 
 function TechnologiesSection() {
-  const techs = [
-    { label: "JavaScript",  category: "Frontend"  },
-    { label: "TypeScript",  category: "Frontend"  },
-    { label: "React",       category: "Frontend"  },
-    { label: "Tailwindcss", category: "Frontend"  },
-    { label: "Vite",        category: "Frontend"  },
-    { label: "Java",        category: "Backend"   },
-    { label: "Spring Boot", category: "Backend"   },
-    { label: "Quarkus",     category: "Backend"   },
-    { label: "Node.js",     category: "Backend"   },
-    { label: "Express.js",  category: "Backend"   },
-    { label: "MongoDB",     category: "Databases" },
-    { label: "PostgreSQL",  category: "Databases" },
-    { label: "SQL Server",  category: "Databases" },
-    { label: "Docker",      category: "DevOps"    },
-    { label: "Linux",       category: "DevOps"    },
-    { label: "Git",         category: "DevOps"    },
-  ];
-
   const categories = ["Frontend", "Backend", "Databases", "DevOps"] as const;
   const categoryColors: Record<string, string> = {
     Frontend:  "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700",
@@ -551,10 +520,20 @@ function TechnologiesSection() {
     DevOps:    "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-700",
   };
 
+  // Technology → category mapping derived from DEFAULTS so it stays in sync.
+  const techCategories: Record<string, string> = {
+    JavaScript: "Frontend", TypeScript: "Frontend", React: "Frontend",
+    Tailwindcss: "Frontend", Vite: "Frontend",
+    Java: "Backend", "Spring Boot": "Backend", Quarkus: "Backend",
+    "Node.js": "Backend", "Express.js": "Backend",
+    MongoDB: "Databases", PostgreSQL: "Databases", "SQL Server": "Databases",
+    Docker: "DevOps", Linux: "DevOps", Git: "DevOps",
+  };
+
   return (
     <SectionCard icon="🛠️" title="Stack de Tecnologías">
       <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
-        Para modificar el stack, edita <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded">src/contexts/PortfolioContext.tsx</code>
+        Para modificar el stack, edita <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded">src/lib/defaults.ts</code>
       </p>
       <div className="space-y-3">
         {categories.map((cat) => (
@@ -565,8 +544,8 @@ function TechnologiesSection() {
               {cat}
             </span>
             <div className="flex flex-wrap gap-1.5">
-              {techs
-                .filter((t) => t.category === cat)
+              {DEFAULTS.technologies
+                .filter((t) => techCategories[t.label] === cat)
                 .map((t) => (
                   <ReadOnlyChip key={t.label} label={t.label} />
                 ))}
