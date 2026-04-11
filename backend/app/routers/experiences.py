@@ -7,6 +7,7 @@ from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
+from ..cache import get_cached, set_cached, invalidate
 from ..database import get_db
 from ..models import Experience, ExperiencePosition, ExperienceSummary
 from ..schemas import ExperienceOut, ExperienceTranslationUpdate, ExperienceUpdate
@@ -44,8 +45,14 @@ def _build_out(exp: Experience, lang: str) -> ExperienceOut:
 def list_experiences(lang: str = "es", db: Session = Depends(get_db)):
     """List all experiences in the requested language, ordered by `order`."""
     validate_language(lang)
+    cache_key = f"experiences:{lang}"
+    cached = get_cached(cache_key)
+    if cached is not None:
+        return [ExperienceOut.model_validate(e) for e in cached]
     exps = db.query(Experience).order_by(Experience.order).all()
-    return [_build_out(e, lang) for e in exps]
+    out = [_build_out(e, lang) for e in exps]
+    set_cached(cache_key, [o.model_dump() for o in out])
+    return out
 
 
 @router.get("/{exp_id}", response_model=ExperienceOut)
@@ -67,6 +74,7 @@ def update_experience(
     validate_language(lang)
     exp = get_or_404(db, Experience, exp_id, "Experience not found")
     exp = update_entity(exp, payload, db)
+    invalidate("experiences:es", "experiences:en", "portfolio:es", "portfolio:en")
     return _build_out(exp, lang)
 
 
@@ -98,4 +106,5 @@ def update_experience_translation(
 
     db.commit()
     db.refresh(exp)
+    invalidate(f"experiences:{lang}", f"portfolio:{lang}")
     return _build_out(exp, lang)

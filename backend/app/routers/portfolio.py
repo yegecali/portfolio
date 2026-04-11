@@ -9,6 +9,7 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from ..cache import get_cached, set_cached, invalidate
 from ..database import get_db
 from ..models import (
     AboutClosing, AboutParagraph, HeroTranslation, NavLink,
@@ -34,12 +35,19 @@ router = APIRouter(tags=["portfolio"])
 def get_hero(lang: str, db: Session = Depends(get_db)):
     """Get hero section for the requested language."""
     validate_language(lang)
-    return get_first_or_404(
+    cache_key = f"hero:{lang}"
+    cached = get_cached(cache_key)
+    if cached is not None:
+        return HeroOut.model_validate(cached)
+    row = get_first_or_404(
         db,
         HeroTranslation,
         {"lang": lang},
         "Hero not found. Run /api/seed first."
     )
+    out = HeroOut.model_validate(row)
+    set_cached(cache_key, out.model_dump())
+    return out
 
 
 @router.put("/api/hero/{lang}", response_model=HeroOut)
@@ -52,7 +60,9 @@ def update_hero(lang: str, payload: HeroUpdate, db: Session = Depends(get_db)):
         {"lang": lang},
         "Hero not found. Run /api/seed first."
     )
-    return update_entity(row, payload, db)
+    result = update_entity(row, payload, db)
+    invalidate(f"hero:{lang}", f"portfolio:{lang}")
+    return result
 
 
 # ── About ──────────────────────────────────────────────────────────────────────
@@ -77,7 +87,13 @@ def _get_about(lang: str, db: Session) -> AboutOut:
 def get_about(lang: str, db: Session = Depends(get_db)):
     """Get about section for the requested language."""
     validate_language(lang)
-    return _get_about(lang, db)
+    cache_key = f"about:{lang}"
+    cached = get_cached(cache_key)
+    if cached is not None:
+        return AboutOut.model_validate(cached)
+    out = _get_about(lang, db)
+    set_cached(cache_key, out.model_dump())
+    return out
 
 
 @router.put("/api/about/{lang}", response_model=AboutOut)
@@ -98,6 +114,7 @@ def update_about(lang: str, payload: AboutUpdate, db: Session = Depends(get_db))
             db.add(AboutClosing(lang=lang, text=payload.closing))
 
     db.commit()
+    invalidate(f"about:{lang}", f"portfolio:{lang}")
     return _get_about(lang, db)
 
 
@@ -110,6 +127,11 @@ def get_full_portfolio(lang: str, db: Session = Depends(get_db)):
     the portfolio in the requested language.
     """
     validate_language(lang)
+
+    cache_key = f"portfolio:{lang}"
+    cached = get_cached(cache_key)
+    if cached is not None:
+        return FullPortfolioOut.model_validate(cached)
 
     personal = get_first_or_404(
         db,
@@ -150,7 +172,7 @@ def get_full_portfolio(lang: str, db: Session = Depends(get_db)):
         .all()
     )
 
-    return FullPortfolioOut(
+    out = FullPortfolioOut(
         lang=lang,
         personal=PersonalInfoOut.model_validate(personal),
         hero=HeroOut.model_validate(hero) if hero else HeroOut(lang=lang),
@@ -161,6 +183,8 @@ def get_full_portfolio(lang: str, db: Session = Depends(get_db)):
         technologies=[TechnologyOut.model_validate(t) for t in technologies],
         spoken_languages=[SpokenLanguageOut.model_validate(sl) for sl in spoken_languages],
     )
+    set_cached(cache_key, out.model_dump())
+    return out
 
 
 # ── Seed ──────────────────────────────────────────────────────────────────────
@@ -172,4 +196,5 @@ def run_seed(db: Session = Depends(get_db)):
     WARNING: this deletes all existing rows first.
     """
     seed_all(db)
+    invalidate("portfolio:es", "portfolio:en", "hero:es", "hero:en", "about:es", "about:en")
     return MessageOut(message="Database seeded successfully.")
