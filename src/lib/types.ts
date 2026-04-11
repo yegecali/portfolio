@@ -4,6 +4,7 @@ export type TechDetails = {
   label: string;
   url: string;
   iconName?: string;
+  category?: string;
 };
 
 export type ExperienceDetails = {

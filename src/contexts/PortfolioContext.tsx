@@ -2,6 +2,10 @@
  * PortfolioContext — non-translatable site data (URLs, contacts, technologies).
  * All translatable content (hero, about, projects, experiences, languages, nav)
  * is pulled from I18nContext so it switches automatically with the locale.
+ *
+ * On mount the context attempts to load live data from the backend API
+ * (GET /api/portfolio/{lang}). If the backend is unreachable it falls back
+ * to the static defaults defined in src/lib/defaults.ts.
  */
 import React, { createContext, useEffect, useState, useContext } from "react";
 import type {
@@ -13,6 +17,9 @@ import type {
 } from "@/lib/types";
 import I18nContext from "@/contexts/I18nContext";
 import { readAdminConfig } from "@/lib/adminOverrides";
+import { DEFAULTS } from "@/lib/defaults";
+import { api } from "@/lib/api";
+import type { FullPortfolioOut } from "@/lib/api";
 
 interface PortfolioContextType {
   // ── Site meta ─────────────────────────────────────────────────────────────
@@ -74,62 +81,48 @@ const PortfolioContext = createContext<PortfolioContextType | undefined>(
   undefined,
 );
 
-// ── Non-translatable static defaults ──────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
-const DEFAULTS = {
-  siteName:        "Yemi Genderson",
-  siteDescription: "Full Stack Developer",
-  author:          "Yemi Genderson",
-  email:           "yemi@example.com",
-  phone:           "+51 (123) 456-7890",
-  location:        "Lima, Peru",
-  cvUrl:           "/portfolio/cv-yemi-genderson.pdf",
+/** Parse "YYYY-MM" string into a Date (1st of that month). */
+function parseYYYYMM(str: string): Date {
+  const [year, month] = str.split("-").map(Number);
+  return new Date(year, month - 1);
+}
 
-  socialLinks: {
-    github:    "https://github.com/yemigenderson",
-    linkedin:  "https://linkedin.com/in/yemigenderson",
-    whatsapp:  "https://wa.me/51987654321",
-    instagram: "https://instagram.com/yemigenderson",
-  },
+/**
+ * Map a FullPortfolioOut (backend response) onto the static shape used by the
+ * context, applying localStorage admin overrides on top.
+ */
+function buildStaticFromApi(data: FullPortfolioOut) {
+  const cfg = readAdminConfig();
+  const adminP = cfg.personal ?? {};
+  const p = data.personal;
+  return {
+    ...DEFAULTS,
+    siteName:        adminP.siteName        ?? p.name        ?? DEFAULTS.siteName,
+    siteDescription: adminP.siteDescription ?? p.role        ?? DEFAULTS.siteDescription,
+    author:          adminP.siteName        ?? p.name        ?? DEFAULTS.author,
+    email:           adminP.email           ?? p.email       ?? DEFAULTS.email,
+    phone:           adminP.phone           ?? p.phone       ?? DEFAULTS.phone,
+    location:        adminP.location        ?? p.location    ?? DEFAULTS.location,
+    cvUrl:           adminP.cvUrl           ?? p.cv_url      ?? DEFAULTS.cvUrl,
+    heroImage:       adminP.heroImage       ?? p.hero_image  ?? DEFAULTS.heroImage,
+    socialLinks: [
+      { url: cfg.social?.github    ?? p.github_url    ?? DEFAULTS.socialLinks.github    },
+      { url: cfg.social?.linkedin  ?? p.linkedin_url  ?? DEFAULTS.socialLinks.linkedin  },
+      { url: cfg.social?.whatsapp  ?? p.whatsapp_url  ?? DEFAULTS.socialLinks.whatsapp  },
+      { url: cfg.social?.instagram ?? p.instagram_url ?? DEFAULTS.socialLinks.instagram },
+    ],
+    technologies: data.technologies.map((t) => ({
+      label:    t.label,
+      url:      t.url ?? "",
+      iconName: t.icon_name ?? "",
+    })) satisfies TechDetails[],
+  };
+}
 
-  technologies: [
-    { label: "JavaScript",  url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript", iconName: "javascript"  },
-    { label: "TypeScript",  url: "https://www.typescriptlang.org/",                          iconName: "typescript"  },
-    { label: "React",       url: "https://react.dev/",                                       iconName: "react"       },
-    { label: "Vite",        url: "https://vitejs.dev/",                                      iconName: "vite"        },
-    { label: "Node.js",     url: "https://nodejs.org/en",                                    iconName: "nodejs"      },
-    { label: "Express.js",  url: "https://expressjs.com/",                                   iconName: "expressjs"   },
-    { label: "MongoDB",     url: "https://www.mongodb.com/",                                 iconName: "mongodb"     },
-    { label: "PostgreSQL",  url: "https://www.postgresql.org/",                              iconName: "postgresql"  },
-    { label: "Tailwindcss", url: "https://tailwindcss.com/",                                 iconName: "tailwindcss" },
-    { label: "Git",         url: "https://git-scm.com/",                                     iconName: "git"         },
-    { label: "Java",        url: "https://www.java.com/",                                    iconName: "java"        },
-    { label: "Spring Boot", url: "https://spring.io/projects/spring-boot",                   iconName: "spring"      },
-    { label: "Quarkus",     url: "https://quarkus.io/",                                      iconName: "quarkus"     },
-    { label: "SQL Server",  url: "https://www.microsoft.com/en-us/sql-server",               iconName: "sqlserver"   },
-    { label: "Docker",      url: "https://www.docker.com/",                                  iconName: "docker"      },
-    { label: "Linux",       url: "https://www.linux.org/",                                   iconName: "linux"       },
-  ] satisfies TechDetails[],
-
-  testimonials: [
-    { personName: "John Doe",      title: "CEO - Tech Company",       testimonial: "Working with this developer was an absolute pleasure. Highly recommended for any complex project!" },
-    { personName: "Jane Smith",    title: "Product Manager - Startup", testimonial: "Outstanding work on our recent project. Great attention to detail and excellent communication throughout." },
-    { personName: "Mike Johnson",  title: "Freelancer",               testimonial: "Delivered exactly what was promised on time. Professional and skilled developer." },
-  ] satisfies TestimonialDetails[],
-
-  externalLinks: {
-    GITHUB:   "https://github.com",
-    TWITTER:  "https://twitter.com",
-    LINKEDIN: "https://www.linkedin.com",
-  },
-
-  /** Hero image — not translatable */
-  heroImage:
-    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop",
-};
-
-/** Build the static (non-translatable) data, merging any admin overrides. */
-function buildStatic() {
+/** Build the static data using only localStorage overrides (backend offline). */
+function buildStaticFromDefaults() {
   const cfg = readAdminConfig();
   const p = cfg.personal ?? {};
   const s = cfg.social ?? {};
@@ -160,14 +153,21 @@ export const PortfolioProvider: React.FC<PortfolioProviderProps> = ({
 }) => {
   const i18n = useContext(I18nContext);
   const [isLoading, setIsLoading] = useState(true);
+  const [apiData, setApiData] = useState<FullPortfolioOut | null>(null);
 
+  // Fetch the full portfolio from the backend API for the current language.
+  // Falls back gracefully to static defaults when the backend is offline.
   useEffect(() => {
-    const id = requestAnimationFrame(() => setIsLoading(false));
-    return () => cancelAnimationFrame(id);
-  }, []);
+    const lang = i18n?.lang ?? "es";
+    api
+      .getPortfolio(lang)
+      .then((data) => setApiData(data))
+      .catch(() => setApiData(null))
+      .finally(() => setIsLoading(false));
+  }, [i18n?.lang]);
 
-  // Rebuild static each render so overrides from localStorage are always fresh
-  const STATIC = buildStatic();
+  // Static non-translatable data — prefer API response, fall back to defaults.
+  const STATIC = apiData ? buildStaticFromApi(apiData) : buildStaticFromDefaults();
 
   // Locale-driven content (falls back to Spanish if I18nContext is absent)
   const locale = i18n?.t;
@@ -175,30 +175,60 @@ export const PortfolioProvider: React.FC<PortfolioProviderProps> = ({
   const heroLocale = locale?.hero;
   const aboutLocale = locale?.about;
 
-  const projects: ProjectDetails[] = (locale?.projects ?? []) as ProjectDetails[];
-  const experiences: ExperienceDetails[] = (locale?.experiences ?? []) as ExperienceDetails[];
-  const languages: LanguageDetails[] = (locale?.languages ?? []) as LanguageDetails[];
+  // When the backend is available use its translatable content directly,
+  // otherwise fall back to the bundled i18n locale files.
+  const projects: ProjectDetails[] = apiData
+    ? apiData.projects.map((p) => ({
+        name:        p.name,
+        description: p.description,
+        url:         p.url ?? "",
+        technologies: p.technologies,
+      }))
+    : ((locale?.projects ?? []) as ProjectDetails[]);
+
+  const experiences: ExperienceDetails[] = apiData
+    ? apiData.experiences.map((e) => ({
+        logoAlt:           e.logo_alt ?? "",
+        company:           e.company,
+        position:          e.position,
+        currentlyWorkHere: e.currently_work_here,
+        startDate:         parseYYYYMM(e.start_date),
+        endDate:           e.end_date ? parseYYYYMM(e.end_date) : undefined,
+        summary:           e.summary,
+      }))
+    : ((locale?.experiences ?? []) as ExperienceDetails[]);
+
+  const languages: LanguageDetails[] = apiData
+    ? apiData.spoken_languages.map((l) => ({
+        name:        l.name,
+        flag:        l.flag ?? "",
+        level:       l.level,
+        proficiency: l.proficiency,
+      }))
+    : ((locale?.languages ?? []) as LanguageDetails[]);
 
   const mergedValue: PortfolioContextType = {
     ...STATIC,
     ...(value ?? {}),
     isLoading,
 
-    navLinks: locale?.nav ?? [],
+    navLinks: apiData
+      ? apiData.nav
+      : (locale?.nav ?? []),
 
     about: {
       title:      (aboutLocale ? `${locale!.ui.about.title} 👨‍💻` : ""),
-      paragraphs: aboutLocale?.paragraphs ?? [],
+      paragraphs: apiData?.about.paragraphs ?? aboutLocale?.paragraphs ?? [],
       highlights: aboutLocale?.highlights ?? [],
-      closing:    aboutLocale?.closing ?? "",
+      closing:    apiData?.about.closing   ?? aboutLocale?.closing ?? "",
     },
 
     hero: {
-      badge:       heroLocale?.badge       ?? "",
-      title:       heroLocale?.title       ?? "",
-      description: heroLocale?.description ?? "",
-      location:    heroLocale?.location    ?? "",
-      status:      heroLocale?.status      ?? "",
+      badge:       apiData?.hero.badge       ?? heroLocale?.badge       ?? "",
+      title:       apiData?.hero.title       ?? heroLocale?.title       ?? "",
+      description: apiData?.hero.description ?? heroLocale?.description ?? "",
+      location:    apiData?.hero.location    ?? heroLocale?.location    ?? "",
+      status:      apiData?.hero.status      ?? heroLocale?.status      ?? "",
       image:       STATIC.heroImage,
     },
 
