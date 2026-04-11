@@ -2,22 +2,16 @@
 CV generation endpoint — returns a PDF file for download.
 """
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from fastapi.responses import Response
 from sqlalchemy.orm import Session
 
 from ..database import get_db
-from ..models import (
-    Experience, HeroTranslation, NavLink, PersonalInfo,
-    Project, SpokenLanguage, Technology,
-)
-from ..routers.portfolio import _get_about, get_full_portfolio
-from ..schemas import FullPortfolioOut
+from ..utils.validators import validate_language
+from ..routers.portfolio import get_full_portfolio
 from ..services.cv_generator import generate_cv
 
 router = APIRouter(prefix="/api/cv", tags=["cv"])
-
-SUPPORTED_LANGS = {"es", "en"}
 
 
 @router.get("/{lang}")
@@ -33,8 +27,7 @@ def download_cv(lang: str, db: Session = Depends(get_db)):
     - Technical skills by category
     - Spoken languages with proficiency bars
     """
-    if lang not in SUPPORTED_LANGS:
-        raise HTTPException(422, f"lang must be one of {SUPPORTED_LANGS}")
+    validate_language(lang)
 
     # Reuse the full portfolio aggregation
     portfolio = get_full_portfolio(lang=lang, db=db)

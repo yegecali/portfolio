@@ -4,19 +4,20 @@ Read + update endpoints for Projects.
 
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from ..database import get_db
 from ..models import Project, ProjectTranslation
 from ..schemas import ProjectOut, ProjectTranslationUpdate, ProjectUpdate
+from ..utils.validators import validate_language
+from ..utils.crud import get_or_404, update_entity
 
 router = APIRouter(prefix="/api/projects", tags=["projects"])
 
-SUPPORTED_LANGS = {"es", "en"}
-
 
 def _build_out(proj: Project, lang: str) -> ProjectOut:
+    """Build ProjectOut schema from Project model for given language."""
     description = next(
         (t.description for t in proj.translations if t.lang == lang),
         proj.translations[0].description if proj.translations else "",
@@ -34,17 +35,16 @@ def _build_out(proj: Project, lang: str) -> ProjectOut:
 @router.get("", response_model=List[ProjectOut])
 def list_projects(lang: str = "es", db: Session = Depends(get_db)):
     """List all projects in the requested language."""
-    if lang not in SUPPORTED_LANGS:
-        raise HTTPException(422, f"lang must be one of {SUPPORTED_LANGS}")
+    validate_language(lang)
     projects = db.query(Project).order_by(Project.order).all()
     return [_build_out(p, lang) for p in projects]
 
 
 @router.get("/{project_id}", response_model=ProjectOut)
 def get_project(project_id: int, lang: str = "es", db: Session = Depends(get_db)):
-    proj = db.query(Project).filter(Project.id == project_id).first()
-    if not proj:
-        raise HTTPException(404, "Project not found")
+    """Get a single project by ID."""
+    validate_language(lang)
+    proj = get_or_404(db, Project, project_id, "Project not found")
     return _build_out(proj, lang)
 
 
@@ -56,13 +56,9 @@ def update_project(
     db: Session = Depends(get_db),
 ):
     """Update non-translatable fields (name, url, technologies, order)."""
-    proj = db.query(Project).filter(Project.id == project_id).first()
-    if not proj:
-        raise HTTPException(404, "Project not found")
-    for field, value in payload.model_dump(exclude_none=True).items():
-        setattr(proj, field, value)
-    db.commit()
-    db.refresh(proj)
+    validate_language(lang)
+    proj = get_or_404(db, Project, project_id, "Project not found")
+    proj = update_entity(proj, payload, db)
     return _build_out(proj, lang)
 
 
@@ -74,12 +70,8 @@ def update_project_translation(
     db: Session = Depends(get_db),
 ):
     """Replace the project description for a given language."""
-    if lang not in SUPPORTED_LANGS:
-        raise HTTPException(422, f"lang must be one of {SUPPORTED_LANGS}")
-
-    proj = db.query(Project).filter(Project.id == project_id).first()
-    if not proj:
-        raise HTTPException(404, "Project not found")
+    validate_language(lang)
+    proj = get_or_404(db, Project, project_id, "Project not found")
 
     trans = next((t for t in proj.translations if t.lang == lang), None)
     if trans:

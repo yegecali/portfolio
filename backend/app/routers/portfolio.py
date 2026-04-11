@@ -20,43 +20,45 @@ from ..schemas import (
     SpokenLanguageOut, TechnologyOut,
 )
 from ..seed import seed_all
-from .experiences import _build_out as _exp_out, list_experiences
-from .projects import _build_out as _proj_out, list_projects
+from ..utils.validators import validate_language
+from ..utils.crud import get_first_or_404, update_entity
+from .experiences import _build_out as _exp_out
+from .projects import _build_out as _proj_out
 
 router = APIRouter(tags=["portfolio"])
-
-SUPPORTED_LANGS = {"es", "en"}
 
 
 # ── Hero ──────────────────────────────────────────────────────────────────────
 
 @router.get("/api/hero/{lang}", response_model=HeroOut)
 def get_hero(lang: str, db: Session = Depends(get_db)):
-    if lang not in SUPPORTED_LANGS:
-        raise HTTPException(422, f"lang must be one of {SUPPORTED_LANGS}")
-    row = db.query(HeroTranslation).filter(HeroTranslation.lang == lang).first()
-    if not row:
-        raise HTTPException(404, "Hero not found. Run /api/seed first.")
-    return row
+    """Get hero section for the requested language."""
+    validate_language(lang)
+    return get_first_or_404(
+        db,
+        HeroTranslation,
+        {"lang": lang},
+        "Hero not found. Run /api/seed first."
+    )
 
 
 @router.put("/api/hero/{lang}", response_model=HeroOut)
 def update_hero(lang: str, payload: HeroUpdate, db: Session = Depends(get_db)):
-    if lang not in SUPPORTED_LANGS:
-        raise HTTPException(422, f"lang must be one of {SUPPORTED_LANGS}")
-    row = db.query(HeroTranslation).filter(HeroTranslation.lang == lang).first()
-    if not row:
-        raise HTTPException(404, "Hero not found. Run /api/seed first.")
-    for field, value in payload.model_dump(exclude_none=True).items():
-        setattr(row, field, value)
-    db.commit()
-    db.refresh(row)
-    return row
+    """Update hero section for the requested language."""
+    validate_language(lang)
+    row = get_first_or_404(
+        db,
+        HeroTranslation,
+        {"lang": lang},
+        "Hero not found. Run /api/seed first."
+    )
+    return update_entity(row, payload, db)
 
 
 # ── About ──────────────────────────────────────────────────────────────────────
 
 def _get_about(lang: str, db: Session) -> AboutOut:
+    """Helper to build AboutOut for a given language."""
     paragraphs = (
         db.query(AboutParagraph)
         .filter(AboutParagraph.lang == lang)
@@ -73,15 +75,15 @@ def _get_about(lang: str, db: Session) -> AboutOut:
 
 @router.get("/api/about/{lang}", response_model=AboutOut)
 def get_about(lang: str, db: Session = Depends(get_db)):
-    if lang not in SUPPORTED_LANGS:
-        raise HTTPException(422, f"lang must be one of {SUPPORTED_LANGS}")
+    """Get about section for the requested language."""
+    validate_language(lang)
     return _get_about(lang, db)
 
 
 @router.put("/api/about/{lang}", response_model=AboutOut)
 def update_about(lang: str, payload: AboutUpdate, db: Session = Depends(get_db)):
-    if lang not in SUPPORTED_LANGS:
-        raise HTTPException(422, f"lang must be one of {SUPPORTED_LANGS}")
+    """Update about section for the requested language."""
+    validate_language(lang)
 
     if payload.paragraphs is not None:
         db.query(AboutParagraph).filter(AboutParagraph.lang == lang).delete()
@@ -107,15 +109,14 @@ def get_full_portfolio(lang: str, db: Session = Depends(get_db)):
     Single endpoint that returns every piece of data needed to render
     the portfolio in the requested language.
     """
-    if lang not in SUPPORTED_LANGS:
-        raise HTTPException(422, f"lang must be one of {SUPPORTED_LANGS}")
+    validate_language(lang)
 
-    personal = db.query(PersonalInfo).filter(PersonalInfo.id == 1).first()
-    if not personal:
-        raise HTTPException(
-            404,
-            "Database is empty. POST /api/seed to populate it first.",
-        )
+    personal = get_first_or_404(
+        db,
+        PersonalInfo,
+        {"id": 1},
+        "Database is empty. POST /api/seed to populate it first."
+    )
 
     hero = db.query(HeroTranslation).filter(HeroTranslation.lang == lang).first()
     about = _get_about(lang, db)
