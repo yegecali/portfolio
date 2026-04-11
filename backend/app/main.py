@@ -10,6 +10,10 @@ Interactive docs:
 
 Seed the database on first run:
     POST http://localhost:8000/api/seed
+
+Required environment variables (see .env.example):
+    MYSQL_USER, MYSQL_PASSWORD, MYSQL_HOST, MYSQL_PORT, MYSQL_DB
+    REDIS_URL
 """
 
 from contextlib import asynccontextmanager
@@ -17,6 +21,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from .cache import init_cache, close_cache
 from .database import Base, engine, SessionLocal
 from .routers import cv, experiences, personal, portfolio, projects, technologies
 from .seed import seed_all
@@ -24,6 +29,9 @@ from .seed import seed_all
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # Initialize Redis cache
+    init_cache()
+
     # Create all tables on startup
     Base.metadata.create_all(bind=engine)
 
@@ -34,6 +42,9 @@ async def lifespan(app: FastAPI):
             seed_all(db)
 
     yield
+
+    # Shutdown: close Redis connection
+    close_cache()
 
 
 app = FastAPI(

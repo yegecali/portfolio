@@ -1,4 +1,7 @@
+# Legacy SQLite files (no longer used)
 portfolio.db
+portfolio.db-shm
+portfolio.db-wal
 __pycache__/
 *.py[cod]
 .venv/
