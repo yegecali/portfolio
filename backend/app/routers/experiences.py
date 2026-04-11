@@ -4,19 +4,20 @@ Read + update endpoints for Work Experience.
 
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from ..database import get_db
 from ..models import Experience, ExperiencePosition, ExperienceSummary
 from ..schemas import ExperienceOut, ExperienceTranslationUpdate, ExperienceUpdate
+from ..utils.validators import validate_language
+from ..utils.crud import get_or_404, update_entity
 
 router = APIRouter(prefix="/api/experiences", tags=["experiences"])
 
-SUPPORTED_LANGS = {"es", "en"}
-
 
 def _build_out(exp: Experience, lang: str) -> ExperienceOut:
+    """Build ExperienceOut schema from Experience model for given language."""
     position = next(
         (p.position for p in exp.positions if p.lang == lang),
         exp.positions[0].position if exp.positions else "",
@@ -42,17 +43,16 @@ def _build_out(exp: Experience, lang: str) -> ExperienceOut:
 @router.get("", response_model=List[ExperienceOut])
 def list_experiences(lang: str = "es", db: Session = Depends(get_db)):
     """List all experiences in the requested language, ordered by `order`."""
-    if lang not in SUPPORTED_LANGS:
-        raise HTTPException(422, f"lang must be one of {SUPPORTED_LANGS}")
+    validate_language(lang)
     exps = db.query(Experience).order_by(Experience.order).all()
     return [_build_out(e, lang) for e in exps]
 
 
 @router.get("/{exp_id}", response_model=ExperienceOut)
 def get_experience(exp_id: int, lang: str = "es", db: Session = Depends(get_db)):
-    exp = db.query(Experience).filter(Experience.id == exp_id).first()
-    if not exp:
-        raise HTTPException(404, "Experience not found")
+    """Get a single experience by ID."""
+    validate_language(lang)
+    exp = get_or_404(db, Experience, exp_id, "Experience not found")
     return _build_out(exp, lang)
 
 
@@ -64,13 +64,9 @@ def update_experience(
     db: Session = Depends(get_db),
 ):
     """Update non-translatable fields (company, dates, order)."""
-    exp = db.query(Experience).filter(Experience.id == exp_id).first()
-    if not exp:
-        raise HTTPException(404, "Experience not found")
-    for field, value in payload.model_dump(exclude_none=True).items():
-        setattr(exp, field, value)
-    db.commit()
-    db.refresh(exp)
+    validate_language(lang)
+    exp = get_or_404(db, Experience, exp_id, "Experience not found")
+    exp = update_entity(exp, payload, db)
     return _build_out(exp, lang)
 
 
@@ -82,12 +78,8 @@ def update_experience_translation(
     db: Session = Depends(get_db),
 ):
     """Replace the position title and all bullet-point summaries for a given language."""
-    if lang not in SUPPORTED_LANGS:
-        raise HTTPException(422, f"lang must be one of {SUPPORTED_LANGS}")
-
-    exp = db.query(Experience).filter(Experience.id == exp_id).first()
-    if not exp:
-        raise HTTPException(404, "Experience not found")
+    validate_language(lang)
+    exp = get_or_404(db, Experience, exp_id, "Experience not found")
 
     # Update position
     pos_row = next((p for p in exp.positions if p.lang == lang), None)
