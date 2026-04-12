@@ -38,7 +38,7 @@ const HighlightedMetricText = ({
         part.isMetric ? (
           <mark
             key={i}
-            className={`inline-flex items-center px-1.5 py-0.5 rounded-md text-[11px] font-bold leading-tight align-middle mx-0.5 bg-transparent ${markClassName}`}
+            className={`inline-flex items-center px-1.5 py-0.5 rounded-md text-[11px] font-bold leading-tight align-middle mx-0.5 ${markClassName}`}
           >
             {part.value.trim()}
           </mark>
