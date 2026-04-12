@@ -9,6 +9,9 @@
 
 import type { LangCode } from "@/lib/i18n/types";
 
+/** Default request timeout in milliseconds. */
+const REQUEST_TIMEOUT_MS = 10_000;
+
 export const API_BASE_URL =
   (import.meta.env.VITE_API_URL as string | undefined) ??
   "http://localhost:8000";
@@ -157,22 +160,52 @@ export interface ProjectTranslationUpdate {
 
 // ── Core fetch helper ─────────────────────────────────────────────────────────
 
+/**
+ * Low-level fetch wrapper used by all API helpers.
+ *
+ * Features:
+ * - Automatic 10-second timeout via `AbortSignal.timeout`.
+ * - Accepts an optional external `signal` (e.g. from an `AbortController`);
+ *   the request is aborted as soon as either the timeout or the external
+ *   signal fires (`AbortSignal.any`).
+ * - On non-2xx responses the error message includes the `detail` field from
+ *   the JSON body when the backend provides one.
+ */
 async function apiFetch<T>(
   path: string,
   options?: RequestInit,
 ): Promise<T> {
+  const timeoutSignal = AbortSignal.timeout(REQUEST_TIMEOUT_MS);
+  const signal = options?.signal
+    ? AbortSignal.any([options.signal as AbortSignal, timeoutSignal])
+    : timeoutSignal;
+
   const res = await fetch(`${API_BASE_URL}${path}`, {
     headers: { "Content-Type": "application/json" },
     ...options,
+    signal,
   });
+
   if (!res.ok) {
-    throw new Error(`API ${options?.method ?? "GET"} ${path} failed: ${res.status}`);
+    let detail = "";
+    try {
+      const body = await res.json() as { detail?: unknown };
+      if (typeof body.detail === "string" && body.detail) {
+        detail = `: ${body.detail}`;
+      }
+    } catch {
+      // Ignore JSON parse errors — the status code is enough context.
+    }
+    throw new Error(
+      `API ${options?.method ?? "GET"} ${path} failed: ${res.status}${detail}`,
+    );
   }
+
   return res.json() as Promise<T>;
 }
 
-function apiGet<T>(path: string): Promise<T> {
-  return apiFetch<T>(path);
+function apiGet<T>(path: string, signal?: AbortSignal): Promise<T> {
+  return apiFetch<T>(path, { signal });
 }
 
 function apiPut<T>(path: string, body: unknown): Promise<T> {
@@ -198,8 +231,8 @@ export const api = {
   // ── Portfolio (aggregate) ─────────────────────────────────────────────────
 
   /** GET /api/portfolio/{lang} — returns all portfolio data in one request */
-  getPortfolio: (lang: LangCode) =>
-    apiGet<FullPortfolioOut>(`/api/portfolio/${lang}`),
+  getPortfolio: (lang: LangCode, signal?: AbortSignal) =>
+    apiGet<FullPortfolioOut>(`/api/portfolio/${lang}`, signal),
 
   // ── Personal info ─────────────────────────────────────────────────────────
 
