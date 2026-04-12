@@ -6,7 +6,7 @@ const Card = ({ className, children, ...props }: CardProps) => {
   return (
     <div
       className={mergeClasses(
-        "rounded-xl bg-white dark:bg-gray-800 shadow-lg dark:shadow-2xl border border-gray-100 dark:border-gray-700 transition-colors duration-300",
+        "rounded-xl bg-card-bg shadow-lg dark:shadow-2xl border border-card-border transition-colors duration-300",
         className,
       )}
       {...props}
