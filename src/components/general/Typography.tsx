@@ -2,16 +2,16 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { mergeClasses } from "@/lib/utils";
 import React from "react";
 
-const typographyVariants = cva("text-gray-600 dark:text-gray-400", {
+const typographyVariants = cva("text-body", {
   variants: {
     variant: {
-      h1: "text-4xl font-semibold md:font-bold md:text-5xl md:tracking-[-0.02em] lg:text-6xl lg:leading-[72px] text-gray-900 dark:text-white",
-      h2: "text-lg md:text-4xl font-semibold tracking-[-0.02em] text-gray-900 dark:text-white",
-      h3: "text-2xl md:text-3xl font-semibold tracking-[-0.02em] text-gray-900 dark:text-white",
-      subtitle: "text-lg md:text-xl text-gray-700 dark:text-gray-300",
-      body1: "text-base md:text-lg text-gray-700 dark:text-gray-300",
-      body2: "text-base text-gray-700 dark:text-gray-300",
-      body3: "text-sm text-gray-500 dark:text-gray-400",
+      h1: "text-4xl font-semibold md:font-bold md:text-5xl md:tracking-[-0.02em] lg:text-6xl lg:leading-[72px] text-heading",
+      h2: "text-lg md:text-4xl font-semibold tracking-[-0.02em] text-heading",
+      h3: "text-2xl md:text-3xl font-semibold tracking-[-0.02em] text-heading",
+      subtitle: "text-lg md:text-xl text-body",
+      body1: "text-base md:text-lg text-body",
+      body2: "text-base text-body",
+      body3: "text-sm text-subtle",
     },
   },
   defaultVariants: {

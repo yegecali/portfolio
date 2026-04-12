@@ -68,7 +68,7 @@ const Header = () => {
       ref={headerRef}
       className={`fixed top-0 left-0 w-screen max-w-full z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl shadow-lg shadow-black/5 dark:shadow-black/20 border-b border-gray-200/60 dark:border-gray-700/60"
+          ? "bg-section-alt/90 backdrop-blur-xl shadow-lg shadow-black/5 dark:shadow-black/20 border-b border-card-border/60"
           : "bg-transparent border-b border-transparent"
       }`}
     >
@@ -108,7 +108,7 @@ const Header = () => {
           {/* Hamburger */}
           <button
             onClick={() => setMobileOpen((v) => !v)}
-            className="md:hidden p-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="md:hidden p-2.5 rounded-lg hover:bg-section-bg transition-colors"
             aria-label="Toggle menu"
           >
             <AnimatePresence mode="wait" initial={false}>

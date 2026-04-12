@@ -20,7 +20,7 @@ const MobileMenu = ({ open, links, activeSection, onNavigate }: MobileMenuProps)
         animate={{ opacity: 1, height: "auto" }}
         exit={{ opacity: 0, height: 0 }}
         transition={{ duration: 0.25, ease: "easeInOut" }}
-        className="md:hidden overflow-hidden border-t border-gray-200 dark:border-gray-700 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl"
+        className="md:hidden overflow-hidden border-t border-card-border bg-section-alt/95 backdrop-blur-xl"
       >
         <nav className="flex flex-col gap-1 p-4">
           {links.map((link, index) => {
@@ -39,7 +39,7 @@ const MobileMenu = ({ open, links, activeSection, onNavigate }: MobileMenuProps)
                     ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold mt-2"
                     : isActive
                     ? "bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
-                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    : "text-body hover:bg-section-bg"
                 }`}
               >
                 {isActive && !isContact && (

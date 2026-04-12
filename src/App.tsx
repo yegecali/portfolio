@@ -39,7 +39,7 @@ function PageLayout({ children }: { children: React.ReactNode }) {
   return (
     <div
       style={{ width: "100vw", maxWidth: "100vw", overflowX: "clip" }}
-      className="relative min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100"
+      className="relative min-h-screen bg-section-alt text-heading"
     >
       {children}
     </div>

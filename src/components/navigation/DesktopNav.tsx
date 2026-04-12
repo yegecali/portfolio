@@ -26,7 +26,7 @@ const DesktopNav = ({ links, activeSection, onNavigate }: DesktopNavProps) => (
           className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
             isActive
               ? "text-blue-600 dark:text-blue-400"
-              : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
+              : "text-body hover:text-heading"
           }`}
         >
           {isActive && (
