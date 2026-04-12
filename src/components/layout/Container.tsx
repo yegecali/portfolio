@@ -8,7 +8,7 @@ const Container = React.forwardRef<HTMLElement, ContainerProps>(
     return (
       <section
         className={mergeClasses(
-          "w-full overflow-hidden bg-section-bg py-16 md:py-28 2xl:py-40 transition-colors duration-500",
+          "w-full overflow-hidden bg-gradient-to-b from-section-alt to-section-bg py-16 md:py-28 2xl:py-40 transition-colors duration-500",
           className,
         )}
         ref={ref}
