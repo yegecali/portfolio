@@ -157,13 +157,29 @@ export const PortfolioProvider: React.FC<PortfolioProviderProps> = ({
 
   // Fetch the full portfolio from the backend API for the current language.
   // Falls back gracefully to static defaults when the backend is offline.
+  // The AbortController is used to cancel any in-flight request when the
+  // language changes before the previous fetch has completed.
   useEffect(() => {
+    const controller = new AbortController();
     const lang = i18n?.lang ?? "es";
+
     api
-      .getPortfolio(lang)
-      .then((data) => setApiData(data))
-      .catch(() => setApiData(null))
-      .finally(() => setIsLoading(false));
+      .getPortfolio(lang, controller.signal)
+      .then((data) => {
+        if (controller.signal.aborted) return;
+        setApiData(data);
+        setIsLoading(false);
+      })
+      .catch((err: unknown) => {
+        if (err instanceof Error && err.name === "AbortError") return;
+        if (controller.signal.aborted) return;
+        setApiData(null);
+        setIsLoading(false);
+      });
+
+    return () => {
+      controller.abort();
+    };
   }, [i18n?.lang]);
 
   // Static non-translatable data — prefer API response, fall back to defaults.
