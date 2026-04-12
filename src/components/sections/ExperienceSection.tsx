@@ -10,51 +10,10 @@ import StatusBadge from "@/components/general/StatusBadge";
 import Reveal from "@/components/general/Reveal";
 import { ExperienceCardSkeleton } from "@/components/general/Skeleton";
 import { BRAND } from "@/lib/theme";
+import HighlightedMetricText from "@/components/general/HighlightedMetricText";
 
 const formatDate = (date: Date) =>
   date.toLocaleDateString("es-PE", { month: "short", year: "numeric" });
-
-// Matches numeric metrics inside bullet text (percentages, ms, multipliers, large numbers)
-const METRIC_PATTERN =
-  /(\d+(?:[.,]\d+)?\s*(?:millones?|M\b|K\b)?\s*(?:%|ms|x\b)|99[.,]\d+%|\d+\s+millones?)/gi;
-
-/**
- * Renders bullet text with numeric metrics wrapped in a colored chip.
- */
-const HighlightedBullet = ({ text }: { text: string }) => {
-  const parts: Array<{ value: string; isMetric: boolean }> = [];
-  let lastIndex = 0;
-  let match: RegExpExecArray | null;
-
-  METRIC_PATTERN.lastIndex = 0;
-  while ((match = METRIC_PATTERN.exec(text)) !== null) {
-    if (match.index > lastIndex) {
-      parts.push({ value: text.slice(lastIndex, match.index), isMetric: false });
-    }
-    parts.push({ value: match[0], isMetric: true });
-    lastIndex = METRIC_PATTERN.lastIndex;
-  }
-  if (lastIndex < text.length) {
-    parts.push({ value: text.slice(lastIndex), isMetric: false });
-  }
-
-  return (
-    <>
-      {parts.map((part, i) =>
-        part.isMetric ? (
-          <mark
-            key={i}
-            className="inline-flex items-center px-1.5 py-0.5 rounded-md text-[11px] font-bold leading-tight align-middle mx-0.5 bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700/50"
-          >
-            {part.value.trim()}
-          </mark>
-        ) : (
-          <span key={i}>{part.value}</span>
-        )
-      )}
-    </>
-  );
-};
 
 const ExperienceSection = () => {
   const { experiences, isLoading } = usePortfolio();
@@ -269,7 +228,7 @@ const ExperienceCard = ({ exp, currentLabel, presentLabel }: CardProps) => (
           >
             <span className={`mt-1.5 flex-shrink-0 w-1.5 h-1.5 rounded-full bg-gradient-to-br ${BRAND.progressGradient}`} />
             <Typography className="text-body text-sm leading-relaxed">
-              <HighlightedBullet text={point} />
+              <HighlightedMetricText text={point} />
             </Typography>
           </Reveal>
         ))}
