@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
 import type { ISourceOptions } from "@tsparticles/engine";
-import { useTheme } from "@/hooks/useThemeHook";
+import { useTheme } from "@/hooks/useTheme";
 
 const buildConfig = (isDark: boolean): ISourceOptions => ({
   fullScreen: { enable: false },

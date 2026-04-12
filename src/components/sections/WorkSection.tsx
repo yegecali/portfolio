@@ -17,6 +17,7 @@ import {
   Github,
   ArrowUpRight,
 } from "lucide-react";
+import HighlightedMetricText from "@/components/general/HighlightedMetricText";
 
 // One icon per project (backend-themed, no images needed)
 const PROJECT_ICONS = [Gauge, ShieldCheck, Activity, Database];
@@ -35,54 +36,6 @@ const extractMetric = (description: string): string | null => {
     if (m) return m[1] || m[0];
   }
   return null;
-};
-
-// Matches meaningful numeric metrics inside description text
-const METRIC_PATTERN =
-  /(\d+(?:[.,]\d+)?\s*(?:millones?|M\b|K\b)?\s*(?:%|ms|x\b)|99[.,]\d+%|\d+\s+millones?)/gi;
-
-/**
- * Renders description text with numeric metrics wrapped in a colored chip.
- */
-const HighlightedDescription = ({
-  text,
-  highlightClass,
-}: {
-  text: string;
-  highlightClass: string;
-}) => {
-  const parts: Array<{ value: string; isMetric: boolean }> = [];
-  let lastIndex = 0;
-  let match: RegExpExecArray | null;
-
-  METRIC_PATTERN.lastIndex = 0;
-  while ((match = METRIC_PATTERN.exec(text)) !== null) {
-    if (match.index > lastIndex) {
-      parts.push({ value: text.slice(lastIndex, match.index), isMetric: false });
-    }
-    parts.push({ value: match[0], isMetric: true });
-    lastIndex = METRIC_PATTERN.lastIndex;
-  }
-  if (lastIndex < text.length) {
-    parts.push({ value: text.slice(lastIndex), isMetric: false });
-  }
-
-  return (
-    <>
-      {parts.map((part, i) =>
-        part.isMetric ? (
-          <mark
-            key={i}
-            className={`inline-flex items-center px-1.5 py-0.5 rounded-md text-[11px] font-bold leading-tight align-middle mx-0.5 bg-transparent ${highlightClass}`}
-          >
-            {part.value.trim()}
-          </mark>
-        ) : (
-          <span key={i}>{part.value}</span>
-        )
-      )}
-    </>
-  );
 };
 
 const WorkSection = () => {
@@ -208,9 +161,9 @@ const WorkSection = () => {
 
                         {/* Description with inline metric chips */}
                         <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed relative z-10 line-clamp-4">
-                          <HighlightedDescription
+                          <HighlightedMetricText
                             text={project.description}
-                            highlightClass={accent.highlight}
+                            markClassName={accent.highlight}
                           />
                         </p>
 
