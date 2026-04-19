@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import ThemeSwitcher from "@/components/general/ThemeSwitcher";
 import LanguageSwitcher from "@/components/general/LanguageSwitcher";
 import { Menu, X, Code2 } from "lucide-react";
@@ -23,7 +23,7 @@ const Logo = () => (
       <Code2 className="w-4.5 h-4.5 text-white" strokeWidth={2.5} />
     </div>
     <span className="font-black text-lg bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent tracking-tight">
-      Yemi<span className="text-gray-400 dark:text-gray-500 font-light">.dev</span>
+      Yemi<span className="text-gray-500 dark:text-gray-400 font-light">.dev</span>
     </span>
   </motion.a>
 );
@@ -35,9 +35,11 @@ const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
 
-  const sectionIds = navLinks
-    .filter((l) => l.href.startsWith("#"))
-    .map((l) => l.href.slice(1));
+  const sectionIds = useMemo(() => {
+    return navLinks
+      .filter((l) => l.href.startsWith("#"))
+      .map((l) => l.href.slice(1));
+  }, [navLinks]);
 
   const activeSection = useActiveSection(sectionIds);
 

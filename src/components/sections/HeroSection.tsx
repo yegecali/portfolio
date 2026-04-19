@@ -41,6 +41,7 @@ const HeroSection = () => {
     offset: ["start start", "end start"],
   });
   const indicatorOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
+  const indicatorPointerEvents = useTransform(scrollYProgress, (v) => v < 0.2 ? "auto" : "none");
 
   return (
     <Container
@@ -128,7 +129,7 @@ const HeroSection = () => {
       {/* Scroll indicator — fades + drifts as user scrolls */}
       <motion.div
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
-        style={{ y: indicatorY, opacity: indicatorOpacity }}
+        style={{ y: indicatorY, opacity: indicatorOpacity, pointerEvents: indicatorPointerEvents }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 0.8 }}
@@ -136,7 +137,7 @@ const HeroSection = () => {
           document.querySelector("#about")?.scrollIntoView({ behavior: "smooth" })
         }
       >
-        <span className="text-xs text-gray-400 dark:text-gray-500 tracking-widest uppercase font-medium">
+        <span className="text-xs text-gray-500 dark:text-gray-400 tracking-widest uppercase font-medium">
           Scroll
         </span>
         <motion.div

@@ -1,0 +1,11 @@
+node_modules
+dist
+dist-ssr
+*.local
+.env
+.git
+.github
+Dockerfile
+.dockerignore
+playwright-report
+test-results
