@@ -26,7 +26,7 @@ const MobileMenu = ({ open, links, activeSection, onNavigate }: MobileMenuProps)
           {links.map((link, index) => {
             const id = link.href.slice(1);
             const isActive = activeSection === id;
-            const isContact = link.label === "Contact";
+            const isContact = link.href === "#contact";
             return (
               <motion.button
                 key={link.href}

@@ -62,8 +62,8 @@ const Header = () => {
     setTimeout(() => scrollToSection(href), 300);
   };
 
-  const mainLinks = navLinks.filter((l) => l.label !== "Contact");
-  const ctaLink = navLinks.find((l) => l.label === "Contact");
+  const mainLinks = navLinks.filter((l) => l.href !== "#contact");
+  const ctaLink = navLinks.find((l) => l.href === "#contact");
 
   return (
     <header
