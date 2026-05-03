@@ -6,6 +6,29 @@
 
 export type LangCode = "es" | "en";
 
+export interface LanguageOption {
+  code: LangCode;
+  flag: string;
+  short: string;
+}
+
+export interface PersonalInfo {
+  fullName: string;
+  role: string;
+  shortDescription: string;
+  brandName: string;
+}
+
+export interface SkillsConfig {
+  categoryLabels: Record<string, string>;
+  categoryIcons: Record<string, string>;
+  categories: Record<string, string[]>;
+}
+
+export interface FooterStrings {
+  builtWith: string;
+}
+
 export interface NavLink {
   label: string;
   href: string;
@@ -139,5 +162,9 @@ export interface Locale {
   experiences: ExperienceLocale[];
   projects: ProjectLocale[];
   languages: LanguageLocale[];
+  personalInfo: PersonalInfo;
+  languageOptions: LanguageOption[];
+  skillsConfig: SkillsConfig;
+  footerStrings: FooterStrings;
   ui: UIStrings;
 }

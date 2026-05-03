@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 /**
@@ -6,12 +6,12 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
  * Hidden on touch devices.
  */
 const CustomCursor = () => {
+  const isTouchDevice =
+    typeof window !== "undefined" &&
+    (window.matchMedia("(pointer: coarse)").matches || "ontouchstart" in window);
+
   const [visible, setVisible] = useState(false);
   const [expanded, setExpanded] = useState(false);
-  const isTouchDevice = useRef(
-    typeof window !== "undefined" &&
-      (window.matchMedia("(pointer: coarse)").matches || "ontouchstart" in window)
-  );
 
   const rawX = useMotionValue(-100);
   const rawY = useMotionValue(-100);
@@ -25,7 +25,6 @@ const CustomCursor = () => {
   const dotY = useSpring(rawY, { stiffness: 500, damping: 30, mass: 0.2 });
 
   useEffect(() => {
-    if (isTouchDevice.current) return;
 
     const onMove = (e: MouseEvent) => {
       rawX.set(e.clientX);
@@ -71,7 +70,7 @@ const CustomCursor = () => {
     };
   }, [rawX, rawY, visible]);
 
-  if (isTouchDevice.current) return null;
+  if (isTouchDevice) return null;
 
   return (
     <>

@@ -1,4 +1,5 @@
-import React, { createContext, useCallback, useContext, useState } from "react";
+/* eslint-disable react-refresh/only-export-components */
+import React, { createContext, useCallback, useContext, useState, useEffect } from "react";
 import type { LangCode, Locale } from "@/lib/i18n/types";
 import { es } from "@/lib/i18n/es";
 import { en } from "@/lib/i18n/en";
@@ -76,7 +77,7 @@ interface I18nContextType {
   t: Locale;
 }
 
-const I18nContext = createContext<I18nContextType | undefined>(undefined);
+export const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
 // ── Provider ──────────────────────────────────────────────────────────────────
 
@@ -89,6 +90,10 @@ export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.setItem(STORAGE_KEY, next);
     setLangState(next);
   }, []);
+
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
 
   const t = applyOverrides(LOCALES[lang]);
 
@@ -106,5 +111,3 @@ export const useI18n = (): I18nContextType => {
   if (!ctx) throw new Error("useI18n must be used within an I18nProvider");
   return ctx;
 };
-
-export default I18nContext;

@@ -1,7 +1,3 @@
-// Matches numeric metrics inside text (percentages, ms, multipliers, large numbers)
-export const METRIC_PATTERN =
-  /(\d+(?:[.,]\d+)?\s*(?:millones?|M\b|K\b)?\s*(?:%|ms|x\b)|99[.,]\d+%|\d+\s+millones?)/gi;
-
 interface HighlightedMetricTextProps {
   text: string;
   /** Extra Tailwind classes applied to the `<mark>` chip. */
@@ -20,13 +16,13 @@ const HighlightedMetricText = ({
   let lastIndex = 0;
   let match: RegExpExecArray | null;
 
-  METRIC_PATTERN.lastIndex = 0;
-  while ((match = METRIC_PATTERN.exec(text)) !== null) {
+  const pattern = /(\d+(?:[.,]\d+)?\s*(?:millones?|M\b|K\b)?\s*(?:%|ms|x\b)|99[.,]\d+%|\d+\s+millones?)/gi;
+  while ((match = pattern.exec(text)) !== null) {
     if (match.index > lastIndex) {
       parts.push({ value: text.slice(lastIndex, match.index), isMetric: false });
     }
     parts.push({ value: match[0], isMetric: true });
-    lastIndex = METRIC_PATTERN.lastIndex;
+    lastIndex = pattern.lastIndex;
   }
   if (lastIndex < text.length) {
     parts.push({ value: text.slice(lastIndex), isMetric: false });

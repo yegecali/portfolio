@@ -6,25 +6,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import BackgroundBlobs from "@/components/general/BackgroundBlobs";
 import { sectionHeaderProps } from "@/lib/animations";
 import Reveal from "@/components/general/Reveal";
-import { useState } from "react";
-import { Monitor, Server, Database, Container as ContainerIcon, ExternalLink } from "lucide-react";
+import { useState, useMemo, createElement } from "react";
+import { ExternalLink } from "lucide-react";
 import { getDevicon } from "@/lib/devicons";
 import type { TechDetails } from "@/lib/types";
 import { BRAND, SKILL_ACCENTS } from "@/lib/theme";
-
-const CATEGORY_ICONS: Record<string, React.ElementType> = {
-  Frontend:  Monitor,
-  Backend:   Server,
-  Databases: Database,
-  DevOps:    ContainerIcon,
-};
-
-const categories: Record<string, string[]> = {
-  Frontend:  ["JavaScript", "TypeScript", "React", "Tailwindcss", "Vite"],
-  Backend:   ["Java", "Spring Boot", "Quarkus", "Node.js", "Express.js"],
-  Databases: ["MongoDB", "PostgreSQL", "SQL Server"],
-  DevOps:    ["Docker", "Linux", "Git"],
-};
 
 interface SkillCardProps {
   tech: TechDetails;
@@ -32,7 +18,7 @@ interface SkillCardProps {
 }
 
 const SkillCard = ({ tech, index }: SkillCardProps) => {
-  const Icon = getDevicon(tech.iconName);
+  const Icon = useMemo(() => getDevicon(tech.iconName), [tech.iconName]);
   return (
     <motion.a
       href={tech.url}
@@ -46,7 +32,7 @@ const SkillCard = ({ tech, index }: SkillCardProps) => {
       whileHover={{ y: -4 }}
     >
       <div className="relative p-4 rounded-2xl bg-card-bg border border-card-border shadow-sm group-hover:shadow-md group-hover:border-gray-200 dark:group-hover:border-gray-600 transition-all duration-300">
-        {Icon && <Icon size={40} />}
+        {Icon && createElement(Icon, { size: 40 })}
         <span className="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           <ExternalLink className="w-2.5 h-2.5 text-gray-400" />
         </span>
@@ -63,10 +49,11 @@ const SkillsSection = () => {
   const { t } = useI18n();
   const ui = t.ui.skills;
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const categories = t.skillsConfig.categories;
 
   const getTechs = (category: string) => {
     const names = categories[category] || [];
-    return technologies.filter((t) => names.includes(t.label));
+    return technologies.filter((tech) => names.includes(tech.label));
   };
 
   const totalSkills = Object.values(categories).flat().length;
@@ -137,7 +124,7 @@ const SkillsSection = () => {
           </button>
           {Object.keys(categories).map((cat) => {
             const cfg = SKILL_ACCENTS[cat];
-            const Icon = CATEGORY_ICONS[cat];
+            const icon = t.skillsConfig.categoryIcons[cat];
             return (
               <button
                 key={cat}
@@ -148,7 +135,7 @@ const SkillsSection = () => {
                     : "bg-gray-100 dark:bg-gray-800 text-subtle hover:bg-gray-200 dark:hover:bg-gray-700"
                 }`}
               >
-                <Icon className="w-3.5 h-3.5" />
+                <span className="text-base">{icon}</span>
                 {cat} · {categories[cat].length}
               </button>
             );
@@ -159,7 +146,7 @@ const SkillsSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {Object.keys(categories).map((category, idx) => {
             const cfg = SKILL_ACCENTS[category];
-            const Icon = CATEGORY_ICONS[category];
+            const icon = t.skillsConfig.categoryIcons[category];
             const techs = getTechs(category);
             const isFiltered = activeCategory !== null && activeCategory !== category;
             const catLabel = ui.categoryLabels[category] ?? category;
@@ -179,8 +166,8 @@ const SkillsSection = () => {
                     {/* Card header */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className={`p-2.5 rounded-xl bg-gradient-to-br ${cfg.gradient} shadow-md`}>
-                          <Icon className="w-5 h-5 text-white" />
+                        <div className={`p-2.5 rounded-xl bg-gradient-to-br ${cfg.gradient} shadow-md flex items-center justify-center`}>
+                          <span className="text-lg">{icon}</span>
                         </div>
                         <div>
                           <h3 className="font-bold text-heading text-base">{category}</h3>

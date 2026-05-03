@@ -15,7 +15,7 @@ import type {
   ExperienceDetails,
   LanguageDetails,
 } from "@/lib/types";
-import I18nContext from "@/contexts/I18nContext";
+import { I18nContext } from "@/contexts/I18nContext";
 import { readAdminConfig } from "@/lib/adminOverrides";
 import { DEFAULTS } from "@/lib/defaults";
 import { api } from "@/lib/api";

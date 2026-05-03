@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Code2, Heart, ArrowUp } from "lucide-react";
 import { usePortfolio } from "@/hooks/usePortfolio";
+import { useI18n } from "@/hooks/useI18n";
 import { getSocialMeta } from "@/lib/constants";
 import { scrollToSection } from "@/lib/utils";
 import Reveal from "@/components/general/Reveal";
@@ -25,7 +26,8 @@ const NAV_COLS = [
 ];
 
 const Footer = () => {
-  const { siteName, socialLinks, email } = usePortfolio();
+  const { socialLinks, email } = usePortfolio();
+  const { t } = useI18n();
   const year = new Date().getFullYear();
 
   return (
@@ -45,12 +47,12 @@ const Footer = () => {
               <Code2 className="w-4 h-4 text-white" strokeWidth={2.5} />
             </div>
             <span className="font-black text-lg text-white tracking-tight">
-              Yemi<span className="text-gray-600 font-light">.dev</span>
+              {t.personalInfo.brandName}
             </span>
           </div>
 
           <p className="text-sm leading-relaxed max-w-xs text-gray-400">
-            Full Stack Developer especializado en sistemas bancarios de alto rendimiento. Construyendo soluciones escalables con Java y React.
+            {t.personalInfo.shortDescription}
           </p>
 
           {/* Email */}
@@ -99,12 +101,12 @@ const Footer = () => {
             <ul className="flex flex-col gap-2.5">
               {col.links.map((link) => (
                 <li key={link.href}>
-                  <button
-                    onClick={() => scrollToSection(link.href)}
-                    className="text-sm text-gray-400 hover:text-white transition-colors duration-200 text-left"
+                  <a
+                    href={link.href}
+                    className="text-sm text-gray-400 hover:text-white transition-colors duration-200"
                   >
                     {link.label}
-                  </button>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -117,9 +119,9 @@ const Footer = () => {
         <Reveal animation="fade-up" delay={0.2} className="mx-auto max-w-7xl px-4 md:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
 
           <p className="text-xs text-gray-600 flex items-center gap-1.5">
-            © {year} {siteName} · Hecho con
+            © {year} {t.personalInfo.brandName} · Hecho con
             <Heart className="w-3 h-3 text-red-500 fill-red-500 inline" />
-            usando React & TypeScript
+            {t.footerStrings.builtWith}
           </p>
 
           <div className="flex items-center gap-4">
@@ -127,6 +129,7 @@ const Footer = () => {
             <a
               href="?admin"
               title="Panel de administración"
+              aria-label="Panel de administración"
               className="text-xs text-gray-700 hover:text-gray-500 transition-colors"
             >
               ⚙

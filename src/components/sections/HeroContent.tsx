@@ -41,7 +41,7 @@ const HeroContent = ({
   ];
 
   // Split: "Hi, I'm Yemi Genderson 👋" → ["Hi, I'm ", "Yemi Genderson", " 👋"]
-  const titleParts = title.split(/(Yemi Genderson)/);
+  const titleParts = title.split(new RegExp(`(${t.personalInfo.fullName})`, 'i'));
 
   return (
     <motion.div

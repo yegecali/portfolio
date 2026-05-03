@@ -114,6 +114,47 @@ export const en: Locale = {
     { name: "English", flag: "🇺🇸", level: "Professional", proficiency: 80  },
   ],
 
+  // ── Personal Info ──────────────────────────────────────────────────────────
+  personalInfo: {
+    fullName: "Yemi Genderson",
+    role: "Full Stack Developer",
+    shortDescription: "Full Stack Developer specialized in high-performance banking systems. Building scalable solutions with Java and React.",
+    brandName: "Yemi.dev",
+  },
+
+  // ── Language Options ───────────────────────────────────────────────────────
+  languageOptions: [
+    { code: "es", flag: "🇵🇪", short: "ES" },
+    { code: "en", flag: "🇺🇸", short: "EN" },
+  ],
+
+  // ── Skills Config ──────────────────────────────────────────────────────────
+  skillsConfig: {
+    categoryLabels: {
+      Frontend:  "Modern responsive interfaces",
+      Backend:   "Robust APIs and microservices",
+      Databases: "Storage and persistence",
+      DevOps:    "Infrastructure and deployment",
+    },
+    categoryIcons: {
+      Frontend:  "⚛️",
+      Backend:   "🔧",
+      Databases: "🗄️",
+      DevOps:    "🚀",
+    },
+    categories: {
+      Frontend:  ["React", "TypeScript", "Tailwind CSS", "Framer Motion"],
+      Backend:   ["Java", "Spring Boot", "Quarkus", "Apache Kafka"],
+      Databases: ["PostgreSQL", "SQL Server", "Redis", "MongoDB"],
+      DevOps:    ["Docker", "Kubernetes", "AWS", "CI/CD"],
+    },
+  },
+
+  // ── Footer Strings ────────────────────────────────────────────────────────
+  footerStrings: {
+    builtWith: "using React & TypeScript",
+  },
+
   // ── UI strings ─────────────────────────────────────────────────────────────
   ui: {
     scroll: "Scroll",

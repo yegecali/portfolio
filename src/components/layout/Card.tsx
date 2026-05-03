@@ -1,8 +1,6 @@
 import { mergeClasses } from "@/lib/utils";
 
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-const Card = ({ className, children, ...props }: CardProps) => {
+const Card = ({ className, children, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
   return (
     <div
       className={mergeClasses(

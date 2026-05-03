@@ -40,7 +40,7 @@ const ExperienceSection = () => {
             <Briefcase className="w-6 h-6 text-white" />
           </div>
           <Typography
-            variant="h1"
+            variant="h2"
             className="text-4xl md:text-5xl font-bold text-heading"
           >
             <WordReveal

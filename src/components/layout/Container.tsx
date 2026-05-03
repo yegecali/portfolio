@@ -1,9 +1,7 @@
 import React from "react";
 import { mergeClasses } from "@/lib/utils";
 
-interface ContainerProps extends React.HTMLAttributes<HTMLElement> {}
-
-const Container = React.forwardRef<HTMLElement, ContainerProps>(
+const Container = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(
   ({ className, children, ...props }, ref) => {
     return (
       <section

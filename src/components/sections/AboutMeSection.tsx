@@ -185,10 +185,10 @@ const AboutMeSection = () => {
               <div className="absolute bottom-4 left-4 right-4">
                 <div className="bg-white/10 dark:bg-black/20 backdrop-blur-md rounded-2xl px-4 py-3 border border-white/20">
                   <Typography className="text-white font-bold text-base leading-tight">
-                    Yemi Genderson
+                    {t.personalInfo.fullName}
                   </Typography>
                   <Typography className="text-blue-200 text-xs font-medium">
-                    Full Stack Developer
+                    {t.personalInfo.role}
                   </Typography>
                 </div>
               </div>

@@ -1,17 +1,11 @@
 import { useI18n } from "@/hooks/useI18n";
-import type { LangCode } from "@/lib/i18n/types";
-
-const OPTIONS: Array<{ code: LangCode; flag: string; short: string }> = [
-  { code: "es", flag: "🇵🇪", short: "ES" },
-  { code: "en", flag: "🇺🇸", short: "EN" },
-];
 
 const LanguageSwitcher = () => {
-  const { lang, setLang } = useI18n();
+  const { lang, setLang, t } = useI18n();
 
   return (
     <div className="flex items-center gap-0.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-100/60 dark:bg-gray-800/60 p-0.5">
-      {OPTIONS.map(({ code, flag, short }) => {
+      {t.languageOptions.map(({ code, flag, short }) => {
         const active = lang === code;
         return (
           <button
