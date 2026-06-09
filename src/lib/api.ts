@@ -16,6 +16,9 @@ export const API_BASE_URL =
   (import.meta.env.VITE_API_URL as string | undefined) ??
   "http://localhost:8000";
 
+/** True only when VITE_API_URL is explicitly configured. */
+export const API_ENABLED = Boolean(import.meta.env.VITE_API_URL);
+
 // ── Response types (mirror backend/app/schemas.py) ────────────────────────────
 
 export interface PersonalInfoOut {

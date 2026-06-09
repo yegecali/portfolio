@@ -7,24 +7,20 @@ const SocialIcons = () => {
   return (
     <div className="flex gap-4">
       {socialLinks.map((socialLink, index) => (
-        <a
+        <SocialIcon
           key={index}
-          href={socialLink.url}
+          url={socialLink.url}
           target="_blank"
           rel="noopener noreferrer"
+          fgColor="currentColor"
+          bgColor="transparent"
           className="transition-transform duration-300 hover:scale-110"
-        >
-          <SocialIcon
-            url={socialLink.url}
-            fgColor="currentColor"
-            bgColor="transparent"
-            style={{
-              width: "40px",
-              height: "40px",
-              color: "currentColor",
-            }}
-          />
-        </a>
+          style={{
+            width: "40px",
+            height: "40px",
+            color: "currentColor",
+          }}
+        />
       ))}
     </div>
   );

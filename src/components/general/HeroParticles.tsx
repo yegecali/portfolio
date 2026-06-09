@@ -7,7 +7,7 @@ import { useTheme } from "@/hooks/useTheme";
 const buildConfig = (isDark: boolean): ISourceOptions => ({
   fullScreen: { enable: false },
   particles: {
-    number: { value: 60, density: { enable: true, width: 900 } },
+    number: { value: 35, density: { enable: true, width: 900 } },
     color: {
       value: isDark
         ? ["#3b82f6", "#8b5cf6", "#ec4899"]
@@ -41,18 +41,12 @@ const buildConfig = (isDark: boolean): ISourceOptions => ({
   interactivity: {
     detectsOn: "canvas",
     events: {
-      onHover: { enable: true, mode: "grab" },
+      onHover: { enable: false },
       onClick: { enable: false },
       resize: { enable: true },
     },
-    modes: {
-      grab: {
-        distance: 120,
-        links: { opacity: isDark ? 0.35 : 0.45 },
-      },
-    },
   },
-  detectRetina: true,
+  detectRetina: false,
 });
 
 const HeroParticles = () => {
@@ -61,9 +55,13 @@ const HeroParticles = () => {
   const [engineReady, setEngineReady] = useState(false);
 
   useEffect(() => {
-    initParticlesEngine(async (engine) => {
-      await loadSlim(engine);
-    }).then(() => setEngineReady(true));
+    // Defer initialization to avoid competing with LCP paint
+    const id = setTimeout(() => {
+      initParticlesEngine(async (engine) => {
+        await loadSlim(engine);
+      }).then(() => setEngineReady(true));
+    }, 600);
+    return () => clearTimeout(id);
   }, []);
 
   if (!engineReady) return null;

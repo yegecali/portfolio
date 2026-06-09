@@ -5,26 +5,25 @@
 
 // ── Hero section ──────────────────────────────────────────────────────────────
 
-/** Stagger container used in HeroContent (waits for page paint). */
+/** Stagger container used in HeroContent. */
 export const heroContainerVariants = {
   hidden: {},
   visible: {
     transition: {
-      delayChildren: 0.15,
-      staggerChildren: 0.14,
+      delayChildren: 0,
+      staggerChildren: 0.08,
     },
   },
 };
 
-/** Fade-up with blur — main items inside HeroContent. */
+/** Fade-up — main items inside HeroContent. */
 export const heroItemVariants = {
-  hidden: { opacity: 0, y: 32, filter: "blur(8px)" },
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: {
-      duration: 0.65,
+      duration: 0.35,
       ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
     },
   },

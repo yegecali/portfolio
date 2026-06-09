@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, startTransition } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 /**
@@ -12,6 +12,7 @@ const CustomCursor = () => {
 
   const [visible, setVisible] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const visibleRef = useRef(false);
 
   const rawX = useMotionValue(-100);
   const rawY = useMotionValue(-100);
@@ -29,35 +30,42 @@ const CustomCursor = () => {
     const onMove = (e: MouseEvent) => {
       rawX.set(e.clientX);
       rawY.set(e.clientY);
-      if (!visible) setVisible(true);
+      if (!visibleRef.current) {
+        visibleRef.current = true;
+        startTransition(() => setVisible(true));
+      }
     };
 
-    const onEnter = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (
+    const isInteractive = (target: HTMLElement) =>
+      !!(
         target.closest("a, button, [role='button'], input, textarea, select, label") ||
         target.closest("[data-cursor-expand]")
-      ) {
-        setExpanded(true);
+      );
+
+    const onEnter = (e: MouseEvent) => {
+      if (isInteractive(e.target as HTMLElement)) {
+        startTransition(() => setExpanded(true));
       }
     };
 
     const onLeave = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (
-        target.closest("a, button, [role='button'], input, textarea, select, label") ||
-        target.closest("[data-cursor-expand]")
-      ) {
-        setExpanded(false);
+      if (isInteractive(e.target as HTMLElement)) {
+        startTransition(() => setExpanded(false));
       }
     };
 
-    const onMouseLeaveWindow = () => setVisible(false);
-    const onMouseEnterWindow = () => setVisible(true);
+    const onMouseLeaveWindow = () => {
+      visibleRef.current = false;
+      startTransition(() => setVisible(false));
+    };
+    const onMouseEnterWindow = () => {
+      visibleRef.current = true;
+      startTransition(() => setVisible(true));
+    };
 
-    window.addEventListener("mousemove", onMove);
-    document.addEventListener("mouseover", onEnter);
-    document.addEventListener("mouseout", onLeave);
+    window.addEventListener("mousemove", onMove, { passive: true });
+    document.addEventListener("mouseover", onEnter, { passive: true });
+    document.addEventListener("mouseout", onLeave, { passive: true });
     document.addEventListener("mouseleave", onMouseLeaveWindow);
     document.addEventListener("mouseenter", onMouseEnterWindow);
 
@@ -68,7 +76,7 @@ const CustomCursor = () => {
       document.removeEventListener("mouseleave", onMouseLeaveWindow);
       document.removeEventListener("mouseenter", onMouseEnterWindow);
     };
-  }, [rawX, rawY, visible]);
+  }, [rawX, rawY]);
 
   if (isTouchDevice) return null;
 

@@ -18,7 +18,7 @@ import type {
 import { I18nContext } from "@/contexts/I18nContext";
 import { readAdminConfig } from "@/lib/adminOverrides";
 import { DEFAULTS } from "@/lib/defaults";
-import { api } from "@/lib/api";
+import { api, API_ENABLED } from "@/lib/api";
 import type { FullPortfolioOut } from "@/lib/api";
 
 interface PortfolioContextType {
@@ -156,10 +156,14 @@ export const PortfolioProvider: React.FC<PortfolioProviderProps> = ({
   const [apiData, setApiData] = useState<FullPortfolioOut | null>(null);
 
   // Fetch the full portfolio from the backend API for the current language.
-  // Falls back gracefully to static defaults when the backend is offline.
-  // The AbortController is used to cancel any in-flight request when the
-  // language changes before the previous fetch has completed.
+  // Only runs when VITE_API_URL is explicitly set — without it the app uses
+  // the static defaults in src/lib/defaults.ts with no network requests.
   useEffect(() => {
+    if (!API_ENABLED) {
+      setIsLoading(false);
+      return;
+    }
+
     const controller = new AbortController();
     const lang = i18n?.lang ?? "es";
 

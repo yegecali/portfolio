@@ -25,6 +25,7 @@ const MagneticButton = ({
   onClick,
 }: MagneticButtonProps) => {
   const ref = useRef<HTMLElement>(null);
+  const rectRef = useRef<DOMRect | null>(null);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -32,19 +33,23 @@ const MagneticButton = ({
   const springX = useSpring(x, { stiffness: 200, damping: 18, mass: 0.5 });
   const springY = useSpring(y, { stiffness: 200, damping: 18, mass: 0.5 });
 
+  const handleMouseEnter = () => {
+    if (ref.current) rectRef.current = ref.current.getBoundingClientRect();
+  };
+
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    const el = ref.current;
-    if (!el) return;
-    const { left, top, width, height } = el.getBoundingClientRect();
-    const cx = left + width / 2;
-    const cy = top + height / 2;
-    x.set((e.clientX - cx) * (strength / (width / 2)));
-    y.set((e.clientY - cy) * (strength / (height / 2)));
+    const rect = rectRef.current;
+    if (!rect) return;
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    x.set((e.clientX - cx) * (strength / (rect.width / 2)));
+    y.set((e.clientY - cy) * (strength / (rect.height / 2)));
   };
 
   const handleMouseLeave = () => {
     x.set(0);
     y.set(0);
+    rectRef.current = null;
   };
 
   const inner = (
@@ -65,6 +70,7 @@ const MagneticButton = ({
         target={target}
         rel={rel}
         className={className}
+        onMouseEnter={handleMouseEnter}
         onMouseMove={handleMouseMove as React.MouseEventHandler<HTMLAnchorElement>}
         onMouseLeave={handleMouseLeave}
         onClick={onClick}
@@ -78,6 +84,7 @@ const MagneticButton = ({
     <button
       ref={ref as React.RefObject<HTMLButtonElement>}
       className={className}
+      onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove as React.MouseEventHandler<HTMLButtonElement>}
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
